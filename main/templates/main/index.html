@@ -1,0 +1,9 @@
+{% block content %}
+
+to jest index
+
+<a href="{% url 'main:do_logout' %}"> WYLOGUJ </a>
+
+{% if user.is_staff %}<p><strong> <a href="{% url 'admin:index' %}"> ZARZADZAJ </a>  </strong></p>{% endif %}
+
+{% endblock %}
