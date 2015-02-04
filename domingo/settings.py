@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ev2wdvb8#f4)qv_0hf@*ol33iu#jypzo7j1&sp%2&ty$f%q(+p'
+SECRET_KEY = '1x^(c1&!@oxpxg2j@w@bu=6!r8*&8@3*y*cw2hhq2@*_w=_4x='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'domingo',
+    'main',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,12 +59,8 @@ WSGI_APPLICATION = 'domingo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'domingo',
-        'USER': 'postgres',
-        'PASSWORD': 'l1VSR9v8qOszEo7ZNzvp',
-        'HOST': '10.132.23.115',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -73,7 +69,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Warsaw'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
