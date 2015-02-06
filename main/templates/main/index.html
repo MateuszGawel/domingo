@@ -1,9 +1,11 @@
 {% block content %}
 
-to jest index
+    to jest index
 
-<a href="{% url 'main:do_logout' %}"> WYLOGUJ </a>
+    <a href="{% url 'main:do_logout' %}"> WYLOGUJ </a>
 
-{% if user.is_staff %}<p><strong> <a href="{% url 'admin:index' %}"> ZARZADZAJ </a>  </strong></p>{% endif %}
+    {% if user.is_staff %}<p><strong> <a href="{% url 'admin:index' %}"> ZARZADZAJ </a>  </strong></p>{% endif %}
+
+    <p><strong> <a href="{% url 'main:start_duty' %}"> ROZPOCZNIJ DYUŻUR </a>  </strong></p>
 
 {% endblock %}

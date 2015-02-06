@@ -13,7 +13,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Alert(models.Model):
-    alt_id = models.IntegerField(primary_key=True)
+    alt_id = models.AutoField(primary_key=True)
     alt_rep = models.ForeignKey('Report', blank=True, null=True)
     alt_prj = models.ForeignKey('Project', blank=True, null=True)
     alt_start_date = models.DateTimeField(blank=True, null=True)
@@ -24,7 +24,7 @@ class Alert(models.Model):
 
 
 class Call(models.Model):
-    cal_id = models.IntegerField(primary_key=True)
+    cal_id = models.AutoField(primary_key=True)
     cal_rep = models.ForeignKey('Report', blank=True, null=True)
     cal_prj = models.ForeignKey('Project', blank=True, null=True)
     cal_date = models.DateTimeField(blank=True, null=True)
@@ -34,24 +34,23 @@ class Call(models.Model):
 
 
 class Duty(models.Model):
-    dut_id = models.IntegerField(primary_key=True)
+    dut_id = models.AutoField(primary_key=True)
+    dut_usr = models.ForeignKey(User, blank=True, null=True)
     dut_rep = models.ForeignKey('Report', blank=True, null=True)
     dut_start_date = models.DateTimeField(blank=True, null=True)
     dut_end_date = models.DateTimeField(blank=True, null=True)
-    dut_redirection = models.CharField(max_length=1, blank=True)
-
 
 
 class Project(models.Model):
-    prj_id = models.IntegerField(primary_key=True)
+    prj_id = models.AutoField(primary_key=True)
     prj_name = models.CharField(max_length=32, blank=True)
 
 
 
 class Report(models.Model):
-    rep_id = models.IntegerField(primary_key=True)
-    rep_usr = models.ForeignKey(User, blank=True, null=True)
+    rep_id = models.AutoField(primary_key=True)
     rep_status = models.CharField(max_length=1, blank=True)
     rep_send_date = models.DateTimeField(blank=True, null=True)
     rep_remove_date = models.DateTimeField(blank=True, null=True)
     rep_notes = models.TextField(blank=True)
+    rep_redirection = models.CharField(max_length=1, blank=True)

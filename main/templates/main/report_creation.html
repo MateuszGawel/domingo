@@ -1,0 +1,88 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <script>
+     $(document).ready(function() {
+         $('#add-alert-form').submit(function (e) {
+             e.preventDefault();
+                 $.ajax({
+                     type: "POST",
+                     url: "{% url 'main:add_alert' %}",
+                     data: $(this).serialize(),
+
+                     success: function (data) {
+                         $("#alerts").load(" #alerts");
+                     }
+                 });
+         });
+     });
+    </script>
+
+
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active" >
+                <a href="#report-creation-alerts" aria-controls="report-creation-alerts" role="tab" data-toggle="tab">Alerts</a>
+            </li>
+            <li role="presentation">
+                <a href="#report-creation-incidents" aria-controls="report-creation-incidents" role="tab" data-toggle="tab">Incidents</a>
+            </li>
+            <li role="presentation">
+                <a href="#report-creation-phone-calls" aria-controls="report-creation-phone-calls" role="tab" data-toggle="tab">Phone Calls</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="report-creation-alerts">
+
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputFile">File input</label>
+                        <input type="file" id="exampleInputFile">
+                        <p class="help-block">Example block-level help text here.</p>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Check me out
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+
+                <form id="add-alert-form" action="" method="post">
+                {% csrf_token %}
+                    <input type="text" name="type" placeholder="type"/>
+                    <input type="text" name="ticket" placeholder="ticket"/>
+                    <input type="submit" value="Add" />
+                </form>
+
+                <h1>ALERTY:</h1>
+                <div id="alerts" style="border: solid blue 1px">
+                    <ul>
+                        {% for alert in duty.dut_rep.alert_set.all %}
+                            <li>{{  alert.alt_ticket }}</li>
+                        {%  endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="report-creation-incidents">
+                INCYDENTY
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="report-creation-phone-calls">
+                FOŁN KOLE
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

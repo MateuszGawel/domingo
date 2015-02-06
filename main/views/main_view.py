@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
-    print 'jestes w dupie!'
     if request.user.is_authenticated():
         return render(request, 'main/index.html', None)
     else:
