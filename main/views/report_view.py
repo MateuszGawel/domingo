@@ -57,6 +57,9 @@ def add_alert(request):
         alert.alt_start_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         alert.alt_ticket = request.POST['ticket']
         alert.alt_type = request.POST['type']
+        #tu wywala blad bo nie ma jeszcze zadnego projektu
+        #alert.alt_prj_id = request.POST['project']
+        alert.alt_start_date = request.POST['time']
         alert.alt_rep = duty.dut_rep
         alert.save()
         return HttpResponse(duty)

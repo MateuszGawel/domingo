@@ -17,10 +17,21 @@
                  });
          });
      });
+
+     //https://github.com/Eonasdan/bootstrap-datetimepicker
+     $(function () {
+         $('#report-creation-alert-time').datetimepicker({
+             format: 'YYYY-MM-DD HH:mm:ss',
+             toolbarPlacement: 'top',
+             showTodayButton: true,
+             showClear: true
+         });
+     });
     </script>
 
 
     <div class="container">
+
         <ul class="nav nav-tabs">
             <li role="presentation" class="active" >
                 <a href="#report-creation-alerts" aria-controls="report-creation-alerts" role="tab" data-toggle="tab">Alerts</a>
@@ -36,44 +47,80 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="report-creation-alerts">
 
-                <form>
+                <div class="row">
+                    <br>
+                    <div class="col-md-9 col-md-offset-1">
+                        <form id="add-alert-form" action="" method="post">
+                        {% csrf_token %}
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select class="form-control" name="type">
+                                    <option>B</option>
+                                    <option>C</option>
+                                    <option>M</option>
+                                </select>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="date" class="form-control" id="exampleInputEmail1">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputFile">File input</label>
-                        <input type="file" id="exampleInputFile">
-                        <p class="help-block">Example block-level help text here.</p>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"> Check me out
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
+                            <div class="form-group">
+                                <label>Project</label>
+                                <select class="form-control" name="project">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            </div>
 
-                <form id="add-alert-form" action="" method="post">
-                {% csrf_token %}
-                    <input type="text" name="type" placeholder="type"/>
-                    <input type="text" name="ticket" placeholder="ticket"/>
-                    <input type="submit" value="Add" />
-                </form>
+                            <div class="form-group">
+                                <label>Ticket</label>
+                                <input type="text" class="form-control" name="ticket">
+                            </div>
 
-                <h1>ALERTY:</h1>
-                <div id="alerts" style="border: solid blue 1px">
-                    <ul>
-                        {% for alert in duty.dut_rep.alert_set.all %}
-                            <li>{{  alert.alt_ticket }}</li>
-                        {%  endfor %}
-                    </ul>
+                            <div class="form-group">
+                                    <label>Time</label>
+
+                                    <div class='input-group date' id='report-creation-alert-time'>
+                                        <input type='text' class="form-control" name="time" />
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg center-block">Add alert</button>
+                        </form>
+                    </div>
                 </div>
+
+                <div class="row" id="alerts">
+                    <br>
+                    <div class="col-md-9 col-md-offset-1">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Added alerts</div>
+
+                            <table class="table">
+                                <thead>
+                                    <th> Type </th>
+                                    <th> Project </th>
+                                    <th> Ticket </th>
+                                    <th> Time </th>
+                                    <th> Delete </th>
+                                </thead>
+                                <tbody>
+                                    {% for alert in duty.dut_rep.alert_set.all %}
+                                        <tr>
+                                            <td>{{  alert.alt_type }}</td>
+                                            <td>{{  alert.alt_prj_id }}</td>
+                                            <td>{{  alert.alt_ticket }}</td>
+                                            <td>{{  alert.alt_start_date|date:"Y-m-d H:h:s" }}</td>
+                                            <td> <button class="btn btn-danger btn-sm">X</button> </td>
+                                        </tr>
+                                    {%  endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div role="tabpanel" class="tab-pane" id="report-creation-incidents">
