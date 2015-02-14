@@ -1,0 +1,24 @@
+{% extends 'main/_layout/base.html' %}
+
+{% block breadcrumbs %}
+    {% include "main/_layout/breadcrumbs.html" with skiplast=True %}
+{% endblock %}
+
+{% block content %}
+    <h1>ID: {{ contact.con_id }}</h1>
+
+    <div class="col-lg-12">
+
+            <a href="{% url 'contacts:edit' contact.con_id %}" type="submit" class='btn btn-primary'>Edit</a> <br><br>
+
+            Project: {{ contact.con_prj_id.prj_name  }} <br />
+            Type: {{ contact.con_type }} <br />
+            Address: {{ contact.con_address }} <br />
+            Date: {{ contact.con_date }} <br />
+            Direction: {{ contact.con_direction }} <br />
+            Internal: {{ contact.con_internal }} <br />
+            Comment: {{ contact.con_com_id.com_value }} <br />
+
+    </div>
+
+{% endblock %}

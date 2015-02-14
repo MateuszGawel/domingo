@@ -1,0 +1,56 @@
+{% extends 'main/_layout/base.html' %}
+
+{% block content %}
+
+    <form action="{% url 'reports:close' report.rep_id %}" method="post">
+        {% csrf_token %}
+        <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close report</button>
+    </form>
+
+
+    <ul class="nav nav-tabs">
+        <li><a href="{% url 'reports:alert_tab' report.rep_id %}">Alerts</a></li>
+        <li><a href="{% url 'reports:contact_tab' report.rep_id %}">Contacts</a></li>
+        <li class="active"><a href="{% url 'reports:incident_tab' report.rep_id %}">Incidents</a></li>
+    </ul>
+
+
+
+    <form class="filters form-inline well" action="{% url 'reports:incident_tab' report.rep_id %}" method="post">
+        {% csrf_token %}
+        {{ incidentForm }}
+        {{ error_message }}
+        <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Open</button>
+    </form>
+    <table class='table table-bordered table-striped table-hover'>
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Ticket</th>
+                <th>Start date</th>
+                <th>Close date</th>
+                <th>Comment</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for incident in incidents %}
+                <tr>
+                    <td>{{ incident.inc_prj_id.prj_name }}</td>
+                    <td>{{ incident.inc_ticket }}</td>
+                    <td>{{ incident.inc_date_start }}</td>
+                    <td>{{ incident.inc_date_end }}</td>
+                    <td>{{ incident.inc_com_id.com_value }}</td>
+                    <td>
+                        <a class='btn btn-primary' href="{% url 'alerts:details' alert.alt_id %}">Details</a>
+                        <form action="{% url 'incidents:close' report.rep_id %}" method="post">
+                            {% csrf_token %}
+                            <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close incident</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

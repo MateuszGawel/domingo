@@ -135,6 +135,14 @@ class ContactForm(forms.Form):
     con_internal = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Internal").get_widget() )
     con_com_id = forms.CharField(label = '', widget = TextWidget("Comment", '', 3).get_widget() )
 
+class IncidentForm(forms.Form):
+
+    inc_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
+    inc_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
+    inc_date_start = forms.DateTimeField(label = '', widget = DateWidget("Start date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
+    inc_date_end = forms.DateTimeField(label = '', widget = DateWidget("End date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
+    inc_com_id = forms.CharField(label = '', widget = TextWidget("Comment", '', 3).get_widget() )
+
 class ReportFilterForm(forms.Form):
 
     rep_id = forms.CharField(label = '', required=False, widget = CharWidget("Id").get_widget() )

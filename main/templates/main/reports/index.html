@@ -25,9 +25,9 @@
                         <button disabled="disabled" class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</button>
                     </form>
 
-                    <a href="{% url 'reports:edit' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Edit current Report</a>
+                    <a href="{% url 'reports:alert_tab' report.rep_id %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Edit current Report</a>
 
-                    <form action="{% url 'reports:close' %}" method="post">
+                    <form action="{% url 'reports:close' report.rep_id%}" method="post">
                         {% csrf_token %}
                         <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close Report</button>
                     </form>

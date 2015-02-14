@@ -1,0 +1,50 @@
+{% extends 'main/_layout/base.html' %}
+
+{% block content %}
+
+    <form action="{% url 'reports:close' report.rep_id %}" method="post">
+        {% csrf_token %}
+        <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close report</button>
+    </form>
+
+    <ul class="nav nav-tabs">
+        <li><a href="{% url 'reports:alert_tab' report.rep_id %}">Alerts</a></li>
+        <li class="active"><a href="{% url 'reports:contact_tab' report.rep_id %}">Contacts</a></li>
+        <li><a href="{% url 'reports:incident_tab' report.rep_id %}">Incidents</a></li>
+    </ul>
+    <form class="filters form-inline well" action="{% url 'reports:contact_tab' report.rep_id %}" method="post">
+        {% csrf_token %}
+        {{ contactForm.as_p }}
+        {{ error_message }}
+        <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+    </form>
+    <table class='table table-bordered table-striped table-hover'>
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Type</th>
+                <th>Address</th>
+                <th>Date</th>
+                <th>Direction</th>
+                <th>Internal</th>
+                <th>Comment</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.con_prj_id.prj_name }}</td>
+                    <td>{{ contact.con_type }}</td>
+                    <td>{{ contact.con_address }}</td>
+                    <td>{{ contact.con_date }}</td>
+                    <td>{{ contact.con_direction }}</td>
+                    <td>{{ contact.con_internal }}</td>
+                    <td>{{ contact.con_com_id.com_value }}</td>
+                    <td><a class='btn btn-primary' href="{% url 'contacts:details' contact.con_id %}">Details</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
