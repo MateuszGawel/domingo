@@ -1,0 +1,23 @@
+{% extends 'main/_layout/base.html' %}
+
+{% block content %}
+
+{% include 'main/_layout/report_menu.html' with active_tab="summary" %}
+
+    <form class="filters form-inline well" action=" {% url 'reports:summary_tab' report.rep_id %} " method="post">
+        {% csrf_token %}
+        {{ summaryForm }}
+        {{ error_message }}
+
+        <button class='btn btn-success navbar-right' type='submit'>Update</button>
+    </form>
+
+    ID: {{ report.rep_id }} <br>
+    Status: {{ report.rep_status }} <br>
+    Redirection: {{ report.rep_redirection }} <br>
+    Created: {{ report.rep_date_created }} <br>
+    Sent: {{ report.rep_date_sent }} <br>
+    Removed: {{ report.rep_date_removed }} <br>
+    Comment: {{ report.rep_com_id.com_value }} <br>
+
+{% endblock %}

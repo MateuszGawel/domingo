@@ -1,15 +1,11 @@
 {% extends 'main/_layout/base.html' %}
 
-{% block breadcrumbs %}
-    {% include "main/_layout/breadcrumbs.html" with skiplast=True %}
-{% endblock %}
-
 {% block content %}
     <h1>ID: {{ incident.inc_id }}</h1>
 
     <div class="col-lg-12">
 
-        <a href="{% url 'incidents:edit' incident.inc_id %}" type="submit" class='btn btn-primary'>Edit</a> <br><br>
+        <a href="{% url 'incidents:edit' report.rep_id incident.inc_id %}" type="submit" class='btn btn-primary'>Edit</a> <br><br>
         Project: {{ incident.inc_prj_id.prj_name }}<br />
         Ticket: {{ incident.inc_ticket }}<br />
         Start date: {{ incident.inc_date_start }}<br />
@@ -17,7 +13,7 @@
         Comment: {{ incident.inc_com_id.com_value }}<br />
 
         <hr>
-        <form action="{% url 'incidents:join_alert' incident.inc_id %}" method="post">
+        <form action="{% url 'incidents:join_alert' report.rep_id incident.inc_id %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-plus"></span>Add</button>
             <select name="alt_id">
@@ -27,9 +23,9 @@
             </select>
         </form>
         <br>
-        <a class='btn btn-primary' href="{% url 'reports:incident_alert_tab' report.rep_id incident.inc_id %}">Create new alert</a>
+        <a class='btn btn-primary' href="{% url 'reports:incident_alert_tab' incident.inc_id %}">Create new alert</a>
         <hr>
-        <form action="{% url 'incidents:join_contact' incident.inc_id %}" method="post">
+        <form action="{% url 'incidents:join_contact' report.rep_id incident.inc_id %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-plus"></span>Add</button>
             <select name="con_id">
@@ -39,9 +35,9 @@
             </select>
         </form>
         <br>
-        <a class='btn btn-primary' href="{% url 'reports:incident_contact_tab' report.rep_id incident.inc_id %}">Create new contact</a>
+        <a class='btn btn-primary' href="{% url 'reports:incident_contact_tab' incident.inc_id %}">Create new contact</a>
         <hr>
-        <form action="{% url 'incidents:join_maintenance' incident.inc_id %}" method="post">
+        <form action="{% url 'incidents:join_maintenance' report.rep_id incident.inc_id %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-plus"></span>Add</button>
             <select name="mnt_id">
@@ -51,7 +47,7 @@
             </select>
         </form>
         <br>
-        <a class='btn btn-primary' href="{% url 'reports:incident_maintenance_tab' report.rep_id incident.inc_id %}">Create new maintenance</a>
+        <a class='btn btn-primary' href="{% url 'reports:incident_maintenance_tab' incident.inc_id %}">Create new maintenance</a>
         <hr>
     </div>
 
@@ -73,8 +69,8 @@
                     <td>{{ entity.ent_date }}</td>
                     <td>{{ entity.ent_type }}</td>
                     <td>
-                        <a class='btn btn-primary' href="{% url  entity.ent_url  entity.ent_id %}">Details</a>
-                        <form class="" action="{% url 'incidents:remove_incident_step' entity.ent_ins_id %}" method="post">
+                        <a class='btn btn-primary' href="{% url  entity.ent_url  report.rep_id entity.ent_id %}">Details</a>
+                        <form class="" action="{% url 'incidents:remove_incident_step' report.rep_id entity.ent_ins_id %}" method="post">
                             {% csrf_token %}
                             {{ error_message }}
                             <button class='btn btn-danger' type='submit'>Remove</button>

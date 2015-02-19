@@ -9,7 +9,7 @@
 {% if inc_id == None %}
     <form class="filters form-inline well" action=" {% url 'reports:contact_tab' report.rep_id %} " method="post">
 {% else %}
-    <form class="filters form-inline well" action=" {% url 'reports:incident_contact_tab' report.rep_id inc_id %} " method="post">
+    <form class="filters form-inline well" action=" {% url 'reports:incident_contact_tab' inc_id %} " method="post">
 {% endif %}
         {% csrf_token %}
         {{ contactForm.as_p }}
@@ -41,8 +41,8 @@
                     <td>{{ contact.con_internal }}</td>
                     <td>{{ contact.con_com_id.com_value }}</td>
                     <td>
-                        <a class='btn btn-primary' href="{% url 'contacts:details' contact.con_id %}">Details</a>
-                        <form class="" action="{% url 'contacts:remove_contact' contact.con_id %}" method="post">
+                        <a class='btn btn-primary' href="{% url 'contacts:details' report.rep_id contact.con_id %}">Details</a>
+                        <form class="" action="{% url 'contacts:remove_contact' report.rep_id contact.con_id %}" method="post">
                             {% csrf_token %}
                             {{ error_message }}
                             <button class='btn btn-danger' type='submit'>Remove</button>

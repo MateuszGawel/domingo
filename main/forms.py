@@ -115,6 +115,9 @@ def getChoices(Model, fieldName):
 
     return objects
 
+class SummaryForm(forms.Form):
+    rep_redirection = forms.DateTimeField(label = '', required=False, widget = DateWidget("Redirection date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
+    rep_comment = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
 class AlertForm(forms.Form):
 

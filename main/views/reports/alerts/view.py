@@ -3,10 +3,11 @@ from django.shortcuts import get_object_or_404, redirect
 from main.views.reports.utils import *
 
 
-def details(request, alt_id):
-    return render(request, 'main/reports/alerts/details.html', {'alert': Alert.objects.get(alt_id=alt_id)})
+def details(request, rep_id, alt_id):
+    report = Report.objects.get(rep_id=rep_id)
+    return render(request, 'main/reports/alerts/details.html', {'alert': Alert.objects.get(alt_id=alt_id), 'report':report})
 
-def remove(request, alt_id):
+def remove(request, rep_id, alt_id):
     incidentSteps = IncidentStep.objects.filter(ins_ent_id=alt_id, ins_type='A')
     for step in incidentSteps:
         step.delete()
@@ -15,13 +16,14 @@ def remove(request, alt_id):
     alert.delete()
     return redirect("reports:alert_tab", alert.alt_rep_id)
 
-def edit(request, alt_id):
+def edit(request, rep_id, alt_id):
+    report = Report.objects.get(rep_id=rep_id)
     alert = Alert.objects.get(alt_id=alt_id)
     if request.method == 'POST':
         form = AlertForm(request.POST)
         if form.is_valid():
             __modify(form, alt_id)
-            return redirect("alerts:details", alt_id)
+            return redirect("alerts:details", rep_id, alt_id)
         else:
             clear_custom_select_data(form.fields['alert_project'])
             add_custom_select_data(form.fields['alert_project'], int(form.cleaned_data['alert_project'])-1, "selected")
@@ -41,7 +43,7 @@ def edit(request, alt_id):
         clear_custom_select_data(form.fields['alert_type'])
         add_custom_select_data(form.fields['alert_type'], get_inner_tuple_index(Alert._meta.get_field('alt_type').choices, alert.alt_type ), "selected")
 
-    return render(request, 'main/reports/alerts/edit.html', {'alertForm': form, 'alert': alert})
+    return render(request, 'main/reports/alerts/edit.html', {'alertForm': form, 'alert': alert, 'report': report})
 
 def __modify(form, alt_id):
     if form.is_valid():

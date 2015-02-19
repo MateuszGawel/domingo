@@ -1,6 +1,9 @@
 {% load main_filters %}
 
 <ol class="breadcrumb">
+
+    <a href=" {{ request.META.HTTP_REFERER }} "> <span class="glyphicon glyphicon-chevron-left"></span>back</a>
+    &nbsp;&nbsp; | &nbsp;&nbsp;
     {% autoescape off %}
 
         {% if skiplast %}

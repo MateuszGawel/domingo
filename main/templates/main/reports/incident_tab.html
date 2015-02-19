@@ -42,7 +42,7 @@
                     <td>{{ incident.inc_date_end }}</td>
                     <td>{{ incident.inc_com_id.com_value }}</td>
                     <td>
-                        <a class='btn btn-primary' href="{% url 'incidents:details' incident.inc_id %}">Details</a>
+                        <a class='btn btn-primary' href="{% url 'incidents:details' report.rep_id incident.inc_id %}">Details</a>
 
                         {% if incident.inc_status == 'O' %}
                             <form action="{% url 'incidents:close' report.rep_id incident.inc_id %}" method="post">

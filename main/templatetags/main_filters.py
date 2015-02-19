@@ -18,7 +18,7 @@ def breadcrumb_without_last(value, hostname):
 
 
 def __convert_crumbs(crumbs, hostname):
-    s = '<li><a href="http://' + hostname + '/">Main page</a></li> \n'
+    s = '<li><a href="http://' + hostname + '/">main page</a></li> \n'
 
     for i in range( len(crumbs) ):
         s += '<li'

@@ -9,7 +9,7 @@
 {% if inc_id == None %}
     <form class="filters form-inline well" action=" {% url 'reports:maintenance_tab' report.rep_id %} " method="post">
 {% else %}
-    <form class="filters form-inline well" action=" {% url 'reports:incident_maintenance_tab' report.rep_id inc_id %} " method="post">
+    <form class="filters form-inline well" action=" {% url 'reports:incident_maintenance_tab' inc_id %} " method="post">
 {% endif %}
 
         {% csrf_token %}
@@ -36,8 +36,8 @@
                     <td>{{ maintenance.mnt_date }}</td>
                     <td>{{ maintenance.mnt_com_id.com_value }}</td>
                     <td>
-                        <a class='btn btn-primary' href="{% url 'maintenances:details' maintenance.mnt_id %}">Details</a>
-                        <form class="" action="{% url 'maintenances:remove_maintenance' maintenance.mnt_id %}" method="post">
+                        <a class='btn btn-primary' href="{% url 'maintenances:details' report.rep_id maintenance.mnt_id %}">Details</a>
+                        <form class="" action="{% url 'maintenances:remove_maintenance' report.rep_id maintenance.mnt_id %}" method="post">
                             {% csrf_token %}
                             {{ error_message }}
 

@@ -4,6 +4,7 @@
 </form>
 
 <ul class="nav nav-tabs">
+    <li {% if active_tab == 'summary' %} class="active" {% endif %}><a href="{% url 'reports:summary_tab' report.rep_id %}">Summary</a></li>
     <li {% if active_tab == 'alerts' %} class="active" {% endif %}><a href="{% url 'reports:alert_tab' report.rep_id %}">Alerts</a></li>
     <li {% if active_tab == 'contacts' %} class="active" {% endif %}><a href="{% url 'reports:contact_tab' report.rep_id %}">Contacts</a></li>
     <li {% if active_tab == 'maintenances' %} class="active" {% endif %}><a href="{% url 'reports:maintenance_tab' report.rep_id %}">Maintenances</a></li>

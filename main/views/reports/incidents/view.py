@@ -19,7 +19,7 @@ class Entity:
         self.ent_id = id
 
 
-def details(request, inc_id):
+def details(request, rep_id, inc_id):
 
     reportIncident = ReportIncident.objects.filter(rpi_inc_id = inc_id)
 
@@ -96,7 +96,8 @@ def details(request, inc_id):
 
     return render(request, 'main/reports/incidents/details.html', {'incident': Incident.objects.get(inc_id=inc_id), 'entities': entities, "report": report, "alerts": alerts, "contacts": contacts, "maintenances": maintenances})
 
-def edit(request, inc_id):
+def edit(request, rep_id, inc_id):
+    report = Report.objects.get(rep_id=rep_id)
     incident = Incident.objects.get(inc_id=inc_id)
     if request.method == 'POST':
         form = IncidentForm(request.POST)
@@ -119,7 +120,7 @@ def edit(request, inc_id):
             clear_custom_select_data(form.fields['inc_prj_id'])
             add_custom_select_data(form.fields['inc_prj_id'], int(incident.inc_prj_id.prj_id)-1, "selected")
 
-    return render(request, 'main/reports/incidents/edit.html', {'incidentForm': form, 'incident': incident})
+    return render(request, 'main/reports/incidents/edit.html', {'incidentForm': form, 'incident': incident, 'report':report})
 
 def __modify(form, inc_id):
     if form.is_valid():
@@ -171,7 +172,7 @@ def reopen(request, inc_id, rep_id):
 
     return redirect("reports:incident_tab", rep_id)
 
-def join_alert(request, inc_id):
+def join_alert(request, rep_id, inc_id):
     if request.method == 'POST':
         form = Form(request.POST)
         if form.is_valid():
@@ -188,9 +189,9 @@ def join_alert(request, inc_id):
             incidentStepComment.save()
             incidentStep.ins_com_id = incidentStepComment
             incidentStep.save()
-    return redirect("incidents:details", inc_id)
+    return redirect("incidents:details", rep_id, inc_id)
 
-def join_contact(request, inc_id):
+def join_contact(request, rep_id, inc_id):
     if request.method == 'POST':
         form = Form(request.POST)
         if form.is_valid():
@@ -206,9 +207,9 @@ def join_contact(request, inc_id):
             incidentStepComment.save()
             incidentStep.ins_com_id = incidentStepComment
             incidentStep.save()
-    return redirect("incidents:details", inc_id)
+    return redirect("incidents:details", rep_id, inc_id)
 
-def join_maintenance(request, inc_id):
+def join_maintenance(request, rep_id, inc_id):
     if request.method == 'POST':
         form = Form(request.POST)
         if form.is_valid():
@@ -224,9 +225,9 @@ def join_maintenance(request, inc_id):
             incidentStepComment.save()
             incidentStep.ins_com_id = incidentStepComment
             incidentStep.save()
-    return redirect("incidents:details", inc_id)
+    return redirect("incidents:details", rep_id, inc_id)
 
-def remove_incident_step(request, ins_id):
+def remove_incident_step(request, rep_id, ins_id):
     incidentStep = IncidentStep.objects.get(ins_id=ins_id)
     incidentStep.delete()
-    return redirect("incidents:details", incidentStep.ins_inc_id)
+    return redirect("incidents:details", rep_id, incidentStep.ins_inc_id)

@@ -1,13 +1,15 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 
 from main.views.reports.utils import *
 
 
-def details(request, mnt_id):
-    return render(request, 'main/reports/maintenances/details.html', {'maintenance': Maintenance.objects.get(mnt_id=mnt_id)})
+def details(request, rep_id, mnt_id):
+    report = Report.objects.get(rep_id=rep_id)
+    return render(request, 'main/reports/maintenances/details.html', {'maintenance': Maintenance.objects.get(mnt_id=mnt_id), 'report':report})
 
-def remove(request, mnt_id):
+def remove(request, rep_id, mnt_id):
     incidentSteps = IncidentStep.objects.filter(ins_ent_id=mnt_id, ins_type='M')
+    report = Report.objects.get(rep_id=rep_id)
     for step in incidentSteps:
         step.delete()
 
@@ -16,64 +18,45 @@ def remove(request, mnt_id):
 
     return redirect("reports:maintenance_tab", maintenance.mnt_rep_id)
 
-def edit(request, mnt_id):
-    pass
-    '''
-    contact = Contact.objects.get(con_id=con_id)
+def edit(request, rep_id, mnt_id):
+    report = Report.objects.get(rep_id=rep_id)
+
+    maintenance = Maintenance.objects.get(mnt_id=mnt_id)
     if request.method == 'POST':
-        form = ContactForm(request.POST)
+        form = MaintenanceForm(request.POST)
         if form.is_valid():
-            __modify(form, con_id)
-            return redirect("contacts:details", con_id)
+            __modify(form, mnt_id)
+            return redirect("maintenances:details", rep_id, mnt_id)
         else:
-            clear_custom_select_data(form.fields['con_prj_id'])
-            add_custom_select_data(form.fields['con_prj_id'], int(form.cleaned_data['con_prj_id'])-1, "selected")
-            clear_custom_select_data(form.fields['con_type'])
-            add_custom_select_data(form.fields['con_type'], get_inner_tuple_index(Contact._meta.get_field('con_type').choices, form.cleaned_data['con_type'] ), "selected")
-            clear_custom_select_data(form.fields['con_direction'])
-            add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, form.cleaned_data['con_direction'] ), "selected")
+            clear_custom_select_data(form.fields['mnt_prj_id'])
+            add_custom_select_data(form.fields['mnt_prj_id'], int(form.cleaned_data['mnt_prj_id'])-1, "selected")
 
     else:
 
-        form = ContactForm({   'con_prj_id': contact.con_prj_id.prj_id,
-                               'con_type': contact.con_type,
-                               'con_address': contact.con_address,
-                               'con_date': str( contact.con_date ),
-                               'con_direction': contact.con_direction,
-                               'con_internal': contact.con_internal,
-                               'con_com_id': contact.con_com_id.com_value,
+        form = MaintenanceForm({'mnt_prj_id': maintenance.mnt_prj_id.prj_id,
+                                'mnt_name': maintenance.mnt_name,
+                                'mnt_date': str( maintenance.mnt_date ),
+                                'mnt_com_id': maintenance.mnt_com_id.com_value,
         })
 
-        clear_custom_select_data(form.fields['con_prj_id'])
-        add_custom_select_data(form.fields['con_prj_id'], contact.con_prj_id.prj_id - 1, "selected")
-        clear_custom_select_data(form.fields['con_type'])
-        add_custom_select_data(form.fields['con_type'], get_inner_tuple_index(Contact._meta.get_field('con_type').choices, contact.con_type ), "selected")
-        clear_custom_select_data(form.fields['con_direction'])
-        add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, contact.con_direction ), "selected")
+        clear_custom_select_data(form.fields['mnt_prj_id'])
 
-    return render(request, 'main/reports/contacts/edit.html', {'contactForm': form, 'contact': contact})
+    return render(request, 'main/reports/maintenances/edit.html', {'maintenanceForm': form, 'maintenance': maintenance, 'report': report})
 
-def __modify(form, con_id):
+def __modify(form, mnt_id):
     if form.is_valid():
 
-        contact = Contact.objects.get(con_id=con_id)
-        comment = Comment.objects.get(com_id=contact.con_com_id.com_id)
+        maintenance = Maintenance.objects.get(mnt_id=mnt_id)
+        comment = Comment.objects.get(com_id=maintenance.mnt_com_id.com_id)
 
-        if form.cleaned_data.has_key('con_prj_id'):
-            contact.con_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['con_prj_id'])
-        if form.cleaned_data.has_key('con_type'):
-            contact.con_type = form.cleaned_data['con_type']
-        if form.cleaned_data.has_key('con_address'):
-            contact.con_address = form.cleaned_data['con_address']
-        if form.cleaned_data.has_key('con_date'):
-            contact.con_date = form.cleaned_data['con_date']
-        if form.cleaned_data.has_key('con_direction'):
-            contact.con_direction = form.cleaned_data['con_direction']
-        if form.cleaned_data.has_key('con_internal'):
-            contact.con_internal = form.cleaned_data['con_internal']
-        if form.cleaned_data.has_key('con_com_id'):
-            comment.com_value = form.cleaned_data['con_com_id']
+        if form.cleaned_data.has_key('mnt_prj_id'):
+            maintenance.mnt_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['mnt_prj_id'])
+        if form.cleaned_data.has_key('mnt_name'):
+            maintenance.mnt_name = form.cleaned_data['mnt_name']
+        if form.cleaned_data.has_key('mnt_date'):
+            maintenance.mnt_date = form.cleaned_data['mnt_date']
+        if form.cleaned_data.has_key('mnt_com_id'):
+            comment.com_value = form.cleaned_data['mnt_com_id']
 
         comment.save()
-        contact.save()
-    '''
+        maintenance.save()

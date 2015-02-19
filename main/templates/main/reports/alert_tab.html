@@ -1,4 +1,7 @@
 {% extends 'main/_layout/base.html' %}
+<script>
+$('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+</script>
 
 {% block content %}
 
@@ -9,7 +12,7 @@
 {% if inc_id == None %}
     <form class="filters form-inline well" action=" {% url 'reports:alert_tab' report.rep_id %} " method="post">
 {% else %}
-    <form class="filters form-inline well" action=" {% url 'reports:incident_alert_tab' report.rep_id inc_id %} " method="post">
+    <form class="filters form-inline well" action=" {% url 'reports:incident_alert_tab' inc_id %} " method="post">
 {% endif %}
 
         {% csrf_token %}
@@ -47,8 +50,8 @@
                         <td>{{ alert.alt_type }}</td>
                         <td>{{ alert.alt_com_id.com_value }}</td>
                         <td>
-                            <a class='btn btn-primary' href="{% url 'alerts:details' alert.alt_id %}">Details</a>
-                            <form class="" action="{% url 'alerts:remove_alert' alert.alt_id %}" method="post">
+                            <a class='btn btn-primary' href="{% url 'alerts:details' report.rep_id alert.alt_id %}">Details</a>
+                            <form class="" action="{% url 'alerts:remove_alert' report.rep_id alert.alt_id %}" method="post">
                                 {% csrf_token %}
                                 {{ error_message }}
 

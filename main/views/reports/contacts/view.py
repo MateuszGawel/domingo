@@ -3,10 +3,12 @@ from django.shortcuts import get_object_or_404, redirect
 from main.views.reports.utils import *
 
 
-def details(request, con_id):
-    return render(request, 'main/reports/contacts/details.html', {'contact': Contact.objects.get(con_id=con_id)})
+def details(request, rep_id, con_id):
+    report = Report.objects.get(rep_id=rep_id)
+    return render(request, 'main/reports/contacts/details.html', {'contact': Contact.objects.get(con_id=con_id), 'report':report})
 
-def remove(request, con_id):
+def remove(request, rep_id, con_id):
+    report = Report.objects.get(rep_id=rep_id)
     incidentSteps = IncidentStep.objects.filter(ins_ent_id=con_id, ins_type='C')
     for step in incidentSteps:
         step.delete()
@@ -15,7 +17,8 @@ def remove(request, con_id):
     contact.delete()
     return redirect("reports:contact_tab", contact.con_rep_id)
 
-def edit(request, con_id):
+def edit(request, rep_id, con_id):
+    report = Report.objects.get(rep_id=rep_id)
     contact = Contact.objects.get(con_id=con_id)
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -48,7 +51,7 @@ def edit(request, con_id):
         clear_custom_select_data(form.fields['con_direction'])
         add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, contact.con_direction ), "selected")
 
-    return render(request, 'main/reports/contacts/edit.html', {'contactForm': form, 'contact': contact})
+    return render(request, 'main/reports/contacts/edit.html', {'contactForm': form, 'contact': contact, 'report':report})
 
 def __modify(form, con_id):
     if form.is_valid():

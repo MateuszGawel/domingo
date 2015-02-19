@@ -16,7 +16,7 @@ class Report(models.Model):
     rep_date_created = models.DateTimeField(blank=True, null=True, verbose_name="Report creation date")
     rep_date_sent = models.DateTimeField(blank=True, null=True, verbose_name="Report sent date")
     rep_date_removed = models.DateTimeField(blank=True, null=True, verbose_name="Report deletion date")
-    rep_redirection = models.BooleanField(blank=True, default="false", verbose_name="Report redirection check")
+    rep_redirection = models.DateTimeField(blank=True, null=True, verbose_name="Report redirection check")
     rep_usr_id = models.ForeignKey(User, blank=True, null=True, verbose_name="Report user FK")
     rep_com_id = models.ForeignKey("Comment", blank=True, null=True, verbose_name="Report comment FK")
 

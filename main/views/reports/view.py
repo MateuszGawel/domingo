@@ -67,7 +67,10 @@ def create(request):
 
         report.rep_date_created = (datetime.datetime.now()- timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
         report.rep_usr_id = request.user
-        report.rep_notes = 'Siema, elo, mowi Spejson'
+        comment = Comment()
+        comment.com_value = 'Siema, elo, mowi Spejson'
+        comment.save()
+        report.rep_com_id = comment
         report.save()
 
         for incident in Incident.objects.filter(inc_status='O'):
@@ -76,7 +79,7 @@ def create(request):
             ri.rpi_rep_id = report
             ri.save()
 
-        return redirect("reports:alert_tab", report.rep_id)
+        return redirect("reports:summary_tab", report.rep_id)
 
     return redirect("reports:index")
 
@@ -111,9 +114,48 @@ def get_alerts_from_jira(request, rep_id):
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
-def alert_tab(request, rep_id, inc_id=None):
+def summary_tab(request, rep_id):
     if request.user.is_authenticated():
         report = Report.objects.get(rep_id=rep_id)
+
+        if request.method == 'POST':
+            form = SummaryForm(request.POST)
+            if form.is_valid():
+                __summary_add(form, report)
+                return redirect("reports:summary_tab", report.rep_id)
+
+            else:
+                pass
+
+        else:
+            form = SummaryForm()
+
+        return render(request, 'main/reports/summary_tab.html', {'summaryForm': form, 'report': report})
+
+    else:
+        return render(request, 'main/login.html', {'error_message': "You have to log in first."})
+
+def find_report(request, inc_id):
+    report = None
+
+    reportIncident = ReportIncident.objects.filter(rpi_inc_id = inc_id)
+
+    for ri in reportIncident:
+        report = Report.objects.get(rep_id = ri.rpi_rep_id.rep_id)
+        if report.rep_status == 'O' and report.rep_usr_id == request.user:
+            break
+
+    return report
+
+def alert_tab(request, rep_id=None, inc_id=None):
+    if request.user.is_authenticated():
+
+        report = None
+        if rep_id == None:
+            report = find_report(request, inc_id)
+        else:
+            report = Report.objects.get(rep_id=rep_id)
+
         alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
 
         if request.method == 'POST':
@@ -142,9 +184,15 @@ def alert_tab(request, rep_id, inc_id=None):
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
-def contact_tab(request, rep_id, inc_id=None):
+def contact_tab(request, rep_id=None, inc_id=None):
     if request.user.is_authenticated():
-        report = Report.objects.get(rep_id=rep_id)
+
+        report = None
+        if rep_id == None:
+            report = find_report(request, inc_id)
+        else:
+            report = Report.objects.get(rep_id=rep_id)
+
         contacts  = Contact.objects.filter(con_rep_id=report.rep_id)
 
         if request.method == 'POST':
@@ -175,9 +223,15 @@ def contact_tab(request, rep_id, inc_id=None):
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
-def maintenance_tab(request, rep_id, inc_id=None):
+def maintenance_tab(request, rep_id=None, inc_id=None):
     if request.user.is_authenticated():
-        report = Report.objects.get(rep_id=rep_id)
+
+        report = None
+        if rep_id == None:
+            report = find_report(request, inc_id)
+        else:
+            report = Report.objects.get(rep_id=rep_id)
+
         maintenances  = Maintenance.objects.filter(mnt_rep_id=report.rep_id)
         if request.method == 'POST':
             form = MaintenanceForm(request.POST)
@@ -236,16 +290,24 @@ def close(request, rep_id):
 
     return redirect("reports:index")
 
-def incident_alert_tab(request, rep_id, inc_id):
-    return alert_tab(request, rep_id, inc_id)
+def incident_alert_tab(request, inc_id):
+    return alert_tab(request, None, inc_id)
 
-def incident_contact_tab(request, rep_id, inc_id):
-    return contact_tab(request, rep_id, inc_id)
+def incident_contact_tab(request, inc_id):
+    return contact_tab(request, None, inc_id)
 
-def incident_maintenance_tab(request, rep_id, inc_id):
-    return maintenance_tab(request, rep_id, inc_id)
+def incident_maintenance_tab(request, inc_id):
+    return maintenance_tab(request, None, inc_id)
 
 #----PRIVATE METHODS----#
+def __summary_add(form, report):
+    if form.cleaned_data.has_key('rep_redirection'):
+        report.rep_redirection = form.cleaned_data['rep_redirection']
+    if form.cleaned_data.has_key('rep_comment'):
+        print form.cleaned_data['rep_comment']
+        report.rep_com_id.com_value = form.cleaned_data['rep_comment']
+        report.rep_com_id.save()
+    report.save()
 
 def __alert_add(form, report, inc_id=None):
     alert = Alert()
