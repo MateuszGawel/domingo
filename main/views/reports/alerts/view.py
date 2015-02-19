@@ -1,14 +1,16 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect
+
 from main.views.reports.utils import *
-import main.views.reports.view
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+
 
 def details(request, alt_id):
     return render(request, 'main/reports/alerts/details.html', {'alert': Alert.objects.get(alt_id=alt_id)})
 
 def remove(request, alt_id):
+    incidentSteps = IncidentStep.objects.filter(ins_ent_id=alt_id, ins_type='A')
+    for step in incidentSteps:
+        step.delete()
+
     alert = Alert.objects.get(alt_id=alt_id)
     alert.delete()
     return redirect("reports:alert_tab", alert.alt_rep_id)

@@ -1,0 +1,18 @@
+{% extends 'main/_layout/base.html' %}
+
+{% block breadcrumbs %}
+    {% include "main/_layout/breadcrumbs.html" with skiplast=True %}
+{% endblock %}
+
+{% block content %}
+    <h1>ID: {{ maintenance.mnt_id }}</h1>
+
+    <div class="col-lg-12">
+
+            <a href="{% url 'maintenances:edit' maintenance.mnt_id %}" type="submit" class='btn btn-primary'>Edit</a> <br><br>
+
+            maintenance
+
+    </div>
+
+{% endblock %}

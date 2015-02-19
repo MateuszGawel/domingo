@@ -1,21 +1,24 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 
 from main.views.reports.utils import *
 
 
-def details(request, con_id):
-    return render(request, 'main/reports/contacts/details.html', {'contact': Contact.objects.get(con_id=con_id)})
+def details(request, mnt_id):
+    return render(request, 'main/reports/maintenances/details.html', {'maintenance': Maintenance.objects.get(mnt_id=mnt_id)})
 
-def remove(request, con_id):
-    incidentSteps = IncidentStep.objects.filter(ins_ent_id=con_id, ins_type='C')
+def remove(request, mnt_id):
+    incidentSteps = IncidentStep.objects.filter(ins_ent_id=mnt_id, ins_type='M')
     for step in incidentSteps:
         step.delete()
 
-    contact = Contact.objects.get(con_id=con_id)
-    contact.delete()
-    return redirect("reports:contact_tab", contact.con_rep_id)
+    maintenance = Maintenance.objects.get(mnt_id=mnt_id)
+    maintenance.delete()
 
-def edit(request, con_id):
+    return redirect("reports:maintenance_tab", maintenance.mnt_rep_id)
+
+def edit(request, mnt_id):
+    pass
+    '''
     contact = Contact.objects.get(con_id=con_id)
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -73,3 +76,4 @@ def __modify(form, con_id):
 
         comment.save()
         contact.save()
+    '''

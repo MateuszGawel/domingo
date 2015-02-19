@@ -1,9 +1,9 @@
 from django import forms
-from django.forms import ModelForm
-from main.models import *
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
-from django.utils.encoding import smart_text, force_str, force_text
+
+from main.models import *
+
 
 class CustomWidget(forms.Widget):
 
@@ -134,6 +134,13 @@ class ContactForm(forms.Form):
     con_direction = forms.CharField(label = '', widget = SelectWidget("Contact direction", getChoices(Contact, "con_direction")).get_widget())
     con_internal = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Internal").get_widget() )
     con_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+
+class MaintenanceForm(forms.Form):
+
+    mnt_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
+    mnt_name = forms.CharField(label = '', widget = CharWidget("Maintenance name").get_widget() )
+    mnt_date = forms.DateTimeField(label = '', widget = DateWidget("Maintenance date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
+    mnt_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
 class IncidentForm(forms.Form):
 

@@ -2,17 +2,7 @@
 
 {% block content %}
 
-    <form action="{% url 'reports:close' report.rep_id %}" method="post">
-        {% csrf_token %}
-        <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close report</button>
-    </form>
-
-
-    <ul class="nav nav-tabs">
-        <li><a href="{% url 'reports:alert_tab' report.rep_id %}">Alerts</a></li>
-        <li><a href="{% url 'reports:contact_tab' report.rep_id %}">Contacts</a></li>
-        <li class="active"><a href="{% url 'reports:incident_tab' report.rep_id %}">Incidents</a></li>
-    </ul>
+{% include 'main/_layout/report_menu.html' with active_tab="incidents" %}
 
 
 

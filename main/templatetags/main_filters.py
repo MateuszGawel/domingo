@@ -36,3 +36,18 @@ def __convert_crumbs(crumbs, hostname):
         s += ' </li> \n'
 
     return s
+
+@register.simple_tag
+def setSession(request, inc_id):
+    if inc_id != None:
+        try:
+            request.session['inc_id'] = inc_id
+        except:
+            pass
+
+@register.simple_tag
+def clearSession(request):
+    try:
+        del request.session['inc_id']
+    except:
+        pass

@@ -1,8 +1,11 @@
 import datetime
+from datetime import timedelta
+
 from django.shortcuts import redirect,get_object_or_404
-from django.contrib.messages import get_messages
+
 from utils import *
-from datetime import date, timedelta
+
+
 def index(request):
     if request.user.is_authenticated():
         report = Report.objects.filter(rep_usr_id=request.user.id)
@@ -108,7 +111,7 @@ def get_alerts_from_jira(request, rep_id):
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
-def alert_tab(request, rep_id):
+def alert_tab(request, rep_id, inc_id=None):
     if request.user.is_authenticated():
         report = Report.objects.get(rep_id=rep_id)
         alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
@@ -116,8 +119,13 @@ def alert_tab(request, rep_id):
         if request.method == 'POST':
             form = AlertForm(request.POST)
             if form.is_valid():
-                __alert_add(form, report)
-                return redirect("reports:alert_tab", report.rep_id)
+                if inc_id == None:
+                    __alert_add(form, report)
+                    return redirect("reports:alert_tab", report.rep_id)
+                else:
+                    __alert_add(form, report, inc_id)
+                    return redirect("incidents:details", inc_id)
+
             else:
                 clear_custom_select_data(form.fields['alert_project'])
                 add_custom_select_data(form.fields['alert_project'], int(form.cleaned_data['alert_project'])-1, "selected")
@@ -129,12 +137,12 @@ def alert_tab(request, rep_id):
             clear_custom_select_data(form.fields['alert_project'])
             clear_custom_select_data(form.fields['alert_type'])
 
-        return render(request, 'main/reports/alert_tab.html', {'alertForm': form, 'alerts': alerts, 'report': report})
+        return render(request, 'main/reports/alert_tab.html', {'alertForm': form, 'alerts': alerts, 'report': report, 'inc_id': inc_id})
 
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
-def contact_tab(request, rep_id):
+def contact_tab(request, rep_id, inc_id=None):
     if request.user.is_authenticated():
         report = Report.objects.get(rep_id=rep_id)
         contacts  = Contact.objects.filter(con_rep_id=report.rep_id)
@@ -142,8 +150,12 @@ def contact_tab(request, rep_id):
         if request.method == 'POST':
             form = ContactForm(request.POST)
             if form.is_valid():
-                __contact_add(form, report)
-                return redirect("reports:contact_tab", report.rep_id)
+                if inc_id == None:
+                    __contact_add(form, report)
+                    return redirect("reports:contact_tab", report.rep_id)
+                else:
+                    __contact_add(form, report, inc_id)
+                    return redirect("incidents:details", inc_id)
             else:
                 clear_custom_select_data(form.fields['con_prj_id'])
                 add_custom_select_data(form.fields['con_prj_id'], int(form.cleaned_data['con_prj_id'])-1, "selected")
@@ -158,7 +170,32 @@ def contact_tab(request, rep_id):
             clear_custom_select_data(form.fields['con_type'])
             clear_custom_select_data(form.fields['con_direction'])
 
-        return render(request, 'main/reports/contact_tab.html', {'contactForm': form, 'contacts': contacts, 'report': report})
+        return render(request, 'main/reports/contact_tab.html', {'contactForm': form, 'contacts': contacts, 'report': report, 'inc_id': inc_id})
+
+    else:
+        return render(request, 'main/login.html', {'error_message': "You have to log in first."})
+
+def maintenance_tab(request, rep_id, inc_id=None):
+    if request.user.is_authenticated():
+        report = Report.objects.get(rep_id=rep_id)
+        maintenances  = Maintenance.objects.filter(mnt_rep_id=report.rep_id)
+        if request.method == 'POST':
+            form = MaintenanceForm(request.POST)
+            if form.is_valid():
+                if inc_id == None:
+                    __maintenance_add(form, report)
+                    return redirect("reports:maintenance_tab", report.rep_id)
+                else:
+                    __maintenance_add(form, report, inc_id)
+                    return redirect("incidents:details", inc_id)
+            else:
+                clear_custom_select_data(form.fields['mnt_prj_id'])
+                add_custom_select_data(form.fields['mnt_prj_id'], int(form.cleaned_data['mnt_prj_id'])-1, "selected")
+        else:
+            form = MaintenanceForm()
+            clear_custom_select_data(form.fields['mnt_prj_id'])
+
+        return render(request, 'main/reports/maintenance_tab.html', {'maintenances': maintenances, 'maintenanceForm' : form, 'report': report, 'inc_id': inc_id})
 
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
@@ -199,14 +236,20 @@ def close(request, rep_id):
 
     return redirect("reports:index")
 
+def incident_alert_tab(request, rep_id, inc_id):
+    return alert_tab(request, rep_id, inc_id)
 
+def incident_contact_tab(request, rep_id, inc_id):
+    return contact_tab(request, rep_id, inc_id)
+
+def incident_maintenance_tab(request, rep_id, inc_id):
+    return maintenance_tab(request, rep_id, inc_id)
 
 #----PRIVATE METHODS----#
 
-def __alert_add(form, report):
+def __alert_add(form, report, inc_id=None):
     alert = Alert()
     comment = Comment()
-
     if form.cleaned_data.has_key('alert_project'):
         alert.alt_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['alert_project'])
     if form.cleaned_data.has_key('alert_name'):
@@ -227,7 +270,18 @@ def __alert_add(form, report):
 
     alert.save()
 
-def __contact_add(form, report):
+    if inc_id != None:
+        incident = Incident.objects.get(inc_id=inc_id)
+        incidentStep = IncidentStep()
+        incidentStep.ins_type = 'A'
+        incidentStep.ins_ent_id = alert.alt_id
+        incidentStep.ins_inc_id = incident
+        incidentStepComment = Comment()
+        incidentStepComment.save()
+        incidentStep.ins_com_id = incidentStepComment
+        incidentStep.save()
+
+def __contact_add(form, report, inc_id=None):
     contact = Contact()
     comment = Comment()
 
@@ -252,6 +306,46 @@ def __contact_add(form, report):
     contact.con_rep_id = report
 
     contact.save()
+    if inc_id != None:
+        incident = Incident.objects.get(inc_id=inc_id)
+        incidentStep = IncidentStep()
+        incidentStep.ins_type = 'C'
+        incidentStep.ins_ent_id = contact.con_id
+        incidentStep.ins_inc_id = incident
+        incidentStepComment = Comment()
+        incidentStepComment.save()
+        incidentStep.ins_com_id = incidentStepComment
+        incidentStep.save()
+
+def __maintenance_add(form, report, inc_id=None):
+    comment = Comment()
+    maintenance = Maintenance()
+
+    if form.cleaned_data.has_key('mnt_prj_id'):
+        maintenance.mnt_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['mnt_prj_id'])
+    if form.cleaned_data.has_key('mnt_name'):
+        maintenance.mnt_name = form.cleaned_data['mnt_name']
+    if form.cleaned_data.has_key('mnt_date'):
+        maintenance.mnt_date = form.cleaned_data['mnt_date']
+    if form.cleaned_data.has_key('con_com_id'):
+        comment.com_value = form.cleaned_data['mnt_com_id']
+
+    comment.save()
+
+    maintenance.mnt_com_id = comment
+    maintenance.mnt_rep_id = report
+
+    maintenance.save()
+    if inc_id != None:
+        incident = Incident.objects.get(inc_id=inc_id)
+        incidentStep = IncidentStep()
+        incidentStep.ins_type = 'M'
+        incidentStep.ins_ent_id = maintenance.mnt_id
+        incidentStep.ins_inc_id = incident
+        incidentStepComment = Comment()
+        incidentStepComment.save()
+        incidentStep.ins_com_id = incidentStepComment
+        incidentStep.save()
 
 def __incident_add(form, report):
     incident = Incident()

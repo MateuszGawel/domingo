@@ -1,0 +1,53 @@
+{% extends 'main/_layout/base.html' %}
+
+{% block content %}
+
+{% include 'main/_layout/report_menu.html' with active_tab="maintenances" %}
+
+{% if inc_id != None %} DODAJE DO INCYDENTU O ID: {{ inc_id }} {% endif %}
+
+{% if inc_id == None %}
+    <form class="filters form-inline well" action=" {% url 'reports:maintenance_tab' report.rep_id %} " method="post">
+{% else %}
+    <form class="filters form-inline well" action=" {% url 'reports:incident_maintenance_tab' report.rep_id inc_id %} " method="post">
+{% endif %}
+
+        {% csrf_token %}
+        {{ maintenanceForm }}
+        {{ error_message }}
+        <button class='btn btn-success navbar-right' type='submit'>Add</button>
+    </form>
+    {% if inc_id == None %}
+    <table class='table table-bordered table-striped table-hover'>
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Name</th>
+                <th>Data</th>
+                <th>Comment</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for maintenance in maintenances %}
+                <tr>
+                    <td>{{ maintenance.mnt_prj_id.prj_name }}</td>
+                    <td>{{ maintenance.mnt_name }}</td>
+                    <td>{{ maintenance.mnt_date }}</td>
+                    <td>{{ maintenance.mnt_com_id.com_value }}</td>
+                    <td>
+                        <a class='btn btn-primary' href="{% url 'maintenances:details' maintenance.mnt_id %}">Details</a>
+                        <form class="" action="{% url 'maintenances:remove_maintenance' maintenance.mnt_id %}" method="post">
+                            {% csrf_token %}
+                            {{ error_message }}
+
+                            <button class='btn btn-danger' type='submit'>Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% endblock %}

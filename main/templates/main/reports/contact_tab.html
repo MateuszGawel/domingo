@@ -2,22 +2,21 @@
 
 {% block content %}
 
-    <form action="{% url 'reports:close' report.rep_id %}" method="post">
-        {% csrf_token %}
-        <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close report</button>
-    </form>
+{% include 'main/_layout/report_menu.html' with active_tab="contacts" %}
 
-    <ul class="nav nav-tabs">
-        <li><a href="{% url 'reports:alert_tab' report.rep_id %}">Alerts</a></li>
-        <li class="active"><a href="{% url 'reports:contact_tab' report.rep_id %}">Contacts</a></li>
-        <li><a href="{% url 'reports:incident_tab' report.rep_id %}">Incidents</a></li>
-    </ul>
-    <form class="filters form-inline well" action="{% url 'reports:contact_tab' report.rep_id %}" method="post">
+{% if inc_id != None %} DODAJE DO INCYDENTU O ID: {{ inc_id }} {% endif %}
+
+{% if inc_id == None %}
+    <form class="filters form-inline well" action=" {% url 'reports:contact_tab' report.rep_id %} " method="post">
+{% else %}
+    <form class="filters form-inline well" action=" {% url 'reports:incident_contact_tab' report.rep_id inc_id %} " method="post">
+{% endif %}
         {% csrf_token %}
         {{ contactForm.as_p }}
         {{ error_message }}
         <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
     </form>
+    {% if inc_id == None %}
     <table class='table table-bordered table-striped table-hover'>
         <thead>
             <tr>
@@ -41,10 +40,18 @@
                     <td>{{ contact.con_direction }}</td>
                     <td>{{ contact.con_internal }}</td>
                     <td>{{ contact.con_com_id.com_value }}</td>
-                    <td><a class='btn btn-primary' href="{% url 'contacts:details' contact.con_id %}">Details</a></td>
+                    <td>
+                        <a class='btn btn-primary' href="{% url 'contacts:details' contact.con_id %}">Details</a>
+                        <form class="" action="{% url 'contacts:remove_contact' contact.con_id %}" method="post">
+                            {% csrf_token %}
+                            {{ error_message }}
+                            <button class='btn btn-danger' type='submit'>Remove</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
 
 {% endblock %}
