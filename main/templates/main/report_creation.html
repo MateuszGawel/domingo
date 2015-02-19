@@ -9,6 +9,7 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#alerts">Alerts</a></li>
+        <li><a data-toggle="tab" href="#contacts">Contacts</a></li>
         <li><a data-toggle="tab" href="#incidents">Incidents</a></li>
     </ul>
 
@@ -17,30 +18,7 @@
         <section class="well tab-pane fade in active" id="alerts">
             <form class="filters form-inline well" action="{% url 'main:add_alert' %}" method="post">
                 {% csrf_token %}
-                <div class='filter_project'>
-                    {{ form.alert_project.errors }}
-                    {{ form.alert_project }}
-                </div>
-                <div class='filter_input'>
-                    {{ form.alert_name.errors }}
-                    {{ form.alert_name }}
-                </div>
-                <div class='filter_input'>
-                    {{ form.alert_ticket.errors }}
-                    {{ form.alert_ticket }}
-                </div>
-                <div class='filter_input'>
-                    {{ form.alert_date.errors }}
-                    {{ form.alert_date }}
-                </div>
-                <div class='filter_project'>
-                    {{ form.alert_type.errors }}
-                    {{ form.alert_type }}
-                </div>
-                <div class='filter_input'>
-                    {{ form.alert_comment.errors }}
-                    {{ form.alert_comment }}
-                </div>
+                {{ alertForm.as_p }}
                 {{ error_message }}
                 <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
             </form>
@@ -53,6 +31,7 @@
                         <th>Data</th>
                         <th>Type</th>
                         <th>Comment</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,10 +43,21 @@
                             <td>{{ alert.alt_date }}</td>
                             <td>{{ alert.alt_type }}</td>
                             <td>{{ alert.alt_com_id.com_value }}</td>
+                            <td><a class='btn btn-primary' href="{% url 'main:alert_details' alert.alt_id %}">Edit</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </section>
+
+        <section class="well tab-pane fade" id="contacts">
+            <h1>KONTAKTY</h1>
+            <form class="filters form-inline well" action="{% url 'main:add_contact' %}" method="post">
+                {% csrf_token %}
+                {{ contactForm.as_p }}
+                {{ error_message }}
+                <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+            </form>
         </section>
 
         <section class="well tab-pane fade" id="incidents">

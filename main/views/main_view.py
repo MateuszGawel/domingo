@@ -7,14 +7,9 @@ from main.models import Report
 
 def index(request):
     if request.user.is_authenticated():
-        report = Report.objects.filter(rep_usr_id=request.user.id)
-        if report.exists():
-            report = report.latest('rep_id')
-        else:
-            report = None
-        return render(request, 'main/index.html', {'report': report, 'user': request.user})
+        return render(request, 'main/index.html')
     else:
-        return render(request, 'main/login.html', None)
+        return render(request, 'main/login.html')
 
 def do_login(request):
     username = request.POST['username']

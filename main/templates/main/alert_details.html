@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+    <h1>NAME: {{ alert.alt_name }}</h1>
+
+    <div class="tab-content col-lg-12">
+
+        <section class="tab-pane fade {% if editable %} in active {% endif %}" id="noneditable">
+
+            <a class='btn btn-primary' data-toggle="tab" href="#editable">Edit</a> <br><br>
+            Author: {{ alert.alt_rep_id.rep_usr_id }} <br />
+            Project: {{ alert.alt_prj_id.prj_name }} <br />
+            Sensor: {{ alert.alt_name }} <br />
+            Ticket: {{ alert.alt_ticket }} <br />
+            Data: {{ alert.alt_date }} <br />
+            Type: {{ alert.alt_type }} <br />
+            Comment: {{ alert.alt_com_id.com_value }}<br />
+
+
+        </section>
+
+        <section class="tab-pane fade {% if not editable %} in active {% endif %}" id="editable">
+
+            <a class='btn btn-danger' href="{% url 'main:alert_details' alert.alt_id %}">Cancel</a> <br><br>
+
+            <form action="{% url 'main:alert_details' alert.alt_id %}" method="post">
+                {% csrf_token %}
+                {{ alertForm }}
+                <button type="submit" class='btn btn-success'>Save</button> <br><br>
+            </form>
+
+
+        </section>
+
+    </div>
+
+{% endblock %}

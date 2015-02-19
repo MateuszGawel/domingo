@@ -12,8 +12,7 @@
 
         <section class="well tab-pane fade in active" id="browse_reports">
             <h1>BROWSE REPORTS</h1>
-            <form class="filters form-inline well" action="{% url 'main:filter_reports' %}" method="post">
-                {% csrf_token %}
+            <form class="filters form-inline well get-clear" action="{% url 'main:filter_reports' %}" method="get">
                 <div class='filter_project'>
                     {{ form.rep_id.errors }}
                     {{ form.rep_id }}
@@ -56,6 +55,7 @@
                     {{ form.rep_usr_id }}
                 </div><br>
                 {{ error_message }}
+                <button class='btn btn-danger navbar-right clear'><i class="glyphicon glyphicon-circle-ok"></i>Clear</button>
                 <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Filter</button>
             </form>
             <table class='table table-bordered table-striped table-hover'>

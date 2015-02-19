@@ -1,0 +1,36 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    {% include "main/side_menu.html" with active="reports" %}
+    <div class="col-md-8 col-md-offset-4">
+        <div class="row">
+            <h1>CREATE REPORT</h1>
+            {% if report == None %}
+                <span style="color: green">You have no reports yet</span><br>
+                <a href="{% url 'main:create_report' %}" class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</a>
+            {% elif report.rep_date_sent == None %}
+                Your last report has been created: {{ report.rep_date_created }}<br>
+                <span style="color: red">It hasn't been sent yet. You cannot create a new one. Please close or edit the old report.</span>
+                <p>
+                    <a href="" disabled="disabled" class='btn btn-success' type='submit' style="margin-bottom: 20px">Create Report</a>
+                    <a href="{% url 'main:edit_report' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Edit current Report</a>
+                    <a href="{% url 'main:close_report' %}" class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close Report</a>
+                </p>
+            {% else %}
+                Your last report has been created: {{ report.rep_date_created }}<br>
+                <span style="color: green">It has been closed: {{ report.rep_date_sent }}</span>
+                <p><a href="{% url 'main:create_report' %}" class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</a></p>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <h1>BROWSE REPORT</h1>
+            <p>
+                <a href="{% url 'main:browse_my_reports' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Browse my reports</a>
+                <a href="{% url 'main:browse_reports' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Browse all reports</a>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

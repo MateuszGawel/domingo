@@ -1,0 +1,17 @@
+<aside class='list-group col-lg-3 col-md-3 col-sm-3'>
+    <a href="{% url 'main:index' %}" class='list-group-item {% if active == "dashboard" %} active {% endif %}'>
+        Dashboard
+    </a>
+
+    <a href="{% url 'main:reports' %}" class='list-group-item {% if active == "reports" %} active {% endif %}'>
+        Reports
+    </a>
+
+    <a href="javascript:void(0)" class='list-group-item {% if active == "announcements" %} active {% endif %}'>
+        Announcements
+    </a>
+
+    <a href="javascript:void(0)" class='list-group-item {% if active == "sasha" %} active {% endif %}'>
+        Sasha Grey fanpage
+    </a>
+</aside>
