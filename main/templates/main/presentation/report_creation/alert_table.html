@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Added alerts</div>
+
+    <table class="table">
+        <thead>
+            <th> Type </th>
+            <th> Project </th>
+            <th> Ticket </th>
+            <th> Time </th>
+            <th> Delete </th>
+        </thead>
+        <tbody>
+            {% for alert in duty.dut_rep.alert_set.all %}
+                <tr>
+                    <td>{{  alert.alt_type }}</td>
+                    <td>{{  alert.alt_prj_id }}</td>
+                    <td>{{  alert.alt_ticket }}</td>
+                    <td>{{  alert.alt_start_date|date:"Y-m-d H:h:s" }}</td>
+                    <td> <button class="btn btn-danger btn-sm">X</button> </td>
+                </tr>
+            {%  endfor %}
+        </tbody>
+    </table>
+</div>

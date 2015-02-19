@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
@@ -24,4 +24,4 @@ def do_login(request):
 
 def do_logout(request):
     logout(request)
-    return render(request, 'main/login.html', {'error_message': "Thanks for logging out. Now you can login again."})
+    return render(request, 'main/login.html', {'error_message': "Thanks for logging out. Now you can login again.", "error_type": "success"})
