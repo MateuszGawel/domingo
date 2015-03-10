@@ -1,0 +1,57 @@
+html{
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing:    border-box;
+	box-sizing:         border-box;
+	margin-left:  auto;
+	margin-right: auto;
+}
+
+.navbar{
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+
+header nav, body{
+	padding-right: 15px;
+	padding-left: 15px;
+}
+.user_info, .user_info a{
+	display: inline-block;
+}
+.user_info a{
+	margin-top: 5px;
+}
+.user_info span{
+	font-size: 24px;
+	color: #fafafa;
+	margin-left: 20px;
+
+}
+.user_info .avatar{
+	max-width: 64px;
+	max-height: 80px;
+}
+
+.log_btn{
+	display: block;
+	float: right;
+	margin-right: 10px;
+	margin-top: 8px;
+}
+.begin_work, .raports_field{
+	padding-right: 50px;
+}
+
+
+
+
+
+/* ====================   raport.html ===================   */
+.raports_field section h2, .raports .panel-heading h1{
+	text-align: center;
+}
+.raports .panel-heading h1{
+	color: green;
+}

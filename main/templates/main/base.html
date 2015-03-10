@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Welcome to Domingo!</title>
+
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'main/bootstrap/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap-datetimepicker.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'main/css/style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'main/css/select2.min.css' %}" />
+
+        <script src="{% static "main/js/jQuery.js" %}"></script>
+        <script src="{% static "main/js/moment.js" %}"></script>
+        <script src="{% static "main/js/select2.min.js" %}"></script>
+        <script src="{% static "main/js/script.js" %}"></script>
+        <script src="{% static "main/js/bootstrap-datetimepicker.min.js" %}"></script>
+        <script src="{% static "main/bootstrap/js/bootstrap.min.js" %}"></script>
+
+    </head>
+
+    <body>
+
+        {% include "main/menu.html" %}
+
+        {% block content %} {% endblock %}
+
+    </body>
+</html>

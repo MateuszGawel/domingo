@@ -29,7 +29,7 @@ def start_duty(request):
             global duty
             duty = get_object_or_404(Duty, dut_id=request.session.get('duty'))
 
-        return render(request, 'main/report_creation.html', {'duty': duty})
+        return render(request, 'main/report.html', {'duty': duty})
     else:
         return render(request, 'main/login.html', None)
 
@@ -52,7 +52,7 @@ def add_alert(request):
             if duty is not None:
                 request.session['duty'] = duty.dut_id
             else:
-                return render(request, 'main/report_creation.html', {'error_message': "You have to start your duty first"})
+                return render(request, 'main/report.html', {'error_message': "You have to start your duty first"})
         alert = Alert()
         alert.alt_start_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         alert.alt_ticket = request.POST['ticket']

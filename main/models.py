@@ -23,6 +23,11 @@ class Alert(models.Model):
 
 
 
+#class Alert_type(models.Model):
+#    att_id
+
+
+
 class Call(models.Model):
     cal_id = models.AutoField(primary_key=True)
     cal_rep = models.ForeignKey('Report', blank=True, null=True)
@@ -39,6 +44,7 @@ class Duty(models.Model):
     dut_rep = models.ForeignKey('Report', blank=True, null=True)
     dut_start_date = models.DateTimeField(blank=True, null=True)
     dut_end_date = models.DateTimeField(blank=True, null=True)
+
 
 
 class Project(models.Model):
