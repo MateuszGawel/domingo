@@ -49,3 +49,33 @@ header nav, body{
 .raports .panel-heading h1{
 	color: green;
 }
+
+.filters{
+	display: block;
+}
+.filters .filter_project, .filters .filter_input{
+	display: inline-block;
+}
+.filters button.navbar-right{
+	margin-right: 5px;
+}
+
+
+/* ================ dialog window ======================
+.modal-dialog{
+	width: 1224px;
+}   */
+.date_text{
+	display: block;
+}
+.form-horizontal .date_text label{
+	text-align: left;
+}
+.edit_btn{
+	float: right;
+	margin-right: 15px;
+}
+
+.form-group .filter_project{
+	margin-left: 15px;
+}
