@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     #reports
     url(r'^report/current$', report_view.start_duty, name='start_duty'),
     url(r'^report/alert$', report_view.add_alert, name='add_alert'),
+    url(r'^report/alert_form', report_view.alert_form, name='alert_form'),
 
     #default
     url(r'[a-z]*', main_view.index, name='index'),

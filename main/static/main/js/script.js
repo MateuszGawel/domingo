@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     //AJAX util
-    $('#add-alert-form').submit(function (e) {
+    $('form').submit(function (e) {
         e.preventDefault();
         $.ajax({
             type: "POST",
@@ -10,6 +10,7 @@ $(document).ready(function() {
 
             success: function (data) {
                 $("#alerts").load(" #alerts");
+                alert(data)
             }
         });
     });
@@ -22,13 +23,12 @@ $(document).ready(function() {
 
     //SELECT2 util
     $('select').select2();
-
 });
 
 //DATETIMEPICKER util
 //https://github.com/Eonasdan/bootstrap-datetimepicker
 $(function () {
-    $('#report-creation-alert-time').datetimepicker({
+    $('.datetimePicker').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
         toolbarPlacement: 'top',
         showTodayButton: true,
