@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="css/fullcalendar.min.css">
 <link rel="stylesheet" href="css/bootstrap-fullcalendar.css">
+<link rel="stylesheet" href="css/bootstrap-select.min.css">
 
 <link rel="stylesheet" href="css/main.css">
 
@@ -41,13 +42,213 @@
 					<hr>
 					<p>Lorem ipsum dolor sit amet magna. Donec nec tortor lacus sed est. Lorem ipsum ac imperdiet lectus pharetra pede. Integer nonummy porttitor vitae, arcu. Cras interdum eu, aliquet pulvinar, pede turpis nec augue. Vestibulum ante sodales dui a adipiscing urna. Nam enim. Mauris vel ligula bibendum ipsum ut felis fermentum orci nec diam turpis egestas. Mauris leo. Aenean sed felis sollicitudin turpis in ligula condimentum nulla. Curabitur ultrices posuere ante ipsum dolor vel massa.</p>
 				</section>
+				<!--  RAPORT alerts -->
+				<section class='well'>
+					<form class='filters form-inline well'>
+						<div class='filter_project'>
+							<select class='selectpicker' multiple title='Choose project' data-width="140px">
+								<option>Project1</option>
+								<option>Project2</option>
+								<option>Project3</option>
+							</select>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='sensor'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='ticket'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='start date'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='end date'>
+						</div>
+						<div class='filter_project'>
+							<select class='selectpicker' data-width="120px" multiple title='Choose type'>
+								<option>Task</option>
+								<option>Bug</option>
+								<option>Question</option>
+								<option>Enhancement</option>
+								<option>Internal Bug</option>
+								<option>New network connectivity</option>
+							</select>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='reporter'>
+						</div>
+						<button class='btn btn-primary navbar-right' type='submit'><i class="glyphicon glyphicon-search"></i> Find</button>
+					</form>
+					<table class='table table-bordered table-striped table-hover'>
+						<thead>
+							<tr>
+								<th>Project</th>
+								<th>Sensor</th>
+								<th>Ticket</th>
+								<th>Start data</th>
+								<th>End data</th>
+								<th>Type</th>
+								<th>Reporter</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td>2025-01-01 00:22</td>
+								<td>Bug</td>
+								<td>User_name</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td>2025-01-01 00:22</td>
+								<td>Bug</td>
+								<td>User_name</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td>2025-01-01 00:22</td>
+								<td>Bug</td>
+								<td>User_name</td>
+							</tr>	
+						</tbody>
+					</table>
+				</section>
+
+				<!--    Mobile phones -->
+
+				<section class='well'>
+					<form class='filters form-inline well'>
+						<div class='filter_project'>
+							<select class='selectpicker' multiple title='Choose project' data-width="140px">
+								<option>Project1</option>
+								<option>Project2</option>
+								<option>Project3</option>
+							</select>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='caller' >
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='mobile number'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='ticket'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='date(yyyy-mm-dd)'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='reporter'>
+						</div>
+						<button class='btn btn-primary navbar-right' type='submit'><i class="glyphicon glyphicon-search"></i> Find</button>
+					</form>
+					<table class='table table-bordered table-striped table-hover'>
+						<thead>
+							<tr>
+								<th>Project</th>
+								<th>Caller</th>
+								<th>Phone number</th>
+								<th>Ticket</th>
+								<th>Data</th>
+								<th>Type</th>
+								<th>Reporter</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Test1</td>
+								<td>tester</td>
+								<td>+380967747263</td>
+								<td>NOM-001</td>
+								<td>2015-01-01 00:14</td>
+								<td><i class="glyphicon glyphicon-circle-arrow-up"></i></td>
+								<td>User_name</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>tester_2</td>
+								<td>+3805035525321</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td><i class="glyphicon glyphicon-circle-arrow-down"></i></td>
+								<td>User_name</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>+380967747263</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td><i class="glyphicon glyphicon-circle-arrow-up"></i></td>
+								<td>User_name</td>
+							</tr>	
+						</tbody>
+					</table>
+				</section>
+				
+				<!--  Raports   -->
+
+				<section class='well'>
+					<table class='table table-bordered table-striped table-hover'>
+						<thead>
+							<tr>
+								<th>Project</th>
+								<th>Ticket</th>
+								<th>Data start</th>
+								<th>Data end</th>
+								<th>Details</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Test1</td>
+								<td>ASD-123</td>
+								<td>2015-01-01 00:14</td>
+								<td>2015-01-01 10:15</td>
+								<td>
+									<a class='btn btn-primary' href="javascript:void(0)">Details</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>DFEW-532</td>
+								<td>2015-01-01 00:14</td>
+								<td>2015-01-01 10:15</td>
+								<td>
+									<a class='btn btn-primary' href="javascript:void(0)">Details</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>VSF-352</td>
+								<td>2015-01-01 00:14</td>
+								<td>2015-01-01 10:15</td>
+								<td>
+									<a class='btn btn-primary' href="javascript:void(0)">Details</a>
+								</td>
+							</tr>	
+						</tbody>
+					</table>
+				</section>
 			</div>
 		</div>
 	</div>
 
 </body>
 <script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/moment.min.js"></script>
 <script type="text/javascript" src="js/fullcalendar.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.js"></script>
+<script type="text/javascript" src="js/bootbox.min.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 </html>
