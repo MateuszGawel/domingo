@@ -22,7 +22,10 @@ class CustomWidget(forms.Widget):
         self.widget_context = d
 
     def render(self, name, value, attrs=None):
-        context = {'label': self.label, 'name': name}
+        if value is not None:
+            context = {'label': self.label, 'name': name, 'value': value}
+        else:
+            context = {'label': self.label, 'name': name}
         context = dict(context.items() + self.widget_context.items())
 
         return mark_safe(render_to_string(self.template_name, context))
@@ -68,6 +71,7 @@ class CharWidget(MyWidget):
         self.widget.set_template_name('main/widgets/char_widget.html')
         self.widget.set_label(label)
 
+        print "placeholder: " + label
         context = {'placeholder': label}
 
         self.widget.set_context(context)
@@ -107,11 +111,11 @@ class AlertForm(forms.Form):
 
     alert_project = forms.CharField(label = '', widget = SelectWidget("Project", getModelObjects(Project) ).get_widget() )
     alert_name = forms.CharField(label = '', widget = CharWidget("Alert name").get_widget() )
-    alert_ticket = forms.CharField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
-    alert_date = forms.CharField(label = '', widget = DateWidget("Alert date").get_widget() )
+    alert_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
+    alert_date = forms.DateTimeField(label = '', widget = DateWidget("Alert date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     alert_type = forms.CharField(label = '', widget = SelectWidget("Alert type", Alert._meta.get_field('alt_type').choices).get_widget() )
     #your_choose = forms.BooleanField(label = '', widget = CheckboxWidget("Jakis checkbox").get_widget() )
-    alert_comment = forms.CharField(label = '', widget = CharWidget("Comment").get_widget() ) # widget = TextWidget("Comment", "Enter here your comment", 5).get_widget() )
+    alert_comment = forms.CharField(label = '', widget = TextWidget("Comment", '', 3).get_widget() ) # widget = TextWidget("Comment", "Enter here your comment", 5).get_widget() )
 
 
 class NameForm(forms.Form):

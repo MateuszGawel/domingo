@@ -1,10 +1,21 @@
 {% extends 'main/base.html' %}
 
+
 {% block content %}
-<form class="col-md-12" action="{% url 'main:alert_form' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
-<div id="alerts"></div>
+    <div id="alerts">
+        {% for alert in alerts %}
+            <p> {{ alert.alt_name }} </p>
+        {% endfor %}
+    </div>
+
+    <form class="add-alert-form col-md-12" action="{% url 'main:add_alert' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+    {{ error_message }}
+    <!--ZAPYTANIE LECI PRZEZ JQUERY DLATEGO BLEDY NIE SA ODSWIEZANE. WYWAL KLASE ADD-ALERT-FORM WTEDY SIE WYSWIETLA ALE STRONA BEDZIE SIE LADOWAC CALA BEZ AJAXA.
+    TUTAJ JEST MOJE ZGLOSZENIE NA STACKU: http://stackoverflow.com/questions/29098517/django-with-ajax-render -->
+
+
 {% endblock %}

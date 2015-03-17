@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     //AJAX util
-    $('form').submit(function (e) {
+    $('.add-alert-form').submit(function (e) {
         e.preventDefault();
         $.ajax({
             type: "POST",
@@ -10,7 +10,6 @@ $(document).ready(function() {
 
             success: function (data) {
                 $("#alerts").load(" #alerts");
-                alert(data)
             }
         });
     });

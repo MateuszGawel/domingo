@@ -1,6 +1,6 @@
 <div class="form-group">
     <label> {{ label }} </label>
-    <select class="form-control" name="{{ name }}">
+    <select class="form-control" name="{{ name }}" value="{{ value }}">
         {% for v in values %}
             <option value="{{ v.0 }}"> {{ v.1 }} </option>
         {% endfor %}
