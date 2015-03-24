@@ -83,20 +83,55 @@ var date = new Date();
 
 // ====================  END calendar ===================
 
-//  ===================  Select.js ======================
-$(document).ready(function() {              
-  $('.selectpicker').selectpicker({
-    style: 'btn',
-    size: 4
-  });
-});   
+
+function select(){
+      $('.selectpicker').selectpicker({
+        style: 'btn',
+        size: 4
+    });
+};
+
+//============== add step ===========
+$("body").on("click",".add",function addInfo(){
+    $(".show_form").append(
+                '<hr></hr>'+
+                '<form class="form-horizontal well"> ' +
+                  '<fildset>'+
+                    '<legend>Next step </legend>'+
+                    '<div class="form-group .resp_group"> ' + 
+                          '<select class="selectpicker" multiple title="select" data-width="140px">'+
+                            '<option>qwerty</option>'+
+                            '<option>ytrewq</option>'+
+                            '<option>qazxswedc</option>'+
+                          '</select>'+
+                    '</div>'+
+                    '<div class="form-group .resp_group"> ' + 
+                      '<textarea id="textarea" class="form-control input-xlarge" rows="3"></textarea>'+
+                    '</div>'+
+                    '<div class="form-group"> ' + 
+                      '<div class="btns">'+
+                        '<a class="btn btn-link edit_btn" id="del">Cancel</a>'+
+                        '<button class="btn btn-success edit_btn" type="submit">Save</button>'+
+                        '<a class="btn btn-primary edit_btn add">Next step</a>'+
+                      '</div>' +
+                    '</div>'+
+                  '</fildset>'+
+                '</form>'+
+                '</div>'
+                );
+    select();
+});
+
+
+
+
 
 //  ====================  Dialog window ==============
 
 
  $("#myModal").on("show", function() { // wire up the OK button to dismiss the modal when shown
 $("#myModal a.btn").on("click", function(e) {
-console.log("button pressed"); // just as an example...
+console.log("button pressed"); 
 $("#myModal").modal('hide'); // dismiss the dialog
 });
 });
@@ -114,52 +149,70 @@ $("#myModal").modal({ // wire up the actual modal functionality and show the dia
 
         //  ========== dialog body ==============
 
-bootbox.dialog({
-title: "Details of the incident",
-message:    '<div class="row"> ' +
-                '<div class="date_text col-md-12"> ' +
-                  '<label class="col-md-6 control-label" for="name">Project</label> ' +
-                  '<div class="col-md-6"> ALMA </div> ' +
+ function dialogDetails(){   bootbox.dialog({
+    title: "Details of the incident",
+    message:    '<div class="row"> ' +
+                    '<div class="date_text col-md-12"> ' +
+                      '<label class="col-md-6 control-label" for="name">Project</label> ' +
+                      '<div class="col-md-6"> ALMA </div> ' +
+                    '</div>'+
+                    '<div class="date_text col-md-12"> ' +
+                      '<label class="col-md-6 control-label" for="name">Ticket</label> ' +
+                      '<div class="col-md-6"> ALMA-345 </div> ' +
+                    '</div>'+
+                    '<div class="date_text col-md-12"> ' +
+                      '<label class="col-md-6 control-label" for="name">Data of start incident</label> ' +
+                      '<div class="col-md-6"> 2015-03-01 00:01 </div> ' +
+                    '</div>'+
+                    '<div class="date_text col-md-12"> ' +
+                      '<label class="col-md-6 control-label" for="name">Data of end incident</label> ' +
+                      '<div class="col-md-6"> 2015-03-01 00:01 </div> ' +
+                    '</div>'+
+                    '<div class="btns">'+
+                      '<a class="btn btn-danger edit_btn bootbox-close-button" href="javascript:void(0)">Close</a>'+
+                      '<div class="btn btn-primary edit_btn" id="show_details">Edit</div>'+
+                    '</div>' +
                 '</div>'+
-                '<div class="date_text col-md-12"> ' +
-                  '<label class="col-md-6 control-label" for="name">Ticket</label> ' +
-                  '<div class="col-md-6"> ALMA-345 </div> ' +
-                '</div>'+
-                '<div class="date_text col-md-12"> ' +
-                  '<label class="col-md-6 control-label" for="name">Data of start incident</label> ' +
-                  '<div class="col-md-6"> 2015-03-01 00:01 </div> ' +
-                '</div>'+
-                '<div class="date_text col-md-12"> ' +
-                  '<label class="col-md-6 control-label" for="name">Data of end incident</label> ' +
-                  '<div class="col-md-6"> 2015-03-01 00:01 </div> ' +
-                '</div>'+
-                '<div class="btns">'+
-                  '<a class="btn btn-danger edit_btn bootbox-close-button" href="javascript:void(0)">Close</a>'+
-                  '<a class="btn btn-primary edit_btn" href="javascript:void(0)">Edit</a>'+
-                '</div>' +
-            '</div>'+
-            //  Step 1
-            '<hr></hr>'+
-            '<form class="form-horizontal well"> ' +
-              '<fildset>'+
-                '<legend> Step 1</legend>'+
-                '<div class="form-group .resp_group"> ' + 
-                      '<select class="selectpicker" multiple title="select" data-width="140px">'+
-                        '<option>qwerty</option>'+
-                        '<option>ytrewq</option>'+
-                        '<option>qazxswedc</option>'+
-                      '</select>'+
-                '</div>'+
-                '<div class="form-group .resp_group"> ' + 
-                  '<textarea id="textarea" class="form-control input-xlarge" rows="3"></textarea>'+
-                '</div>'+
-                '<div class="form-group"> ' + 
-                  '<div class="btns">'+
-                    '<button class="btn btn-success edit_btn" type="submit">Save</button>'+
-                    '<a class="btn btn-primary edit_btn" href="javascript:void(0)">Next step</a>'+
-                  '</div>' +
-                '</div>'+
-              '</fildset>'+
-            '</form>'
-}
-); 
+                //  Step 1
+                '<div class="show_form">'+
+                  '<hr></hr>'+
+                  '<form class="form-horizontal well"> ' +
+                    '<fildset>'+
+                      '<legend> Step 1</legend>'+
+                      '<div class="form-group .resp_group"> ' + 
+                            '<select class="selectpicker" multiple title="select" data-width="140px">'+
+                              '<option>qwerty</option>'+
+                              '<option>ytrewq</option>'+
+                              '<option>qazxswedc</option>'+
+                            '</select>'+
+                      '</div>'+
+                      '<div class="form-group .resp_group"> ' + 
+                        '<textarea id="textarea" class="form-control input-xlarge" rows="3"></textarea>'+
+                      '</div>'+
+                      '<div class="form-group"> ' + 
+                        '<div class="btns">'+
+                          '<a class="btn btn-link edit_btn" id="del">Cancel</a>'+
+                          '<button class="btn btn-success edit_btn" type="submit">Save</button>'+
+                          '<a class="btn btn-primary edit_btn add">Next step</a>'+
+
+                        '</div>' +
+                      '</div>'+
+                    '</fildset>'+
+                  '</form>'+
+                '</div>'
+                
+    }
+    ); 
+select();
+};
+
+
+// ==================  animation Edit ============
+
+$(".menu_act span").click(function slide(){
+  if ($("#menu_list1").is(":hidden")) {
+        $("#menu_list1").show("slow");
+      } else {
+        $("#menu_list1").hide('slow');
+      }
+});

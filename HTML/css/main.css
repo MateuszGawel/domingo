@@ -37,8 +37,19 @@ header nav, body{
 .begin_work, .raports_field{
 	padding-right: 50px;
 }
-
-
+.menu_act span{
+	cursor: pointer;
+}
+#menu_list1{
+	display: none;
+}
+#menu_list1 li{
+	list-style-type: none;
+}
+#menu_list1 li a{
+	color: #fff;
+	text-decoration: none;
+}
 
 
 
@@ -79,3 +90,7 @@ header nav, body{
 .form-group .filter_project{
 	margin-left: 15px;
 }
+/*
+.show_form{
+	display: none;
+}  */ 

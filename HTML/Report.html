@@ -31,7 +31,12 @@
 		<div class='panel-heading'><h1>Raports</h1></div>
 		<div class='panel-body'>
 			<aside class='list-group col-lg-3 col-md-3 col-sm-3'>
-				<a href="javascript:void(0)" class='list-group-item active'> Current</a>
+				<div class='list-group-item active menu_act'> <span>Current</span>
+					<ul id='menu_list1'>
+						<li><a href="javascript:void(0)">Show alerts</a></li>
+						<li><a href="javascript:void(0)">Create alerts</a></li>
+					</ul>
+				</div>
 				<a href="javascript:void(0)" class='list-group-item'> Archive</a>
 				<a href="javascript:void(0)" class='list-group-item'> Archive</a>
 				<a href="javascript:void(0)" class='list-group-item'> Archive</a>
@@ -61,9 +66,6 @@
 						<div class='filter_input'>
 							<input class="form-control" type="text" placeholder='start date'>
 						</div>
-						<div class='filter_input'>
-							<input class="form-control" type="text" placeholder='end date'>
-						</div>
 						<div class='filter_project'>
 							<select class='selectpicker' data-width="120px" multiple title='Choose type'>
 								<option>Task</option>
@@ -78,6 +80,81 @@
 							<input class="form-control" type="text" placeholder='reporter'>
 						</div>
 						<button class='btn btn-primary navbar-right' type='submit'><i class="glyphicon glyphicon-search"></i> Find</button>
+					</form>
+					<table class='table table-bordered table-striped table-hover'>
+						<thead>
+							<tr>
+								<th>Project</th>
+								<th>Sensor</th>
+								<th>Ticket</th>
+								<th>Data</th>
+								<th>Type</th>
+								<th>Reporter</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td>Bug</td>
+								<td>User_name</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td>Bug</td>
+								<td>User_name</td>
+							</tr>
+							<tr>
+								<td>Test1</td>
+								<td>test-bd</td>
+								<td>AAA-0001</td>
+								<td>2015-01-01 00:14</td>
+								<td>Bug</td>
+								<td>User_name</td>
+							</tr>	
+						</tbody>
+					</table>
+				</section>
+
+
+				<!--  RAPORT add -->
+				<section class='well'>
+					<form class='filters form-inline well'>
+						<div class='filter_project'>
+							<select class='selectpicker' multiple title='Choose project' data-width="140px">
+								<option>Project1</option>
+								<option>Project2</option>
+								<option>Project3</option>
+							</select>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='alert name'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='url'>
+						</div>
+						<div class='filter_input'>
+							<input class="form-control" type="text" placeholder='alert date'>
+						</div>
+						<div class='filter_project'>
+							<select class='selectpicker' data-width="120px" multiple title='Choose alert type'>
+								<option>Task</option>
+								<option>Bug</option>
+								<option>Question</option>
+								<option>Enhancement</option>
+								<option>Internal Bug</option>
+								<option>Something else</option>
+							</select>
+						</div>
+						<div class='filter_input'>
+							<textarea id="textarea" class="form-control input-xlarge" rows="1" placeholder='Comments'></textarea>
+						</div>
+						<button class='btn btn-success navbar-right' type='submit'>Save</button>
 					</form>
 					<table class='table table-bordered table-striped table-hover'>
 						<thead>
@@ -215,7 +292,7 @@
 								<td>2015-01-01 00:14</td>
 								<td>2015-01-01 10:15</td>
 								<td>
-									<a class='btn btn-primary' href="javascript:void(0)">Details</a>
+									<a class='btn btn-primary' onclick="dialogDetails()">Details</a>
 								</td>
 							</tr>
 							<tr>
@@ -224,7 +301,7 @@
 								<td>2015-01-01 00:14</td>
 								<td>2015-01-01 10:15</td>
 								<td>
-									<a class='btn btn-primary' href="javascript:void(0)">Details</a>
+									<a class='btn btn-primary' onclick="dialogDetails()">Details</a>
 								</td>
 							</tr>
 							<tr>
@@ -233,7 +310,7 @@
 								<td>2015-01-01 00:14</td>
 								<td>2015-01-01 10:15</td>
 								<td>
-									<a class='btn btn-primary' href="javascript:void(0)">Details</a>
+									<a class='btn btn-primary' onclick="dialogDetails()">Details</a>
 								</td>
 							</tr>	
 						</tbody>
