@@ -45,17 +45,17 @@ def add_alert(request):
             alert.alt_rep_id = report
 
             alert.save()
-            alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
+
             print "idzie jako dodany"
-            return render(request, 'main/theform.html', {'form': form, 'alerts': alerts, 'error_message': "Alert has been added"})
+            return __new_alert(request)
         else:
             alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
             print "idzie jako zly"
             return render(request, 'main/theform.html', {'form': form, 'alerts': alerts, 'error_message': "Alert has NOT been added"})
     else:
-        return start_duty(request)
+        return __new_alert(request)
 
-def start_duty(request):
+def __new_alert(request):
     if request.user.is_authenticated():
         report = __get_or_create_empty_Report(request);
         f = AlertForm()

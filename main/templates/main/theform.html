@@ -2,20 +2,63 @@
 
 
 {% block content %}
-    <div id="alerts">
-        {% for alert in alerts %}
-            <p> {{ alert.alt_name }} </p>
-        {% endfor %}
-    </div>
+    <!--  RAPORT alerts -->
+    <section class='well'>
+        <form class="filters form-inline well" action="{% url 'main:add_alert' %}" method="post">
+            {% csrf_token %}
+            <div class='filter_project'>
+                {{ form.alert_project.errors }}
+                {{ form.alert_project }}
+            </div>
+            <div class='filter_input'>
+                {{ form.alert_name.errors }}
+                {{ form.alert_name }}
+            </div>
+            <div class='filter_input'>
+                {{ form.alert_ticket.errors }}
+                {{ form.alert_ticket }}
+            </div>
+            <div class='filter_input'>
+                {{ form.alert_date.errors }}
+                {{ form.alert_date }}
+            </div>
+            <div class='filter_project'>
+                {{ form.alert_type.errors }}
+                {{ form.alert_type }}
+            </div>
+            <div class='filter_input'>
+                {{ form.alert_comment.errors }}
+                {{ form.alert_comment }}
+            </div>
 
-    <form class="add-alert-form col-md-12" action="{% url 'main:add_alert' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
+            <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+        </form>
+        <table class='table table-bordered table-striped table-hover'>
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Sensor</th>
+                    <th>Ticket</th>
+                    <th>Data</th>
+                    <th>Type</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in alerts %}
+                    <tr>
+                        <td>{{ alert.alt_prj_id.prj_name }}</td>
+                        <td>{{ alert.alt_name }}</td>
+                        <td>{{ alert.alt_ticket }}</td>
+                        <td>{{ alert.alt_date }}</td>
+                        <td>{{ alert.alt_type }}</td>
+                        <td>{{ alert.alt_com_id.com_value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+
     {{ error_message }}
-    <!--ZAPYTANIE LECI PRZEZ JQUERY DLATEGO BLEDY NIE SA ODSWIEZANE. WYWAL KLASE ADD-ALERT-FORM WTEDY SIE WYSWIETLA ALE STRONA BEDZIE SIE LADOWAC CALA BEZ AJAXA.
-    TUTAJ JEST MOJE ZGLOSZENIE NA STACKU: http://stackoverflow.com/questions/29098517/django-with-ajax-render -->
-
-
 {% endblock %}
