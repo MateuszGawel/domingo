@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from main.models import Alert, Comment
 import datetime
@@ -8,7 +8,7 @@ from django.db.models import Max
 from main.forms import *
 
 def add_alert(request):
-    report = __get_or_create_empty_Report(request)
+    report = get_current_report(request)
     if request.method == 'POST':
         form = AlertForm(request.POST)
         if form.is_valid():
@@ -43,46 +43,47 @@ def add_alert(request):
             comment.save()
             alert.alt_com_id = comment
             alert.alt_rep_id = report
-
+            print "TEST"
             alert.save()
-
-            print "idzie jako dodany"
-            return __new_alert(request)
+            return __new_alert_form(request)
         else:
             alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
-            print "idzie jako zly"
             return render(request, 'main/theform.html', {'form': form, 'alerts': alerts, 'error_message': "Alert has NOT been added"})
     else:
-        return __new_alert(request)
+        return __new_alert_form(request)
 
-def __new_alert(request):
+
+def __new_alert_form(request, report=None):
     if request.user.is_authenticated():
-        report = __get_or_create_empty_Report(request);
+        if report == None:
+            report = get_current_report(request);
         f = AlertForm()
         alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
         return render(request, 'main/theform.html', {'form': f, 'alerts': alerts})
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
-def __get_or_create_empty_Report(request):
-    report = None
-    if request.session.has_key('report'):
-        global report
-        report = get_object_or_404(Report, rep_id=request.session.get('report'))
-    else:
-        global report
-        report = Report.objects.filter(rep_usr_id=request.user.id).latest('rep_id')
+def create_report(request):
+    if Report.objects.filter(rep_usr_id=request.user.id, rep_date_sent=None).exists():
+        return redirect('main:index')
+    report = Report()
+    report.rep_status = 'O'
+    report.rep_date_created = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    report.rep_usr_id = request.user
+    report.rep_notes = 'Siema, elo, mowi Spejson'
+    report.save()
+    return __new_alert_form(request, report)
 
-    if report is None or report.rep_date_sent is not None:
-        global report
-        report = Report()
-        report.rep_status = 'O'
-        report.rep_date_created = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        report.rep_usr_id = request.user
-        report.rep_notes = 'Siema, elo, mowi Spejson'
-        report.save()
-        request.session['report'] = report.rep_id
-    else:
-        global report
-        request.session['report'] = report.rep_id
+def edit_report(request):
+    report = get_current_report(request)
+    return __new_alert_form(request, report)
+
+def close_report(request):
+    report = get_current_report(request)
+    report.rep_date_sent = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    report.save()
+    return redirect('main:index')
+
+def get_current_report(request):
+    report = Report.objects.filter(rep_usr_id=request.user.id, rep_date_sent=None).latest('rep_id')
     return report

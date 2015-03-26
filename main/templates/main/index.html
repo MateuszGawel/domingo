@@ -2,10 +2,52 @@
 
 {% block content %}
 
-    to jest index
+    <aside class='list-group col-lg-3 col-md-3 col-sm-3'>
+        <a href="javascript:void(0)" class='list-group-item active'> Dashboard</a>
+
+        <div class='list-group-item menu_act'> <span>Monitoring Reports</span>
+            <ul id='menu_list1' >
+                <li><a style="color: black" data-toggle="tab" href="#create-report">Create Report</a></li>
+                <li><a style="color: black"data-toggle="tab" href="#browse-report">Browse Reports</a></li>
+            </ul>
+        </div>
+
+        <a href="javascript:void(0)" class='list-group-item'> Announcements </a>
+
+        <a href="javascript:void(0)" class='list-group-item'> Sasha Grey fanpage</a>
+    </aside>
 
 
 
-    <p><strong> <a href="{% url 'main:add_alert' %}"> DODAJ ALERT </a>  </strong></p>
+    <div class="tab-content">
+        <section class="tab-pane fade" id="dashboard">
+            <h1>DASHBOARD</h1>
+            This is your dashboard.
+        </section>
+        <section class="tab-pane fade in active" id="create-report">
+            <h1>CREATE REPORT</h1>
 
+
+            {% if report == None %}
+                <span style="color: green">You have no reports yet</span><br>
+                <a href="{% url 'main:create_report' %}" class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</a>
+            {% elif report.rep_date_sent == None %}
+                Your last report has been created: {{ report.rep_date_created }}<br>
+                <span style="color: red">It hasn't been sent yet. You cannot create a new one. Please close or edit the old report.</span>
+                <p>
+                    <a href="" disabled="disabled" class='btn btn-success' type='submit' style="margin-bottom: 20px">Create Report</a>
+                    <a href="{% url 'main:edit_report' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Edit current Report</a>
+                    <a href="{% url 'main:close_report' %}" class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close Report</a>
+                </p>
+            {% else %}
+                Your last report has been created: {{ report.rep_date_created }}<br>
+                <span style="color: green">It has been closed: {{ report.rep_date_sent }}</span>
+                <p><a href="{% url 'main:create_report' %}" class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</a></p>
+            {% endif %}
+
+        </section>
+        <section class="tab-pane fade" id="browse-report">
+            <h1>BROWSE REPORT</h1>
+        </section>
+    </div>
 {% endblock %}

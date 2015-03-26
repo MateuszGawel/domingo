@@ -83,8 +83,8 @@ class Alert(models.Model):
 
     alt_id = models.AutoField(primary_key=True, verbose_name="Alert ID")
     alt_date = models.DateTimeField(null=True, blank=True, verbose_name="Alert date")
-    alt_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Alert name")
-    alt_ticket = models.CharField(max_length=32, null=True, blank=True, verbose_name="Alert ticket link")
+    alt_name = models.CharField(max_length=256, null=True, blank=True, verbose_name="Alert name")
+    alt_ticket = models.CharField(max_length=128, null=True, blank=True, verbose_name="Alert ticket link")
     alt_type = models.CharField(max_length=1, null=True, blank=True, choices=ALERT_TYPE, verbose_name="Alert type")
     alt_rep_id = models.ForeignKey('Report', null=True, blank=True, verbose_name="Alert report FK")
     alt_prj_id = models.ForeignKey('Project', null=True, blank=True, verbose_name="Alert project FK")
