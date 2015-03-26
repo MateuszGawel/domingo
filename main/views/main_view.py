@@ -23,7 +23,7 @@ def do_login(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return render(request, 'main/index.html', None)
+            return redirect('main:index')
         else:
             return render(request, 'main/login.html', {'error_message': "Sorry, the account is not active."})
     else:
