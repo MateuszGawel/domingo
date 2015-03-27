@@ -24,7 +24,7 @@
             <h1>DASHBOARD</h1>
             This is your dashboard.
         </section>
-        <section class="tab-pane fade in active" id="create-report">
+        <section class="tab-pane fade" id="create-report">
             <h1>CREATE REPORT</h1>
 
 
@@ -46,8 +46,12 @@
             {% endif %}
 
         </section>
-        <section class="tab-pane fade" id="browse-report">
-            <h1>BROWSE REPORT</h1>
-        </section>
+        <section class="tab-pane fade in active" id="browse-report"></section>
     </div>
+            <h1>BROWSE REPORT</h1>
+            <p>
+                <a href="{% url 'main:browse_my_reports' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Browse my reports</a>
+                <a href="{% url 'main:browse_reports' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Browse all reports</a>
+            </p>
+
 {% endblock %}

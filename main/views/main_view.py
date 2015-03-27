@@ -12,7 +12,7 @@ def index(request):
             report = report.latest('rep_id')
         else:
             report = None
-        return render(request, 'main/index.html', {'report': report})
+        return render(request, 'main/index.html', {'report': report, 'user': request.user})
     else:
         return render(request, 'main/login.html', None)
 

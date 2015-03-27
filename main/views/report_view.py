@@ -48,7 +48,7 @@ def add_alert(request):
             return __new_alert_form(request)
         else:
             alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
-            return render(request, 'main/theform.html', {'form': form, 'alerts': alerts, 'error_message': "Alert has NOT been added"})
+            return render(request, 'main/report_creation.html', {'form': form, 'alerts': alerts, 'error_message': "Alert has NOT been added"})
     else:
         return __new_alert_form(request)
 
@@ -59,7 +59,7 @@ def __new_alert_form(request, report=None):
             report = get_current_report(request);
         f = AlertForm()
         alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
-        return render(request, 'main/theform.html', {'form': f, 'alerts': alerts})
+        return render(request, 'main/report_creation.html', {'form': f, 'alerts': alerts})
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
@@ -81,9 +81,68 @@ def edit_report(request):
 def close_report(request):
     report = get_current_report(request)
     report.rep_date_sent = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    report.rep_status = 'S'
     report.save()
     return redirect('main:index')
 
 def get_current_report(request):
     report = Report.objects.filter(rep_usr_id=request.user.id, rep_date_sent=None).latest('rep_id')
     return report
+
+def browse_reports(request):
+    if request.user.is_authenticated():
+        f = ReportFilterForm()
+        return render(request, 'main/report_browse.html', {'form': f, 'filter_result': None})
+    else:
+        return render(request, 'main/login.html', {'error_message': "You have to log in first."})
+
+def browse_my_reports(request):
+    print "user: " + str(request.user.id)
+    if request.user.is_authenticated():
+        f = ReportFilterForm()
+        f.rep_usr_id = request.user.id
+        result = Report.objects.filter(rep_usr_id=request.user.id)
+        print result
+        return render(request, 'main/report_browse.html', {'form': f, 'filter_result': result})
+    else:
+        return render(request, 'main/login.html', {'error_message': "You have to log in first."})
+
+def filter_reports(request):
+    if request.method == 'POST':
+        form = ReportFilterForm(request.POST)
+        if form.is_valid():
+            filter_result = Report.objects.all()
+
+            if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
+                filter_result = filter_result.filter(rep_id=form.cleaned_data['rep_id'])
+
+            if form.cleaned_data.has_key('rep_status') and form.cleaned_data['rep_status'] != "":
+                filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
+
+            if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
+                filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
+
+            if form.cleaned_data.has_key('rep_date_created_to') and form.cleaned_data['rep_date_created_to'] is not None:
+                filter_result = filter_result.filter(rep_date_created__lte=form.cleaned_data['rep_date_created_to'])
+
+            if form.cleaned_data.has_key('rep_date_sent_from') and form.cleaned_data['rep_date_sent_from'] is not None:
+                filter_result = filter_result.filter(rep_date_sent__gte=form.cleaned_data['rep_date_sent_from'])
+
+            if form.cleaned_data.has_key('rep_date_sent_to') and form.cleaned_data['rep_date_sent_to'] is not None:
+                filter_result = filter_result.filter(rep_date_sent__lte=form.cleaned_data['rep_date_sent_to'])
+
+            if form.cleaned_data.has_key('rep_date_removed_from') and form.cleaned_data['rep_date_removed_from'] is not None:
+                filter_result = filter_result.filter(rep_date_removed__gte=form.cleaned_data['rep_date_removed_from'])
+
+            if form.cleaned_data.has_key('rep_date_removed_to') and form.cleaned_data['rep_date_removed_to'] is not None:
+                filter_result = filter_result.filter(rep_date_removed__lte=form.cleaned_data['rep_date_removed_to'])
+
+            if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
+                filter_result = filter_result.filter(rep_usr_id=form.cleaned_data['rep_usr_id'])
+
+
+            return render(request, 'main/report_browse.html', {'form': form, 'filter_result': filter_result})
+        else:
+            return render(request, 'main/report_browse.html', {'form': form})
+    else:
+        return browse_reports(request)

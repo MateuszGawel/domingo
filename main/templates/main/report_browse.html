@@ -1,0 +1,98 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#browse_reports">Reports</a></li>
+        <li><a data-toggle="tab" href="#browse_alerts">Alerts</a></li>
+        <li><a data-toggle="tab" href="#browse_incidents">Incidents</a></li>
+    </ul>
+    <div class="tab-content">
+
+        <section class="well tab-pane fade in active" id="browse_reports">
+            <h1>BROWSE REPORTS</h1>
+            <form class="filters form-inline well" action="{% url 'main:filter_reports' %}" method="post">
+                {% csrf_token %}
+                <div class='filter_project'>
+                    {{ form.rep_id.errors }}
+                    {{ form.rep_id }}
+                </div><br>
+                <div class='filter_input'>
+                    {{ form.rep_status.errors }}
+                    {{ form.rep_status }}
+                </div><br>
+                <div class='filter_input'>
+                    {{ form.rep_date_created_from.errors }}
+                    {{ form.rep_date_created_from }}
+                </div><br>
+                <div class='filter_input'>
+                    {{ form.rep_date_created_to.errors }}
+                    {{ form.rep_date_created_to }}
+                </div><br>
+                <div class='filter_input'>
+                    {{ form.rep_date_sent_from.errors }}
+                    {{ form.rep_date_sent_from }}
+                </div><br>
+                <div class='filter_input'>
+                    {{ form.rep_date_sent_to.errors }}
+                    {{ form.rep_date_sent_to }}
+                </div><br>
+                <div class='filter_project'>
+                    {{ form.rep_date_removed_from.errors }}
+                    {{ form.rep_date_removed_from }}
+                </div><br>
+                <div class='filter_project'>
+                    {{ form.rep_date_removed_to.errors }}
+                    {{ form.rep_date_removed_to }}
+                </div><br>
+                <div class='filter_input'>
+                    to jeszcze nie działa bo trzeba jakos zaimplementować trzecią opcje. TAK/NIE/OBOJETNE
+                    {{ form.rep_redirection.errors }}
+                    {{ form.rep_redirection }}
+                </div><br>
+                <div class='filter_input'>
+                    {{ form.rep_usr_id.errors }}
+                    {{ form.rep_usr_id }}
+                </div><br>
+                {{ error_message }}
+                <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Filter</button>
+            </form>
+            <table class='table table-bordered table-striped table-hover'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Status</th>
+                        <th>Crated date</th>
+                        <th>Sent date</th>
+                        <th>Removed date</th>
+                        <th>Redirection checked</th>
+                        <th>Comment</th>
+                        <th>Author</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in filter_result %}
+                        <tr>
+                            <td>{{ report.rep_id }}</td>
+                            <td>{{ report.rep_status }}</td>
+                            <td>{{ report.rep_date_created }}</td>
+                            <td>{{ report.rep_date_sent }}</td>
+                            <td>{{ report.rep_date_removed }}</td>
+                            <td>{{ report.rep_redirection }}</td>
+                            <td>{{ report.rep_com_id }}</td>
+                            <td>{{ report.rep_usr_id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="well tab-pane fade" id="browse_alerts">
+            <h1>BROWSE ALERTS</h1>
+        </section>
+        <section class="well tab-pane fade" id="browse_incidents">
+            <h1>BROWSE INCIDENTS</h1>
+        </section>
+    </div>
+{% endblock %}
