@@ -1,8 +1,12 @@
-{% extends "main/base.html" %}
+{% extends "main/_layout/base.html" %}
+
+{% block sidemenu %}
+
+    {% include "main/_layout/side_menu.html" with active="dashboard" %}
+
+{% endblock %}
 
 {% block content %}
-
-    {% include "main/side_menu.html" with active="dashboard" %}
 
     <h1>DASHBOARD</h1>
     This is your dashboard.

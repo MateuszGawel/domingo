@@ -1,11 +1,9 @@
-from django.http import HttpResponse
-from django.template import RequestContext, loader
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from main.views import report_view
-from main.models import Report
+
 
 def index(request):
+    print dir(request)
     if request.user.is_authenticated():
         return render(request, 'main/index.html')
     else:

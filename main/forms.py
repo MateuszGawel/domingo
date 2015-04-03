@@ -42,7 +42,7 @@ class DateWidget(MyWidget):
     def __init__(self, label):
         self.widget = CustomWidget()
 
-        self.widget.set_template_name('main/widgets/date_widget.html')
+        self.widget.set_template_name('main/_widgets/date_widget.html')
         self.widget.set_label(label)
 
         context = {'placeholder': 'YYYY-MM-DD hh:mm:ss'}
@@ -54,7 +54,7 @@ class SelectWidget(MyWidget):
     def __init__(self, label, values):
         self.widget = CustomWidget()
 
-        self.widget.set_template_name('main/widgets/select_widget.html')
+        self.widget.set_template_name('main/_widgets/select_widget.html')
         self.widget.set_label(label)
 
         context = {'values': values}
@@ -68,7 +68,7 @@ class CharWidget(MyWidget):
     def __init__(self, label):
         self.widget = CustomWidget()
 
-        self.widget.set_template_name('main/widgets/char_widget.html')
+        self.widget.set_template_name('main/_widgets/char_widget.html')
         self.widget.set_label(label)
 
         print "placeholder: " + label
@@ -81,7 +81,7 @@ class CheckboxWidget(MyWidget):
     def __init__(self, label):
         self.widget = CustomWidget()
 
-        self.widget.set_template_name('main/widgets/checkbox_widget.html')
+        self.widget.set_template_name('main/_widgets/checkbox_widget.html')
         self.widget.set_label(label)
 
 class TextWidget(MyWidget):
@@ -89,7 +89,7 @@ class TextWidget(MyWidget):
     def __init__(self, label, placeholder, rows):
         self.widget = CustomWidget()
 
-        self.widget.set_template_name('main/widgets/text_widget.html')
+        self.widget.set_template_name('main/_widgets/text_widget.html')
         self.widget.set_label(label)
 
         context = {'placeholder': placeholder, 'rows': rows}

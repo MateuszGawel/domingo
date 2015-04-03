@@ -1,9 +1,10 @@
-{% extends 'main/base.html' %}
-
+{% extends 'main/_layout/base.html' %}
 
 {% block content %}
-    <form>
-        <a href="{% url 'main:close_report' %}" class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close report</a>
+
+    <form action="{% url 'reports:close' %}" method="post">
+        {% csrf_token %}
+        <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close report</button>
     </form>
 
 
@@ -16,9 +17,9 @@
     <div class="tab-content">
         <!--  RAPORT alerts -->
         <section class="well tab-pane fade in active" id="alerts">
-            <form class="filters form-inline well" action="{% url 'main:add_alert' %}" method="post">
+            <form class="filters form-inline well" action="{% url 'alerts:add' %}" method="post">
                 {% csrf_token %}
-                {{ alertForm.as_p }}
+                {{ alertForm }}
                 {{ error_message }}
                 <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
             </form>
@@ -43,7 +44,7 @@
                             <td>{{ alert.alt_date }}</td>
                             <td>{{ alert.alt_type }}</td>
                             <td>{{ alert.alt_com_id.com_value }}</td>
-                            <td><a class='btn btn-primary' href="{% url 'main:alert_details' alert.alt_id %}">Edit</a></td>
+                            <td><a class='btn btn-primary' href="{% url 'alerts:index' alert.alt_id %}">Edit</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -51,13 +52,40 @@
         </section>
 
         <section class="well tab-pane fade" id="contacts">
-            <h1>KONTAKTY</h1>
-            <form class="filters form-inline well" action="{% url 'main:add_contact' %}" method="post">
+            <form class="filters form-inline well" action="{% url 'contacts:add' %}" method="post">
                 {% csrf_token %}
                 {{ contactForm.as_p }}
                 {{ error_message }}
                 <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
             </form>
+            <table class='table table-bordered table-striped table-hover'>
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Type</th>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Direction</th>
+                        <th>Internal</th>
+                        <th>Comment</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                        <tr>
+                            <td>{{ contact.con_prj_id.prj_name }}</td>
+                            <td>{{ contact.con_type }}</td>
+                            <td>{{ contact.con_address }}</td>
+                            <td>{{ contact.con_date }}</td>
+                            <td>{{ contact.con_direction }}</td>
+                            <td>{{ contact.con_internal }}</td>
+                            <td>{{ contact.con_com_id.com_value }}</td>
+                            <td><a class='btn btn-primary' href="{% url 'contacts:index' contact.con_id %}">Edit</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </section>
 
         <section class="well tab-pane fade" id="incidents">

@@ -1,5 +1,4 @@
-{% extends 'main/base.html' %}
-
+{% extends 'main/_layout/base.html' %}
 
 {% block content %}
 
@@ -12,7 +11,7 @@
 
         <section class="well tab-pane fade in active" id="browse_reports">
             <h1>BROWSE REPORTS</h1>
-            <form class="filters form-inline well get-clear" action="{% url 'main:filter_reports' %}" method="get">
+            <form class="filters form-inline well get-clear" action="{% url 'reports:search' %}" method="get">
                 <div class='filter_project'>
                     {{ form.rep_id.errors }}
                     {{ form.rep_id }}

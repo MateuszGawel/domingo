@@ -1,0 +1,18 @@
+{% load main_filters %}
+
+<ol class="breadcrumb">
+    {% autoescape off %}
+
+        {% if skiplast %}
+
+            {{ request.path|breadcrumb_without_last:request.get_host }}
+
+        {% else %}
+
+            {{ request.path|breadcrumb:request.get_host }}
+
+        {% endif %}
+
+
+    {% endautoescape %}
+</ol>

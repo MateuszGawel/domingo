@@ -21,16 +21,18 @@
         <script src="{% static "main/js/bootstrap-select.js" %}"></script>
         <script src="{% static "main/js/bootbox.min.js" %}"></script>
         <script src="{% static "main/js/main.js" %}"></script>
-
-
-
     </head>
 
     <body>
+            {% include "main/_layout/menu.html" %}
 
-        {% include "main/menu.html" %}
+            {% block breadcrumbs %}
+                {% include "main/_layout/breadcrumbs.html" %}
+            {% endblock %}
 
-        {% block content %} {% endblock %}
+            {% block sidemenu %} {% endblock %}
 
+            {% block content %} {% endblock %}
+        </div>
     </body>
 </html>
