@@ -1,67 +1,112 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from main.views.reports.utils import *
+import datetime
 
 
+class Entity:
 
-def details(request, con_id):
-    return render(request, 'main/reports/contacts/details.html', {'contact': Contact.objects.get(con_id=con_id)})
+    def __init__(self, name, date, type, url, id):
+        self.ent_name = name
+        self.ent_date = date
+        self.ent_type = type
 
-def edit(request, con_id):
-    contact = Contact.objects.get(con_id=con_id)
+        self.ent_url = url
+
+        self.ent_id = id
+
+
+def details(request, inc_id):
+
+    incidentSteps = IncidentStep.objects.filter(ins_inc_id=inc_id)
+    entities = []
+    for incidentStep in incidentSteps:
+        entity = None
+        if incidentStep.ins_type=='A':
+            alert = Alert.objects.get(alt_id=incidentStep.ins_ent_id)
+            entity = Entity(alert.alt_name, alert.alt_date, incidentStep.ins_type, "alerts:details", alert.alt_id)
+        elif incidentStep.ins_type=='C':
+            contact = Contact.objects.get(con_id=incidentStep.ins_ent_id)
+            contact_name = ""
+            if contact.con_direction=='I':
+                contact_name = request.user.__str__() + " > " + contact.con_address.__str__()
+            else:
+                contact_name = contact.con_address.__str__() + " > " + request.user.__str__()
+            entity = Entity(contact_name, contact.con_date, incidentStep.ins_type, "contacts:details", contact.con_id)
+        entities.append(entity)
+    return render(request, 'main/reports/incidents/details.html', {'incident': Incident.objects.get(inc_id=inc_id), 'entities': entities})
+
+def edit(request, inc_id):
+    incident = Incident.objects.get(inc_id=inc_id)
     if request.method == 'POST':
-        form = ContactForm(request.POST)
+        form = IncidentForm(request.POST)
         if form.is_valid():
-            __modify(form, con_id)
-            return redirect("contacts:details", con_id)
+            __modify(form, inc_id)
+            return redirect("incidents:details", inc_id)
         else:
-            clear_custom_select_data(form.fields['con_prj_id'])
-            add_custom_select_data(form.fields['con_prj_id'], int(form.cleaned_data['con_prj_id'])-1, "selected")
-            clear_custom_select_data(form.fields['con_type'])
-            add_custom_select_data(form.fields['con_type'], get_inner_tuple_index(Contact._meta.get_field('con_type').choices, form.cleaned_data['con_type'] ), "selected")
-            clear_custom_select_data(form.fields['con_direction'])
-            add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, form.cleaned_data['con_direction'] ), "selected")
+            clear_custom_select_data(form.fields['inc_prj_id'])
+            add_custom_select_data(form.fields['inc_prj_id'], int(form.cleaned_data['inc_prj_id'])-1, "selected")
 
     else:
 
-        form = ContactForm({   'con_prj_id': contact.con_prj_id.prj_id,
-                               'con_type': contact.con_type,
-                               'con_address': contact.con_address,
-                               'con_date': str( contact.con_date ),
-                               'con_direction': contact.con_direction,
-                               'con_internal': contact.con_internal,
-                               'con_com_id': contact.con_com_id.com_value,
-        })
+            form = IncidentForm({   'inc_prj_id': incident.inc_prj_id.prj_id,
+                                    'inc_ticket': incident.inc_ticket,
+                                    'inc_date_start': str( incident.inc_date_start ),
+                                    'inc_date_end': str( incident.inc_date_end ),
+                                    'inc_com_id': incident.inc_com_id.com_value,
+            })
 
-        clear_custom_select_data(form.fields['con_prj_id'])
-        add_custom_select_data(form.fields['con_prj_id'], contact.con_prj_id.prj_id - 1, "selected")
-        clear_custom_select_data(form.fields['con_type'])
-        add_custom_select_data(form.fields['con_type'], get_inner_tuple_index(Contact._meta.get_field('con_type').choices, contact.con_type ), "selected")
-        clear_custom_select_data(form.fields['con_direction'])
-        add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, contact.con_direction ), "selected")
+            clear_custom_select_data(form.fields['inc_prj_id'])
+            add_custom_select_data(form.fields['inc_prj_id'], int(incident.inc_prj_id.prj_id)-1, "selected")
 
-    return render(request, 'main/reports/contacts/edit.html', {'contactForm': form, 'contact': contact})
+    return render(request, 'main/reports/incidents/edit.html', {'incidentForm': form, 'incident': incident})
 
-def __modify(form, con_id):
+def __modify(form, inc_id):
     if form.is_valid():
 
-        contact = Contact.objects.get(con_id=con_id)
-        comment = Comment.objects.get(com_id=contact.con_com_id.com_id)
+        incident = Incident.objects.get(inc_id=inc_id)
+        comment = Comment.objects.get(com_id=incident.inc_com_id.com_id)
 
-        if form.cleaned_data.has_key('con_prj_id'):
-            contact.con_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['con_prj_id'])
-        if form.cleaned_data.has_key('con_type'):
-            contact.con_type = form.cleaned_data['con_type']
-        if form.cleaned_data.has_key('con_address'):
-            contact.con_address = form.cleaned_data['con_address']
-        if form.cleaned_data.has_key('con_date'):
-            contact.con_date = form.cleaned_data['con_date']
-        if form.cleaned_data.has_key('con_direction'):
-            contact.con_direction = form.cleaned_data['con_direction']
-        if form.cleaned_data.has_key('con_internal'):
-            contact.con_internal = form.cleaned_data['con_internal']
-        if form.cleaned_data.has_key('con_com_id'):
-            comment.com_value = form.cleaned_data['con_com_id']
+        if form.cleaned_data.has_key('inc_prj_id'):
+            incident.inc_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['inc_prj_id'])
+        if form.cleaned_data.has_key('inc_ticket'):
+            incident.inc_ticket = form.cleaned_data['inc_ticket']
+        if form.cleaned_data.has_key('inc_date_start'):
+            incident.inc_date_start = form.cleaned_data['inc_date_start']
+        if form.cleaned_data.has_key('inc_date_end'):
+            incident.inc_date_end = form.cleaned_data['inc_date_end']
+        if form.cleaned_data.has_key('inc_com_id'):
+            comment.com_value = form.cleaned_data['inc_com_id']
 
         comment.save()
-        contact.save()
+        incident.save()
+
+def close(request, inc_id, rep_id):
+    if check_csrf(request):
+
+        incident = Incident.objects.get(inc_id=inc_id)
+        incident.inc_date_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        incident.inc_status = 'R'
+        incident.save()
+
+    return redirect("reports:incident_tab", rep_id)
+
+def invalidate(request, inc_id, rep_id):
+    if check_csrf(request):
+
+        incident = Incident.objects.get(inc_id=inc_id)
+        incident.inc_date_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        incident.inc_status = 'I'
+        incident.save()
+
+    return redirect("reports:incident_tab", rep_id)
+
+def reopen(request, inc_id, rep_id):
+    if check_csrf(request):
+
+        incident = Incident.objects.get(inc_id=inc_id)
+        incident.inc_date_end = None
+        incident.inc_status = 'O'
+        incident.save()
+
+    return redirect("reports:incident_tab", rep_id)

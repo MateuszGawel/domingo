@@ -5,20 +5,41 @@
 {% endblock %}
 
 {% block content %}
-    <h1>ID: {{ contact.con_id }}</h1>
+    <h1>ID: {{ incident.inc_id }}</h1>
 
     <div class="col-lg-12">
 
-            <a href="{% url 'contacts:edit' contact.con_id %}" type="submit" class='btn btn-primary'>Edit</a> <br><br>
-
-            Project: {{ contact.con_prj_id.prj_name  }} <br />
-            Type: {{ contact.con_type }} <br />
-            Address: {{ contact.con_address }} <br />
-            Date: {{ contact.con_date }} <br />
-            Direction: {{ contact.con_direction }} <br />
-            Internal: {{ contact.con_internal }} <br />
-            Comment: {{ contact.con_com_id.com_value }} <br />
+            <a href="{% url 'incidents:edit' incident.inc_id %}" type="submit" class='btn btn-primary'>Edit</a> <br><br>
+            Project: {{ incident.inc_prj_id.prj_name }}<br />
+            Ticket: {{ incident.inc_ticket }}<br />
+            Start date: {{ incident.inc_date_start }}<br />
+            Resolve date: {{ incident.inc_date_end }}<br />
+            Comment: {{ incident.inc_com_id.com_value }}<br />
 
     </div>
+
+    <table class='table table-bordered table-striped table-hover'>
+        <thead>
+            <tr>
+                <th>Step name</th>
+                <th>Step date</th>
+                <th>Step type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.ent_name }}</td>
+                    <td>{{ entity.ent_date }}</td>
+                    <td>{{ entity.ent_type }}</td>
+                    <td>
+                        <a class='btn btn-primary' href="{% url  entity.ent_url  entity.ent_id %}">Details</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 
 {% endblock %}

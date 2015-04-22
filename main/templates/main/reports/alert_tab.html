@@ -18,7 +18,12 @@
         {% csrf_token %}
         {{ alertForm }}
         {{ error_message }}
-        <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+        <button class='btn btn-success navbar-right' type='submit'>Add</button>
+    </form>
+    <form class="" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
+        {% csrf_token %}
+        {{ error_message }}
+        <button class='btn btn-warning navbar-right' type='submit'>Get from Jira</button>
     </form>
     <table class='table table-bordered table-striped table-hover'>
         <thead>
@@ -41,7 +46,15 @@
                     <td>{{ alert.alt_date }}</td>
                     <td>{{ alert.alt_type }}</td>
                     <td>{{ alert.alt_com_id.com_value }}</td>
-                    <td><a class='btn btn-primary' href="{% url 'alerts:details' alert.alt_id %}">Details</a></td>
+                    <td>
+                        <a class='btn btn-primary' href="{% url 'alerts:details' alert.alt_id %}">Details</a>
+                        <form class="" action="{% url 'alerts:remove_alert' alert.alt_id %}" method="post">
+                            {% csrf_token %}
+                            {{ error_message }}
+
+                            <button class='btn btn-danger' type='submit'>Remove</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -34,19 +34,23 @@ class Comment(models.Model):
 
 class Project(models.Model):
     prj_id = models.AutoField(primary_key=True, verbose_name="Project ID")
-    prj_label = models.CharField(max_length=10, blank=True, verbose_name="Project label")
     prj_name = models.CharField(max_length=64, blank=True, verbose_name="Project full name")
 
     def __unicode__(self):
-        return str( self.prj_label ) + " (" + str( self.prj_name ) + ")"
+        return str( self.prj_name )
 
 
 class Incident(models.Model):
+    INCIDENT_STATUSES = (
+        ('O', 'Open'),
+        ('R', 'Resolved'),
+        ('I', 'Invalid'),
+    )
     inc_id = models.AutoField(primary_key=True, verbose_name="Incident ID")
     inc_date_start = models.DateTimeField(blank=True, null=True, verbose_name="Incident start date")
     inc_date_end = models.DateTimeField(blank=True, null=True, verbose_name="Incident end date")
+    inc_status = models.CharField(max_length=1, blank=True, choices=INCIDENT_STATUSES, verbose_name="Incident status")
     inc_ticket = models.CharField(max_length=100, blank=True, verbose_name="Incident ticket link")
-    inc_rep_id = models.ForeignKey('Report', blank=True, null=True, verbose_name="Incident report FK")
     inc_prj_id = models.ForeignKey('Project', blank=True, null=True, verbose_name="Incident project FK")
     inc_com_id = models.ForeignKey("Comment", blank=True, null=True, verbose_name="Incident comment FK")
 
@@ -58,18 +62,30 @@ class IncidentStep(models.Model):
     INCIDENT_STEP_TYPE = (
         ('C', 'Contact'),
         ('A', 'Alert'),
-        ('M', 'Maintenance'),
-        ('O', 'Other'),
+        ('M', 'Maintance'),
     )
 
     ins_id = models.AutoField(primary_key=True, verbose_name="IncidentStep ID")
     ins_type = models.CharField(max_length=1, blank=True, choices=INCIDENT_STEP_TYPE, verbose_name="IncidentStep type")
     ins_inc_id = models.ForeignKey('Incident', blank=True, null=True, verbose_name="IncidentStep incident FK")
     ins_com_id = models.ForeignKey('Comment', blank=True, null=True, verbose_name="IncidentStep comment FK")
+    ins_ent_id = models.IntegerField(blank=True, null=True, verbose_name="Connected entity ID")
 
     def __unicode__(self):
         return str( self.ins_id )
 
+
+class Maintenance(models.Model):
+
+    mnt_id = models.AutoField(primary_key=True, verbose_name="Maintenance ID")
+    mnt_date = models.DateTimeField(null=True, blank=True, verbose_name="Maintenance date")
+    mnt_name = models.CharField(max_length=256, null=True, blank=True, verbose_name="Maintenance name")
+    mnt_rep_id = models.ForeignKey('Report', null=True, blank=True, verbose_name="Maintenance report FK")
+    mnt_prj_id = models.ForeignKey('Project', null=True, blank=True, verbose_name="Maintenance project FK")
+    mnt_com_id = models.ForeignKey('Comment', null=True, blank=True, verbose_name="Maintenance comment FK")
+
+    def __unicode__(self):
+        return str( self.mnt_id )
 
 class Alert(models.Model):
     ALERT_TYPE = (
@@ -119,25 +135,6 @@ class Contact(models.Model):
     def __unicode__(self):
         return str( self.con_id )
 
-
-class IncidentStepAlert(models.Model):
-    isa_id = models.AutoField(primary_key=True, verbose_name="IncidentStepAlert ID")
-    isa_ins_id = models.ForeignKey('IncidentStep', blank=True, null=True, verbose_name="IncidentStepAlert incidentStep FK")
-    isa_alt_id = models.ForeignKey('Alert', blank=True, null=True, verbose_name="IncidentStepAlert alert FK")
-
-    def __unicode__(self):
-        return str( self.isa_id )
-
-
-class IncidentStepContact(models.Model):
-    isc_id = models.AutoField(primary_key=True, verbose_name="Contact report FK")
-    isc_ins_id = models.ForeignKey('IncidentStep', blank=True, null=True, verbose_name="IncidentStepContact incidentStep FK")
-    isc_con_id = models.ForeignKey('Contact', blank=True, null=True, verbose_name="IncidentStepContact contact FK")
-
-    def __unicode__(self):
-        return str( self.isc_id )
-
-
 class AlertContact(models.Model):
     aco_id = models.AutoField(primary_key=True, verbose_name="Contact report FK")
     aco_alt_id = models.ForeignKey('Alert', blank=True, null=True, verbose_name="AlertContact alert FK")
@@ -145,3 +142,12 @@ class AlertContact(models.Model):
 
     def __unicode__(self):
         return str( self.aco_id )
+
+
+class ReportIncident(models.Model):
+    rpi_id = models.AutoField(primary_key=True, verbose_name="ReportIncident ID")
+    rpi_rep_id = models.ForeignKey('Report', blank=True, null=True, verbose_name="ReportIncident report FK")
+    rpi_inc_id = models.ForeignKey('Incident', blank=True, null=True, verbose_name="ReportIncident incident FK")
+
+    def __unicode__(self):
+        return str( self.rpi_id )

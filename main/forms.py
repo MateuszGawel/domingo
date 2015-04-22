@@ -123,7 +123,7 @@ class AlertForm(forms.Form):
     alert_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
     alert_date = forms.DateTimeField(label = '', widget = DateWidget("Alert date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     alert_type = forms.CharField(label = '', widget = SelectWidget("Alert type", getChoices(Alert, "alt_type")).get_widget() )
-    alert_comment = forms.CharField(label = '', widget = TextWidget("Comment", '', 3).get_widget() )
+    alert_comment = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
 class ContactForm(forms.Form):
 
@@ -133,15 +133,15 @@ class ContactForm(forms.Form):
     con_date = forms.DateTimeField(label = '', widget = DateWidget("Contact date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     con_direction = forms.CharField(label = '', widget = SelectWidget("Contact direction", getChoices(Contact, "con_direction")).get_widget())
     con_internal = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Internal").get_widget() )
-    con_com_id = forms.CharField(label = '', widget = TextWidget("Comment", '', 3).get_widget() )
+    con_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
 class IncidentForm(forms.Form):
 
     inc_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
     inc_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
     inc_date_start = forms.DateTimeField(label = '', widget = DateWidget("Start date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    inc_date_end = forms.DateTimeField(label = '', widget = DateWidget("End date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    inc_com_id = forms.CharField(label = '', widget = TextWidget("Comment", '', 3).get_widget() )
+    inc_date_end = forms.DateTimeField(label = '', required=False, widget = DateWidget("End date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
+    inc_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
 class ReportFilterForm(forms.Form):
 

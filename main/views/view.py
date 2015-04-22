@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
-    print dir(request)
     if request.user.is_authenticated():
         return render(request, 'main/index.html')
     else:

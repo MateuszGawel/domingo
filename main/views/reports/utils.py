@@ -34,3 +34,24 @@ def check_csrf(request):
         if form.is_valid():
             return True
     return False
+
+def get_data_from_jira(query):
+    '''Zwraca kursor na ktorym trzeba wykonac odpowiednia metode by pobrac dane. Np fetchone()'''
+    from django.db import load_backend
+    myBackend = load_backend('django.db.backends.oracle')
+    myConnection = myBackend.DatabaseWrapper(
+        {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'JIRA',
+        'USER': 'jiranew',
+        'PASSWORD': 'jiraqq',
+        'HOST': '10.233.12.7',
+        'PORT': '1521',
+        'OPTIONS': {},
+        'CONN_MAX_AGE': 1200,
+        'AUTOCOMMIT': False
+    })
+
+    myCursor = myConnection.cursor()
+    myCursor.execute(query)
+    return myCursor

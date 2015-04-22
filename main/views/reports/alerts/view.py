@@ -8,7 +8,10 @@ from django.core.urlresolvers import reverse
 def details(request, alt_id):
     return render(request, 'main/reports/alerts/details.html', {'alert': Alert.objects.get(alt_id=alt_id)})
 
-
+def remove(request, alt_id):
+    alert = Alert.objects.get(alt_id=alt_id)
+    alert.delete()
+    return redirect("reports:alert_tab", alert.alt_rep_id)
 
 def edit(request, alt_id):
     alert = Alert.objects.get(alt_id=alt_id)
@@ -24,8 +27,6 @@ def edit(request, alt_id):
             add_custom_select_data(form.fields['alert_type'], get_inner_tuple_index(Alert._meta.get_field('alt_type').choices, form.cleaned_data['alert_type'] ), "selected")
 
     else:
-
-
         form = AlertForm({'alert_project': alert.alt_prj_id.prj_id,
                                'alert_name': alert.alt_name,
                                'alert_ticket': alert.alt_ticket,
