@@ -24,7 +24,7 @@ def edit(request, rep_id, con_id):
         form = ContactForm(request.POST)
         if form.is_valid():
             __modify(form, con_id)
-            return redirect("contacts:details", con_id)
+            return redirect("contacts:details", rep_id, con_id)
         else:
             clear_custom_select_data(form.fields['con_prj_id'])
             add_custom_select_data(form.fields['con_prj_id'], int(form.cleaned_data['con_prj_id'])-1, "selected")

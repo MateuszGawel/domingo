@@ -1,7 +1,4 @@
 {% extends 'main/_layout/base.html' %}
-<script>
-$('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
-</script>
 
 {% block content %}
 
@@ -28,7 +25,7 @@ $('#mainTable').editableTableWidget().numericInputExample().find('td:first').foc
             <button class='btn btn-warning navbar-right' type='submit'>Get from Jira</button>
         </form>
 
-        <table class='table table-bordered table-striped table-hover'>
+        <table id="alertTable" class='table table-bordered table-striped table-hover'>
             <thead>
                 <tr>
                     <th>Project</th>
@@ -40,24 +37,33 @@ $('#mainTable').editableTableWidget().numericInputExample().find('td:first').foc
                     <th></th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for alert in alerts %}
                     <tr>
-                        <td>{{ alert.alt_prj_id.prj_name }}</td>
-                        <td>{{ alert.alt_name }}</td>
-                        <td>{{ alert.alt_ticket }}</td>
-                        <td>{{ alert.alt_date }}</td>
-                        <td>{{ alert.alt_type }}</td>
-                        <td>{{ alert.alt_com_id.com_value }}</td>
+                    <form action="{% url 'alerts:quick_edit' report.rep_id alert.0.alt_id%}" method="post">
+                        {% csrf_token %}
+                        {% for field in alert.1.visible_fields %}
+                            <td class='alertForm-view alertForm-view{{ alert.0.alt_id }}' style="display: none">{{ field }}</td>
+                        {% endfor %}
+
+                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_prj_id.prj_name }}</td>
+                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_name }}</td>
+                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_ticket }}</td>
+                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_date }}</td>
+                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_type }}</td>
+                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_com_id.com_value }}</td>
                         <td>
-                            <a class='btn btn-primary' href="{% url 'alerts:details' report.rep_id alert.alt_id %}">Details</a>
-                            <form class="" action="{% url 'alerts:remove_alert' report.rep_id alert.alt_id %}" method="post">
+                        <button class='alertForm-view{{ alert.0.alt_id }} btn btn-success' style="display: none">Save</button>
+                    </form>
+                            <a class='alert-view{{ alert.0.alt_id }} btn btn-primary' href="{% url 'alerts:details' report.rep_id alert.0.alt_id %}">Details</a>
+                            <form class="alert-view{{ alert.0.alt_id }}" action="{% url 'alerts:remove_alert' report.rep_id alert.0.alt_id %}" method="post">
                                 {% csrf_token %}
                                 {{ error_message }}
-
                                 <button class='btn btn-danger' type='submit'>Remove</button>
                             </form>
-                        </td>
+                            <button class='alert-view{{ alert.0.alt_id }} edit-button btn btn-warning' onclick="switchToAlertFormView({{ alert.0.alt_id }})">Edit</button>
+                            <button class='alertForm-view{{ alert.0.alt_id }} btn btn-danger' style="display: none" onclick="switchToAlertView({{ alert.0.alt_id }})">Cancel</button>
                     </tr>
                 {% endfor %}
             </tbody>

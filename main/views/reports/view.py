@@ -68,7 +68,7 @@ def create(request):
         report.rep_date_created = (datetime.datetime.now()- timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
         report.rep_usr_id = request.user
         comment = Comment()
-        comment.com_value = 'Siema, elo, mowi Spejson'
+        comment.com_value = ''
         comment.save()
         report.rep_com_id = comment
         report.save()
@@ -157,6 +157,19 @@ def alert_tab(request, rep_id=None, inc_id=None):
             report = Report.objects.get(rep_id=rep_id)
 
         alerts  = Alert.objects.filter(alt_rep_id=report.rep_id)
+        filledAlertForms = []
+        for alert in alerts:
+            filledAlertform = AlertForm({'alert_project': alert.alt_prj_id.prj_id,
+                                   'alert_name': alert.alt_name,
+                                   'alert_ticket': alert.alt_ticket,
+                                   'alert_date': str( alert.alt_date ),
+                                   'alert_type': alert.alt_type,
+                                   'alert_comment': alert.alt_com_id.com_value})
+            clear_custom_select_data(filledAlertform.fields['alert_project'])
+            add_custom_select_data(filledAlertform.fields['alert_project'], alert.alt_prj_id.prj_id - 1, "selected")
+            clear_custom_select_data(filledAlertform.fields['alert_type'])
+            add_custom_select_data(filledAlertform.fields['alert_type'], get_inner_tuple_index(Alert._meta.get_field('alt_type').choices, alert.alt_type ), "selected")
+            filledAlertForms.append( (alert, filledAlertform) )
 
         if request.method == 'POST':
             form = AlertForm(request.POST)
@@ -166,7 +179,7 @@ def alert_tab(request, rep_id=None, inc_id=None):
                     return redirect("reports:alert_tab", report.rep_id)
                 else:
                     __alert_add(form, report, inc_id)
-                    return redirect("incidents:details", inc_id)
+                    return redirect("incidents:details", report.rep_id, inc_id)
 
             else:
                 clear_custom_select_data(form.fields['alert_project'])
@@ -179,7 +192,7 @@ def alert_tab(request, rep_id=None, inc_id=None):
             clear_custom_select_data(form.fields['alert_project'])
             clear_custom_select_data(form.fields['alert_type'])
 
-        return render(request, 'main/reports/alert_tab.html', {'alertForm': form, 'alerts': alerts, 'report': report, 'inc_id': inc_id})
+        return render(request, 'main/reports/alert_tab.html', {'alertForm': form, 'alerts': filledAlertForms, 'report': report, 'inc_id': inc_id})
 
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
@@ -203,7 +216,7 @@ def contact_tab(request, rep_id=None, inc_id=None):
                     return redirect("reports:contact_tab", report.rep_id)
                 else:
                     __contact_add(form, report, inc_id)
-                    return redirect("incidents:details", inc_id)
+                    return redirect("incidents:details", report.rep_id, inc_id)
             else:
                 clear_custom_select_data(form.fields['con_prj_id'])
                 add_custom_select_data(form.fields['con_prj_id'], int(form.cleaned_data['con_prj_id'])-1, "selected")
@@ -241,7 +254,7 @@ def maintenance_tab(request, rep_id=None, inc_id=None):
                     return redirect("reports:maintenance_tab", report.rep_id)
                 else:
                     __maintenance_add(form, report, inc_id)
-                    return redirect("incidents:details", inc_id)
+                    return redirect("incidents:details", report.rep_id, inc_id)
             else:
                 clear_custom_select_data(form.fields['mnt_prj_id'])
                 add_custom_select_data(form.fields['mnt_prj_id'], int(form.cleaned_data['mnt_prj_id'])-1, "selected")

@@ -14,10 +14,24 @@ $(document).ready(function(){
 	})
 })
 
-// =====================   END  tab.js   BEGIN calendar ============
+// =====================   END  tab.js ==================
 
+// =====================   switching between normal and form view - report tabs ============
+function switchToAlertFormView(id){
+    $('.alertForm-view'+id).css('display', '');
+    $('.alert-view'+id).css('display', 'none');
+};
+function switchToAlertView(id){
+    $('.alertForm-view'+id).css('display', 'none');
+    $('.alert-view'+id).css('display', '');
+};
 $(document).ready(function() {
 
+// =====================   hiding labels ============
+$('.alertForm-view label').css('display', 'none');
+
+
+// =====================   BEGIN calendar ============
 var date = new Date();
   var d = date.getDate();
   var m = date.getMonth();

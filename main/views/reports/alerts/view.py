@@ -45,6 +45,35 @@ def edit(request, rep_id, alt_id):
 
     return render(request, 'main/reports/alerts/edit.html', {'alertForm': form, 'alert': alert, 'report': report})
 
+def quick_edit(request, rep_id, alt_id):
+    report = Report.objects.get(rep_id=rep_id)
+    alert = Alert.objects.get(alt_id=alt_id)
+    if request.method == 'POST':
+        form = AlertForm(request.POST)
+        if form.is_valid():
+            __modify(form, alt_id)
+            return redirect("reports:alert_tab", rep_id)
+        else:
+            clear_custom_select_data(form.fields['alert_project'])
+            add_custom_select_data(form.fields['alert_project'], int(form.cleaned_data['alert_project'])-1, "selected")
+            clear_custom_select_data(form.fields['alert_type'])
+            add_custom_select_data(form.fields['alert_type'], get_inner_tuple_index(Alert._meta.get_field('alt_type').choices, form.cleaned_data['alert_type'] ), "selected")
+
+    else:
+        form = AlertForm({'alert_project': alert.alt_prj_id.prj_id,
+                               'alert_name': alert.alt_name,
+                               'alert_ticket': alert.alt_ticket,
+                               'alert_date': str( alert.alt_date ),
+                               'alert_type': alert.alt_type,
+                               'alert_comment': alert.alt_com_id.com_value})
+
+        clear_custom_select_data(form.fields['alert_project'])
+        add_custom_select_data(form.fields['alert_project'], alert.alt_prj_id.prj_id - 1, "selected")
+        clear_custom_select_data(form.fields['alert_type'])
+        add_custom_select_data(form.fields['alert_type'], get_inner_tuple_index(Alert._meta.get_field('alt_type').choices, alert.alt_type ), "selected")
+
+    return redirect("reports:alert_tab", rep_id)
+
 def __modify(form, alt_id):
     if form.is_valid():
 
