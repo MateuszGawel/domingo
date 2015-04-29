@@ -6,7 +6,7 @@
             </a>
 
             <span>
-                Hi, <a href="javascript:void(0)"> {{ user.first_name }} </a>
+                Hi, <a href="javascript:void(0)"> {{ user.first_name }} </a> !
             </span>
 
         </div>
@@ -27,9 +27,9 @@
         <div class='log_btn'>
             <form class="form-inline" action="{% url 'main:do_login' %}" method="post">
                 {% csrf_token %}
-                <input type="text" id="login-input-login" name="username" class="form-control" placeholder="Enter login">
+                <input type="text" id="login-input-login" name="username" class="form-control" placeholder="Enter Login">
                 <input type="password" id="login-input-password" name="password" class="form-control" placeholder="Enter Password">
-                <button type="submit" class="btn btn-primary btn-md">Login</button>
+                <button type="submit" class="btn btn-primary btn-md button_style">Login</button>
             </form>
         </div>
     {% endif %}

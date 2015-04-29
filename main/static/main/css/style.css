@@ -43,9 +43,41 @@ header nav, body{
 .begin_work, .raports_field{
 	padding-right: 50px;
 }
+.form-inline{
+	padding-bottom: 10px;
+	background-color: #333; 
+}
+.form-inline .form-control{
+	background: none repeat scroll 0% 0% transparent;
+	color: #f3f3f3;
+	border-style: solid none none;
+	border-color: #f3f3f3 -moz-use-text-color -moz-use-text-color;
+	border-radius:0;
+	margin-right: 10px;
+}
+.form-inline .form-control:focus{
+	box-shadow: none;
+}
+.button_style{
+	background: none repeat scroll 0% 0% transparent;
+	border: 2px solid #aaa;
+	transition: all 0.5s ease 0s;
+	outline: medium none;
+	border-radius: 7px;
+}
+.button_style:hover{
+	background: none repeat scroll 0% 0% #7B6C63;
+	border: 2px solid #7B6C63;
+	color: #FFF;
+	cursor: pointer;
+}
 
 
 
+.log_content{
+	height: 400px;
+	background: none repeat scroll 0% 0% #F5F5F5;
+}
 
 
 /* ====================   raport.html ===================   */

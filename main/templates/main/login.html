@@ -1,7 +1,9 @@
 {% extends "main/_layout/base.html" %}
 
 {% block content %}
+         {% block breadcrumbs %}
 
+        {% endblock %}
     <div class="col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
 
         {% if error_message %}
@@ -16,7 +18,7 @@
             </div>
         {% endif %}
 
-        <div class="panel panel-primary">
+      <!--  <div class="panel panel-primary">
             <div class="panel-heading">Log into system</div>
             <div class="panel-body">
                 <form action="{% url 'main:do_login' %}" method="post">
@@ -35,7 +37,10 @@
                     <button type="submit" class="btn btn-primary btn-lg center-block">Login</button>
                 </form>
             </div>
-        </div>
+        </div>  -->
+
+
     </div>
+        {% include "main/_layout/login_content.html" %}
 
 {% endblock %}
