@@ -4,20 +4,28 @@
 
 {% include 'main/_layout/report_menu.html' with active_tab="summary" %}
 
-    <form class="filters form-inline well" action=" {% url 'reports:summary_tab' report.rep_id %} " method="post">
+
+
+    <form class="filters form-inline well summary_tab col-md-3" action=" {% url 'reports:summary_tab' report.rep_id %} " method="post">
         {% csrf_token %}
         {{ summaryForm }}
         {{ error_message }}
 
-        <button class='btn btn-success navbar-right' type='submit'>Update</button>
+        <button class='btn button_style_1 navbar-right col-md-offset-4 col-md-4 col-md-offset-4' type='submit'>Update</button>
     </form>
+    <article class="col-md-offset-2 col-md-5 col-md-offset-2">                      <!--col-md-offset-4 col-md-4 col-md-offset-4-->
+        ID: {{ report.rep_id }} <hr>
+        Status: {{ report.rep_status }} <hr>
+        Redirection: {{ report.rep_redirection }} <hr>
+        Created: {{ report.rep_date_created }} <hr>
+        Sent: {{ report.rep_date_sent }} <hr>
+        Removed: {{ report.rep_date_removed }} <hr>
+        Comment: {{ report.rep_com_id.com_value }} <hr>
 
-    ID: {{ report.rep_id }} <br>
-    Status: {{ report.rep_status }} <br>
-    Redirection: {{ report.rep_redirection }} <br>
-    Created: {{ report.rep_date_created }} <br>
-    Sent: {{ report.rep_date_sent }} <br>
-    Removed: {{ report.rep_date_removed }} <br>
-    Comment: {{ report.rep_com_id.com_value }} <br>
 
+        <form action="{% url 'reports:close' report.rep_id %}" method="post">
+            {% csrf_token %}
+            <button class='btn button_style_1 button_style_logout log_btn' type='submit' style="margin-bottom: 20px">Close report</button>
+        </form>
+    </article>
 {% endblock %}

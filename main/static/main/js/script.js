@@ -14,6 +14,11 @@ $(document).ready(function() {
         });
     });
 
+    //DISABLE DISABLED FORMS
+    $('.disabled-form').submit(function (e) {
+        e.preventDefault();
+    });
+
     //CLEAR FOR GET util
     $(".get-clear").submit(function(e){
 
@@ -35,7 +40,7 @@ $(document).ready(function() {
 
     //POPOVER util
     $('[data-toggle="popover"]').popover({
-        placement : 'right',
+        placement : 'bottom',
         container: 'body'
     });
 

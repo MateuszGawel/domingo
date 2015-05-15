@@ -7,51 +7,53 @@
 {% if inc_id != None %} DODAJE DO INCYDENTU O ID: {{ inc_id }} {% endif %}
 
 {% if inc_id == None %}
-    <form class="filters form-inline well" action=" {% url 'reports:contact_tab' report.rep_id %} " method="post">
+    <form class="filters form-inline well col-md-3" action=" {% url 'reports:contact_tab' report.rep_id %} " method="post">
 {% else %}
-    <form class="filters form-inline well" action=" {% url 'reports:incident_contact_tab' inc_id %} " method="post">
+    <form class="filters form-inline well col-md-3" action=" {% url 'reports:incident_contact_tab' inc_id %} " method="post">
 {% endif %}
         {% csrf_token %}
         {{ contactForm.as_p }}
         {{ error_message }}
-        <button class='btn btn-success navbar-right' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+        <button class='btn button_style_1 col-md-offset-4 col-md-4 col-md-offset-4' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
     </form>
     {% if inc_id == None %}
-    <table class='table table-bordered table-striped table-hover'>
-        <thead>
-            <tr>
-                <th>Project</th>
-                <th>Type</th>
-                <th>Address</th>
-                <th>Date</th>
-                <th>Direction</th>
-                <th>Internal</th>
-                <th>Comment</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for contact in contacts %}
-                <tr>
-                    <td>{{ contact.con_prj_id.prj_name }}</td>
-                    <td>{{ contact.con_type }}</td>
-                    <td>{{ contact.con_address }}</td>
-                    <td>{{ contact.con_date }}</td>
-                    <td>{{ contact.con_direction }}</td>
-                    <td>{{ contact.con_internal }}</td>
-                    <td>{{ contact.con_com_id.com_value }}</td>
-                    <td>
-                        <a class='btn btn-primary' href="{% url 'contacts:details' report.rep_id contact.con_id %}">Details</a>
-                        <form class="" action="{% url 'contacts:remove_contact' report.rep_id contact.con_id %}" method="post">
-                            {% csrf_token %}
-                            {{ error_message }}
-                            <button class='btn btn-danger' type='submit'>Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <div class="col-md-9">
+            <table class='table table-bordered table-striped table-hover'>
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Type</th>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Direction</th>
+                        <th>Internal</th>
+                        <th>Comment</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                        <tr>
+                            <td>{{ contact.con_prj_id.prj_name }}</td>
+                            <td>{{ contact.con_type }}</td>
+                            <td>{{ contact.con_address }}</td>
+                            <td>{{ contact.con_date }}</td>
+                            <td>{{ contact.con_direction }}</td>
+                            <td>{{ contact.con_internal }}</td>
+                            <td>{{ contact.con_com_id.com_value }}</td>
+                            <td>
+                                <a class='btn button_style_1 col-md-12' href="{% url 'contacts:details' report.rep_id contact.con_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>
+                                <form class="" action="{% url 'contacts:remove_contact' report.rep_id contact.con_id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ error_message }}
+                                    <button class='btn button_style_1 button_style_logout rem_but col-md-12' type='submit'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 
 {% endblock %}

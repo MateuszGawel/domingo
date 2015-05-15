@@ -5,58 +5,90 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-8 col-md-offset-4">
-        <div class="row">
-            <h1>CREATE REPORT</h1>
-            {% if report == None %}
-                <span style="color: green">You have no reports yet</span><br>
 
+
+
+    <div class="col-md-8 col-md-offset-4 report_base">
+
+        {% if report != None and report.rep_date_sent != None %}
+        <div class="last_rep row">
+                    <div class="col-md-6">
+                        <div>Your last report has been created: {{ report.rep_date_created }}.</div>
+                        <a class="col-md-offset-3 col-md-6 col-md-offset-3" href="javascript:void(0)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> See your last created report.</a>
+                    </div>
+                    <div class="col-md-6">
+                        <div>Last report has been closed at: {{ report.rep_date_created }}.</div>
+                        <a class="col-md-offset-4 col-md-4 col-md-offset-4" href="javascript:void(0)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> See last closed report.</a>
+                    </div>
+        </div>
+
+        {% elif report != None %}
+        <div class="last_rep row">
+                    <div>
+                        <div>Your last report has been created: {{ report.rep_date_created }}.</div>
+                        <a class="col-md-offset-4 col-md-4 col-md-offset-4" href="javascript:void(0)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> See your last created report.</a>
+                    </div>
+        </div>
+        {% endif %}
+
+        <div class="create_report col-md-6">
+             <h1>
+                 <span class="glyphicon glyphicon-pencil reports_icons" aria-hidden="true" title="Your last report has been created: May 5, 2015, 2:52 p.m."></span>
+             </h1>
+            <h2>CREATE REPORT</h2>
+            {% if report == None %}
+            <hr>
                 <form action="{% url 'reports:create' %}" method="post">
                     {% csrf_token %}
-                    <button class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</button>
+                    <button class='btn button_style_1' type='submit' style="margin-bottom: 20px">Create my first report</button>
                 </form>
 
             {% elif report.rep_date_sent == None %}
-                Your last report has been created: {{ report.rep_date_created }}<br>
-                <span style="color: red">It hasn't been sent yet. You cannot create a new one. Please close or edit the old report.</span>
-                <p>
-                    <form action="{% url 'reports:create' %}" method="post">
+                <!-- Your last report has been created: {{ report.rep_date_created }} -->
+                <hr>
+                <div class='form_button'>
+                    <form action="{% url 'reports:create' %}" class="disabled-form col-md-4" method="post" style="opacity:.6;">  <!--style="opacity:.2;  -->
                         {% csrf_token %}
-                        <button disabled="disabled" class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</button>
+                        <button class='btn button_style_1' type='submit' style="margin-bottom: 20px" data-toggle="popover" title="You have opened report!" data-content="It hasn't been sent yet. You cannot create a new one. Please close or edit the old report.">Start Report</button>
+                    </form>
+                    <div class="col-md-4">
+                        <a href="{% url 'reports:summary_tab' report.rep_id %}" class='btn button_style_1' type='submit' style="margin-bottom: 20px">Edit current Report</a>
+                    </div>
+                    <form action="{% url 'reports:close' report.rep_id%}" method="post" class="col-md-4">
+                        {% csrf_token %}
+                        <button class='btn button_style_1 button_style_logout' type='submit' style="margin-bottom: 20px">Close Report</button>
                     </form>
 
-                    <a href="{% url 'reports:summary_tab' report.rep_id %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Edit current Report</a>
-
-                    <form action="{% url 'reports:close' report.rep_id%}" method="post">
-                        {% csrf_token %}
-                        <button class='btn btn-danger' type='submit' style="margin-bottom: 20px">Close Report</button>
-                    </form>
-
-                </p>
+                </div>
             {% else %}
-                Your last report has been created: {{ report.rep_date_created }}<br>
-                <span style="color: green">It has been closed: {{ report.rep_date_sent }}</span>
 
+                <hr>
                 <form action="{% url 'reports:create' %}" method="post">
                     {% csrf_token %}
-                    <button class='btn btn-success' type='submit' style="margin-bottom: 20px">Start Report</button>
+                    <button class='btn button_style_1' type='submit' style="margin-bottom: 20px">Start new report</button>
                 </form>
 
             {% endif %}
         </div>
 
-        <div class="row">
-            <h1>BROWSE REPORT</h1>
-            <p>
-
+        <div class="brose_report col-md-6">
+            <h1>
+                <span class="glyphicon glyphicon-search reports_icons" aria-hidden="true"></span>
+            </h1>
+            <h2>BROWSE REPORT</h2>
+            <div>
+            <hr>
                 {% comment %} ponizszy link to prawie zahardcodowane przeslanie formularza, nie ma sensu bawic sie w urls bo nie dziala, slugify to konwersja int -> string {% endcomment %}
 
                 {% with user.id|slugify as usr %}
-                    <a href="{{ request.path|add:'search/?rep_user_id='|add:usr }}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Browse my reports</a>
+                <div class="col-md-6">
+                    <a href="{{ request.path|add:'search/?rep_user_id='|add:usr }}" class='btn button_style_1' type='submit' style="margin-bottom: 20px">Browse my reports</a>
+                </div>
                 {% endwith %}
-
-                <a href="{% url 'reports:search' %}" class='btn btn-primary' type='submit' style="margin-bottom: 20px">Browse all reports</a>
-            </p>
+                <div class="col-md-6">
+                    <a href="{% url 'reports:search' %}" class='btn button_style_1' type='submit' style="margin-bottom: 20px">Browse all reports</a>
+                </div>
+            </div>
         </div>
     </div>
 

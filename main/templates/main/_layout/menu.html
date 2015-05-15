@@ -1,4 +1,4 @@
-<nav class='navbar navbar-inverse row form-inline'>
+<nav class='navbar navbar-inverse row form-inline head_form'>
     {% if user.is_authenticated %}
         <div class="user_info">
             <a href="{% url 'reports:index' %}">
@@ -14,13 +14,13 @@
         <div class='log_btn'>
             {% if user.is_staff %}
                 <a href="{% url 'admin:index' %}">
-                    <button class="btn btn-default btn-md " type="submit"> <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Manage</button>
+                    <button class="btn button_style" type="submit"> <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Manage</button>
                 </a>
             {% endif %}
 
 
             <a href="{% url 'main:do_logout' %}">
-                <button class="btn btn-primary btn-md " type="submit">Logout</button>
+                <button class="btn button_style button_style_logout" type="submit">Logout</button>
             </a>
         </div>
     {% else %}

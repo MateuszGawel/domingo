@@ -4,69 +4,78 @@
 
 {% include 'main/_layout/report_menu.html' with active_tab="alerts" %}
 
-{% if inc_id != None %} DODAJE DO INCYDENTU O ID: {{ inc_id }} {% endif %}
-
+<div class="filters form-inline well col-md-3 alert_tab">
 {% if inc_id == None %}
-    <form class="filters form-inline well" action=" {% url 'reports:alert_tab' report.rep_id %} " method="post">
+    <form class="" action=" {% url 'reports:alert_tab' report.rep_id %} " method="post">
 {% else %}
-    <form class="filters form-inline well" action=" {% url 'reports:incident_alert_tab' inc_id %} " method="post">
+    <form class="filters form-inline well col-md-offset-4 col-md-4 col-md-offset-4 alert_tab" action=" {% url 'reports:incident_alert_tab' inc_id %} " method="post">
 {% endif %}
 
         {% csrf_token %}
         {{ alertForm }}
         {{ error_message }}
 
-        <button class='btn btn-success navbar-right' type='submit'>Add</button>
+        <button class='btn  navbar-right button_style_1 col-md-offset-3 col-md-6 col-md-offset-3' type='submit'>
+
+            {% if inc_id == None %}Add
+            {% else %}Add Incident Step
+            {% endif %}
+        </button>
     </form>
-    {% if inc_id == None %}
-        <form class="" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
-            {% csrf_token %}
-            {{ error_message }}
-            <button class='btn btn-warning navbar-right' type='submit'>Get from Jira</button>
-        </form>
 
-        <table id="alertTable" class='table table-bordered table-striped table-hover'>
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>Sensor</th>
-                    <th>Ticket</th>
-                    <th>Data</th>
-                    <th>Type</th>
-                    <th>Comment</th>
-                    <th></th>
-                </tr>
-            </thead>
+        {% if inc_id == None %}
+    <form class="col-md-offset-3 col-md-6 col-md-offset-3 gira_get_button" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
+        {% csrf_token %}
+        {{ error_message }}
+        <button class='btn button_style_1 col-md-12' type='submit'>Get from Jira</button>
 
-            <tbody>
-                {% for alert in alerts %}
+    </form>
+        </div>
+        <div class="col-md-9">
+            <table id="alertTable" class='table table-bordered table-striped table-hover'>
+                <thead>
                     <tr>
-                    <form action="{% url 'alerts:quick_edit' report.rep_id alert.0.alt_id%}" method="post">
-                        {% csrf_token %}
-                        {% for field in alert.1.visible_fields %}
-                            <td class='alertForm-view alertForm-view{{ alert.0.alt_id }}' style="display: none">{{ field }}</td>
-                        {% endfor %}
-
-                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_prj_id.prj_name }}</td>
-                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_name }}</td>
-                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_ticket }}</td>
-                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_date }}</td>
-                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_type }}</td>
-                        <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_com_id.com_value }}</td>
-                        <td>
-                        <button class='alertForm-view{{ alert.0.alt_id }} btn btn-success' style="display: none">Save</button>
-                    </form>
-                            <a class='alert-view{{ alert.0.alt_id }} btn btn-primary' href="{% url 'alerts:details' report.rep_id alert.0.alt_id %}">Details</a>
-                            <form class="alert-view{{ alert.0.alt_id }}" action="{% url 'alerts:remove_alert' report.rep_id alert.0.alt_id %}" method="post">
-                                {% csrf_token %}
-                                {{ error_message }}
-                                <button class='btn btn-danger' type='submit'>Remove</button>
-                            </form>
-                            <button class='alert-view{{ alert.0.alt_id }} edit-button btn btn-warning' onclick="switchToAlertFormView({{ alert.0.alt_id }})">Edit</button>
-                            <button class='alertForm-view{{ alert.0.alt_id }} btn btn-danger' style="display: none" onclick="switchToAlertView({{ alert.0.alt_id }})">Cancel</button>
+                        <th>Project</th>
+                        <th>Sensor</th>
+                        <th>Ticket</th>
+                        <th>Data</th>
+                        <th>Type</th>
+                        <th>Comment</th>
+                        <th></th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    {% for alert in alerts %}
+                        <tr>
+                        <form action="{% url 'alerts:quick_edit' report.rep_id alert.0.alt_id%}" method="post">
+                            {% csrf_token %}
+                            {% for field in alert.1.visible_fields %}
+                                <td class='alertForm-view alertForm-view{{ alert.0.alt_id }}' style="display: none">{{ field }}</td>
+                            {% endfor %}
+
+                            <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_prj_id.prj_name }}</td>
+                            <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_name }}</td>
+                            <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_ticket }}</td>
+                            <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_date }}</td>
+                            <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_type }}</td>
+                            <td class="alert-view{{ alert.0.alt_id }}">{{ alert.0.alt_com_id.com_value }}</td>
+                            <td>
+                            <button class='alertForm-view{{ alert.0.alt_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+                        </form class='button_style'>
+                                <a class='alert-view{{ alert.0.alt_id }} btn button_style_1 col-md-6  ' href="{% url 'alerts:details' report.rep_id alert.0.alt_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> </a>
+
+                                <button class='alert-view{{ alert.0.alt_id }}  btn button_style_1 col-md-6' onclick="switchToAlertFormView({{ alert.0.alt_id }})"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </button>
+                            <form class="alert-view{{ alert.0.alt_id }}" action="{% url 'alerts:remove_alert' report.rep_id alert.0.alt_id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ error_message }}
+                                    <button class='btn button_style_logout button_style_1 col-md-12 rem_but' type='submit'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</button>
+                                </form>
+                                <button class='alertForm-view{{ alert.0.alt_id }} btn button_style_logout button_style_1 col-md-12 rem_but' style="display: none" onclick="switchToAlertView({{ alert.0.alt_id }})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {%  endif %}
 {% endblock %}

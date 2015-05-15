@@ -1,17 +1,17 @@
 {% extends 'main/_layout/base.html' %}
 
 {% block content %}
-    <h1>NAME: {{ alert.alt_name }}</h1>
 
-    <div class="col-lg-12">
-            <a class='btn btn-danger'  href="{% url 'alerts:details' report.rep_id alert.alt_id %}">Cancel</a> <br><br>
 
-            <form action="{% url 'alerts:edit' report.rep_id alert.alt_id %}" method="post">
+    <article class="col-lg-offset-4 col-lg-4 col-lg-offset-4 col-md-offset-4 col-md-4 col-md-offset-4 detail">
+        <h1>NAME: {{ alert.alt_name }}</h1>
+             <form action="{% url 'alerts:edit' report.rep_id alert.alt_id %}" method="post">
                 {% csrf_token %}
                 {{ alertForm }}
-                <button type="submit" class='btn btn-success'>Save</button> <br><br>
+                <button type="submit" class='btn button_style_1 col-md-5'>Save</button>
+                <a class='btn button_style_1 button_style_logout col-md-offset-2 col-md-5 log_btn_1'  href="{% url 'alerts:details' report.rep_id alert.alt_id %}">Cancel</a>
             </form>
 
-    </div>
+    </article>
 
 {% endblock %}

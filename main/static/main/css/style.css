@@ -33,21 +33,30 @@ header nav, body{
 	max-width: 64px;
 	max-height: 80px;
 }
-
+.log_btn>.form-inline input{
+	width: auto!important;
+}
 .log_btn{
 	display: block;
 	float: right;
-	margin-right: 10px;
-	margin-top: 8px;
+	margin: 0 8px 10px 10px;
+}
+.log_btn_1{
+	margin-bottom: 10px;
+}
+.log_btn_2{
+	margin-top: 10px;
 }
 .begin_work, .raports_field{
 	padding-right: 50px;
 }
-.form-inline{
+.head_form{
 	padding-bottom: 10px;
 	background-color: #333; 
+	margin-bottom: 0;
+	min-height: 75px;
 }
-.form-inline .form-control{
+.head_form .form-control{
 	background: none repeat scroll 0% 0% transparent;
 	color: #f3f3f3;
 	border-style: solid none none;
@@ -55,32 +64,71 @@ header nav, body{
 	border-radius:0;
 	margin-right: 10px;
 }
-.form-inline .form-control:focus{
-	box-shadow: none;
+ .button_style .glyphicon-cog{
+	color: #eee;
 }
-.button_style{
+.button_style,.button_style_1{
 	background: none repeat scroll 0% 0% transparent;
 	border: 2px solid #aaa;
 	transition: all 0.5s ease 0s;
 	outline: medium none;
 	border-radius: 7px;
+	color:#FFF;
 }
-.button_style:hover{
+.button_style:hover,.button_style_1:hover{
 	background: none repeat scroll 0% 0% #7B6C63;
 	border: 2px solid #7B6C63;
 	color: #FFF;
 	cursor: pointer;
 }
-
-
-
-.log_content{
-	height: 400px;
-	background: none repeat scroll 0% 0% #F5F5F5;
+.button_style_1{
+	color: #555;
+} 
+.button_style_logout:hover{
+	border-color: #a22;
+	background-color: #a44;
 }
 
 
-/* ====================   raport.html ===================   */
+.log_content{
+	padding-top: 10px;
+	min-height: 600px;
+	background: none repeat scroll 0% 0% #F5F5F5;
+}
+.content_img{
+	padding-top:20px;
+}
+.content_img img{
+	width: 100%;
+}
+
+/* =============  Dashboard ========= */
+.breadcrumb{
+	background-color: #bbb;
+}
+.breadcrumb a{
+	text-decoration: none;
+	color: #F5F5F5;
+}
+.breadcrumb a:hover{
+	color:#555;
+}
+.list-group .list-group-item,.summary_tab{
+	border-radius: 0px;
+	border: 2px solid #BBB;
+
+}
+.list-group .list-group-item.active{
+	background-color: #7B6C63;
+	border: 2px solid #7B6C63;
+}
+.list-group .list-group-item.active:hover, .list-group-item:hover{
+	border: 2px solid #7B6C63;
+	transition: all 0.5s ease 0s;
+}
+
+
+
 html{
 	width: 100%;
 	-webkit-box-sizing: border-box;
@@ -133,32 +181,146 @@ header nav, body{
 	color: #fff;
 	text-decoration: none;
 }
-
-
+/*  =================== Datepicker ================== */
+.bootstrap-datetimepicker-widget td.active, .bootstrap-datetimepicker-widget td.active:hover,.bootstrap-datetimepicker-widget td span.active{
+	background-color: #7B6C63;
+}
+.glyphicon{
+	color: #7B6C63;
+}
 
 /* ====================   raport.html ===================   */
-.raports_field section h2, .raports .panel-heading h1{
-	text-align: center;
-}
-.raports .panel-heading h1{
-	color: green;
-}
-
-.filters{
-	display: block;
-}
-.filters .filter_project, .filters .filter_input{
+.report_base{
+	margin-left: 15px;
+	margin-right: 15px;
 	display: inline-block;
 }
-.filters button.navbar-right{
-	margin-right: 5px;
+.create_report,.brose_report,.last_rep{
+	text-align: center;
 }
+.reports_icons{
+	vertical-align: middle;
+	color: #7B6C63;	
+	cursor: default;
+}
+.last_rep{
+	border-bottom: 1px solid #aaa;
+}
+.last_rep a{
+	display: block;
+	text-align: center;
+}
+
+.nav-pills {
+	margin-bottom: 20px;
+}
+.nav-pills li.active, .nav-pills li.active a, .nav-pills li.active a:hover, .nav-pills li.active a:focus{
+	background-color: #7B6C63;
+}
+.nav-pills li a{
+	color: #555;
+}
+
+/* =======================  tabs style ======================*/
+.form-control{
+	width: 100%!important;
+}
+.form-control,.input-group-addon, .filters div.form-group select.form-control option{
+	background: none repeat scroll 0% 0% transparent;
+    border-style: solid none none;
+    border-width: 2px;
+    border-color: #333 -moz-use-text-color -moz-use-text-color;
+    border-radius: 0px;
+    margin-right: 10px;
+    color:#333;
+}
+.filters{
+	padding-left: 30px;
+	border-radius: 5px;
+}
+.filters .form-group{
+	display: block;
+}
+.filters .form-group,  .filters .form-group label{
+	display: block;
+}
+.input-group .form-control:focus, .form-group textarea:focus,.filters div.form-group select.form-control,.head_form .form-control:focus, input.form-control:focus, select.form-control:focus{
+	box-shadow: none;
+} 
+input.form-control:focus, select.form-control:focus{
+	border-color:#333;
+}
+.glyphicon-time{
+	color:#333;
+}
+article.detail{
+	border: 2px solid #888;
+	border-radius: 5px;
+	background-color: #F5F5F5;
+}
+textarea{
+	min-width: 215px;
+	max-width: 400px;
+	min-height: 35px;
+}
+.filters .form-group textarea{
+	width: 100%;
+}
+.form-group textarea:focus{
+	border:1px solid #333;
+}
+.filters .button_style_1{
+	margin-top: 30px;
+	float: none!important;
+}
+.filters .but_float{
+	float: left!important;
+}
+
+.filters div.form-group select.form-control option{
+    border-width: 1px;
+  	border-color: #888 -moz-use-text-color -moz-use-text-color;
+}
+.filters div.form-group select.form-control option:nth-child(2n){
+    background-color: #fff;
+}
+.filters div.form-group select.form-control option:focus{
+	background-color: #7B6C63;
+}
+.rem_but{
+	margin-top: 5px;
+}
+td a:hover .glyphicon, button:hover .glyphicon, .detail a:hover .glyphicon{
+	color:#FFF;
+	transition: all 0.5s ease 0s;
+} 
+ .det_incident hr{
+	width: 100%;
+	display: inline-block;
+}
+.det_incident form{
+	display: inline-block;
+}
+.inc_add{
+	display: block;
+}
+.gira_get_button{
+	padding-left: 0px;
+	padding-right:0px;
+}
+
 
 
 /* ================ dialog window ======================
 .modal-dialog{
 	width: 1224px;
-}   */
+}   
+
+
+
+
+
+*/
 .date_text{
 	display: block;
 }
@@ -177,3 +339,10 @@ header nav, body{
 .show_form{
 	display: none;
 }  */
+
+
+
+.alert_tab{
+	display: block;
+}
+
