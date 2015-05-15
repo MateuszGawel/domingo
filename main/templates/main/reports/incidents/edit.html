@@ -7,11 +7,11 @@
         <h1>ID: {{ incident.inc_id }}</h1>
 
 
-            <form action="{% url 'incidents:edit' incident.inc_id %}" method="post">
+            <form action="{% url 'incidents:edit' report.rep_id incident.inc_id %}" method="post">
                 {% csrf_token %}
                 {{ incidentForm }}
                 <button type="submit" class='btn button_style_1 col-md-5'>Save</button>
-                <a class='btn btn-danger'  href="{% url 'incidents:details' incident.inc_id %}">Cancel</a>
+                <a class='btn btn-danger'  href="{% url 'incidents:details' report.rep_id incident.inc_id %}">Cancel</a>
             </form>
 
     </article>

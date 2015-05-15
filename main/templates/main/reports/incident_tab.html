@@ -38,9 +38,9 @@
                         <tr>
                             <td>{{ incident.inc_prj_id.prj_name }}</td>
                             <td>{{ incident.inc_ticket }}</td>
-                            <td>{{ incident.inc_status }}</td>
+                            <td>{{ incident.get_inc_status_display }}</td>
                             <td>{{ incident.inc_date_start }}</td>
-                            <td>{{ incident.inc_date_end }}</td>
+                            <td>{% if incident.inc_date_end != None %} {{ incident.inc_date_end }} {% endif %}</td>
                             <td>{{ incident.inc_com_id.com_value }}</td>
                             <td>
                                 <a class='btn button_style_1 col-md-12' href="{% url 'incidents:details' report.rep_id incident.inc_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>

@@ -103,7 +103,7 @@ def edit(request, rep_id, inc_id):
         form = IncidentForm(request.POST)
         if form.is_valid():
             __modify(form, inc_id)
-            return redirect("incidents:details", inc_id)
+            return redirect("incidents:details", rep_id, inc_id)
         else:
             clear_custom_select_data(form.fields['inc_prj_id'])
             add_custom_select_data(form.fields['inc_prj_id'], int(form.cleaned_data['inc_prj_id'])-1, "selected")
