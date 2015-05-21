@@ -322,7 +322,13 @@ td a:hover .glyphicon, button:hover .glyphicon, .detail a:hover .glyphicon{
 	padding-left: 0px;
 	padding-right:0px;
 }
-
+td .form-group {
+	max-width: 350px;
+}
+td .form-group .input-group .form-control{
+	padding-right: 0;
+	margin-right: 0;
+}
 
 
 
