@@ -1,0 +1,5 @@
+@font-face {
+  font-family: 'EBGaramond';
+  src: url('/fonts/EBGaramond.eot');
+  src: url('/fonts/EBGaramond.eot') format('embedded-opentype'), url('/fonts/EBGaramond.woff2') format('woff2'), url('/fonts/EBGaramond.woff') format('woff'), url('/fonts/EBGaramond.ttf') format('truetype'), url('/fonts/EBGaramond.svg#MEBGaramond') format('svg');
+}

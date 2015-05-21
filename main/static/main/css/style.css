@@ -1,3 +1,5 @@
+@import "/font.css";
+
 html{
 	width: 100%;
 	-webkit-box-sizing: border-box;
@@ -5,6 +7,7 @@ html{
 	box-sizing:         border-box;
 	margin-left:  auto;
 	margin-right: auto;
+	font-family: 'EBGaramond';
 }
 
 .navbar{
@@ -294,7 +297,8 @@ td a:hover .glyphicon, button:hover .glyphicon, .detail a:hover .glyphicon{
 	color:#FFF;
 	transition: all 0.5s ease 0s;
 } 
- .det_incident hr{
+
+.det_incident hr{
 	width: 100%;
 	display: inline-block;
 }
@@ -304,42 +308,31 @@ td a:hover .glyphicon, button:hover .glyphicon, .detail a:hover .glyphicon{
 .inc_add{
 	display: block;
 }
-.gira_get_button{
+.inc_add form button.button_style_1,.inc_add a.button_style_1{
+	margin-top: 0px;
+}
+.inc_add form select{
+	max-width: 92px;
+}
+.jira_get_button{
 	padding-left: 0px;
 	padding-right:0px;
 }
 
 
 
-/* ================ dialog window ======================
-.modal-dialog{
-	width: 1224px;
-}   
 
 
-
-
-
-*/
-.date_text{
-	display: block;
+/* ================ ERRORS ====================== */
+.errorlist{
+	border-radius: 7px;
+	border: 1px dotted #f61;
+	list-style-type: none;
 }
-.form-horizontal .date_text label{
-	text-align: left;
+.errorlist li{
+	color:#f61;
+	text-align: center;
 }
-.edit_btn{
-	float: right;
-	margin-right: 15px;
-}
-
-.form-group .filter_project{
-	margin-left: 15px;
-}
-/*
-.show_form{
-	display: none;
-}  */
-
 
 
 .alert_tab{
