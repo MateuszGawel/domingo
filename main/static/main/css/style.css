@@ -9,7 +9,11 @@ html{
 	margin-right: auto;
 	font-family: 'EBGaramond';
 }
-
+.test{
+    font-family: 'EBGaramond';
+    color: red;
+    font-size: 44px;
+}
 .navbar{
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;

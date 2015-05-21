@@ -1,7 +1,7 @@
 import datetime
 from datetime import timedelta
 
-from django.shortcuts import redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404
 
 from utils import *
 
