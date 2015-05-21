@@ -3,15 +3,23 @@
         Dashboard
     </a>
 
+    <a href="{% url 'announcements:index' %}" class='list-group-item {% if active == "announcements" %} active {% endif %}'>
+        Announcements
+    </a>
+
     <a href="{% url 'reports:index' %}" class='list-group-item {% if active == "reports" %} active {% endif %}'>
         Reports
     </a>
 
-    <a href="javascript:void(0)" class='list-group-item {% if active == "announcements" %} active {% endif %}'>
-        Announcements
+    <a href="javascript:void(0)" class='list-group-item {% if active == "else" %} active {% endif %}'>
+        Monitoring Schedules
     </a>
 
     <a href="javascript:void(0)" class='list-group-item {% if active == "else" %} active {% endif %}'>
-        Something else
+        Deploy Schedules
+    </a>
+
+    <a href="javascript:void(0)" class='list-group-item {% if active == "else" %} active {% endif %}'>
+        Mailing
     </a>
 </aside>

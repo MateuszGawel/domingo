@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Report(models.Model):
     REPORT_STATUSES = (
         ('O', 'Open'),
-        ('F', 'Finished'),
+        ('S', 'Sent'),
         ('R', 'Removed'),
     )
 
