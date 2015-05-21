@@ -3,3 +3,43 @@
   src: url('fonts/EBGaramond.eot');
   src: url('fonts/EBGaramond.eot') format('embedded-opentype'), url('fonts/EBGaramond.woff') format('woff2'), url('fonts/EBGaramond.woff') format('woff'), url('fonts/EBGaramond.ttf') format('truetype'), url('fonts/EBGaramond.svg#MEBGaramond') format('svg');
 }
+@font-face {
+  font-family: 'AlegreyaSansSC-Regular';
+  src: url('fonts/AlegreyaSansSC-Regular.eot');
+  src: url('fonts/AlegreyaSansSC-Regular.eot') format('embedded-opentype'), url('fonts/AlegreyaSansSC-Regular.woff') format('woff2'), url('fonts/AlegreyaSansSC-Regular.woff') format('woff'), url('fonts/AlegreyaSansSC-Regular.ttf') format('truetype'), url('fonts/AlegreyaSansSC-Regular.svg#AlegreyaSansSC-Regular') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSansSC-Medium';
+  src: url('fonts/AlegreyaSansSC-Medium.eot');
+  src: url('fonts/AlegreyaSansSC-Medium.eot') format('embedded-opentype'), url('fonts/AlegreyaSansSC-Medium.woff') format('woff2'), url('fonts/AlegreyaSansSC-Medium.woff') format('woff'), url('fonts/AlegreyaSansSC-Medium.ttf') format('truetype'), url('fonts/AlegreyaSansSC-Medium.svg#AlegreyaSansSC-Medium') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSansSC-Bold';
+  src: url('fonts/AlegreyaSansSC-Bold.eot');
+  src: url('fonts/AlegreyaSansSC-Bold.eot') format('embedded-opentype'), url('fonts/AlegreyaSansSC-Bold.woff') format('woff2'), url('fonts/AlegreyaSansSC-Bold.woff') format('woff'), url('fonts/AlegreyaSansSC-Bold.ttf') format('truetype'), url('fonts/AlegreyaSansSC-Bold.svg#AlegreyaSansSC-Bold') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSans-LightItalic';
+  src: url('fonts/AlegreyaSans-LightItalic.eot');
+  src: url('fonts/AlegreyaSans-LightItalic.eot') format('embedded-opentype'), url('fonts/AlegreyaSans-LightItalic.woff') format('woff2'), url('fonts/AlegreyaSans-LightItalic.woff') format('woff'), url('fonts/AlegreyaSans-LightItalic.ttf') format('truetype'), url('fonts/AlegreyaSans-LightItalic.svg#AlegreyaSans-LightItalic') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSans-Italic';
+  src: url('fonts/AlegreyaSans-Italic.eot');
+  src: url('fonts/AlegreyaSans-Italic.eot') format('embedded-opentype'), url('fonts/AlegreyaSans-Italic.woff') format('woff2'), url('fonts/AlegreyaSans-Italic.woff') format('woff'), url('fonts/AlegreyaSans-Italic.ttf') format('truetype'), url('fonts/AlegreyaSans-Italic.svg#AlegreyaSans-Italic') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSans-Bold';
+  src: url('fonts/AlegreyaSans-Bold.eot');
+  src: url('fonts/AlegreyaSans-Bold.eot') format('embedded-opentype'), url('fonts/AlegreyaSans-Bold.woff') format('woff2'), url('fonts/AlegreyaSans-Bold.woff') format('woff'), url('fonts/AlegreyaSans-Bold.ttf') format('truetype'), url('fonts/AlegreyaSans-Bold.svg#AlegreyaSans-Bold') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSans-Medium';
+  src: url('fonts/AlegreyaSans-Medium.eot');
+  src: url('fonts/AlegreyaSans-Medium.eot') format('embedded-opentype'), url('fonts/AlegreyaSans-Medium.woff') format('woff2'), url('fonts/AlegreyaSans-Medium.woff') format('woff'), url('fonts/AlegreyaSans-Medium.ttf') format('truetype'), url('fonts/AlegreyaSans-Medium.svg#AlegreyaSans-Medium') format('svg');
+}
+@font-face {
+  font-family: 'AlegreyaSans-Regular';
+  src: url('fonts/AlegreyaSans-Regular.eot');
+  src: url('fonts/AlegreyaSans-Regular.eot') format('embedded-opentype'), url('fonts/AlegreyaSans-Regular.woff') format('woff2'), url('fonts/AlegreyaSans-Regular.woff') format('woff'), url('fonts/AlegreyaSans-Regular.ttf') format('truetype'), url('fonts/AlegreyaSans-Regular.svg#AlegreyaSans-Regular') format('svg');
+}
