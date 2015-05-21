@@ -61,6 +61,9 @@ class SelectWidget(MyWidget):
 
         self.widget.set_context(context)
 
+    def dupa(self):
+        print "COKOLWIEK"
+
 class CharWidget(MyWidget):
 
     #UWAGA zmienne definiowane tu sa STATYCZNE (mozna sie niezle wpuscic w kanal)

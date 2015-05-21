@@ -67,6 +67,8 @@ def quick_edit(request, rep_id, alt_id):
                                'alert_type': alert.alt_type,
                                'alert_comment': alert.alt_com_id.com_value})
 
+        form.alert_project.widget.dupa()
+
         clear_custom_select_data(form.fields['alert_project'])
         add_custom_select_data(form.fields['alert_project'], alert.alt_prj_id.prj_id - 1, "selected")
         clear_custom_select_data(form.fields['alert_type'])
