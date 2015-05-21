@@ -8,7 +8,7 @@
 {% if inc_id == None %}
     <form class="" action=" {% url 'reports:alert_tab' report.rep_id %} " method="post">
 {% else %}
-    <form class="filters form-inline well col-md-offset-4 col-md-4 col-md-offset-4 alert_tab" action=" {% url 'reports:incident_alert_tab' inc_id %} " method="post">
+    <form class="" action=" {% url 'reports:incident_alert_tab' inc_id %} " method="post">
 {% endif %}
 
         {% csrf_token %}
@@ -24,7 +24,7 @@
     </form>
 
         {% if inc_id == None %}
-    <form class="col-md-offset-3 col-md-6 col-md-offset-3 gira_get_button" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
+    <form class="col-md-offset-3 col-md-6 col-md-offset-3 jira_get_button" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
         {% csrf_token %}
         {{ error_message }}
         <button class='btn button_style_1 col-md-12' type='submit'>Get from Jira</button>
