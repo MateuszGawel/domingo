@@ -120,7 +120,7 @@ def summary_tab(request, rep_id):
 
         if request.method == 'POST':
             form = SummaryForm(request.POST)
-            if form.is_valid():
+            if form.is_valid() and report.rep_status == 'O':
                 __summary_add(form, report)
                 return redirect("reports:summary_tab", report.rep_id)
 
@@ -170,10 +170,12 @@ def alert_tab(request, rep_id=None, inc_id=None):
             clear_custom_select_data(filledAlertform.fields['alert_type'])
             add_custom_select_data(filledAlertform.fields['alert_type'], get_inner_tuple_index(Alert._meta.get_field('alt_type').choices, alert.alt_type ), "selected")
             filledAlertForms.append( (alert, filledAlertform) )
+            #print "FILLED"
+            #print filledAlertform.fields['alert_project'].widget.widget_context
 
         if request.method == 'POST':
             form = AlertForm(request.POST)
-            if form.is_valid():
+            if form.is_valid() and report.rep_status == 'O':
                 if inc_id == None:
                     __alert_add(form, report)
                     return redirect("reports:alert_tab", report.rep_id)
@@ -189,9 +191,12 @@ def alert_tab(request, rep_id=None, inc_id=None):
 
         else:
             form = AlertForm()
+            #print "FORM before"
+            #print form.fields['alert_project'].widget.widget_context
             clear_custom_select_data(form.fields['alert_project'])
             clear_custom_select_data(form.fields['alert_type'])
-
+            #print "FORM"
+            #print form.fields['alert_project'].widget.widget_context
         return render(request, 'main/reports/alert_tab.html', {'alertForm': form, 'alerts': filledAlertForms, 'report': report, 'inc_id': inc_id})
 
     else:
@@ -210,7 +215,7 @@ def contact_tab(request, rep_id=None, inc_id=None):
 
         if request.method == 'POST':
             form = ContactForm(request.POST)
-            if form.is_valid():
+            if form.is_valid() and report.rep_status == 'O':
                 if inc_id == None:
                     __contact_add(form, report)
                     return redirect("reports:contact_tab", report.rep_id)
@@ -248,7 +253,7 @@ def maintenance_tab(request, rep_id=None, inc_id=None):
         maintenances  = Maintenance.objects.filter(mnt_rep_id=report.rep_id)
         if request.method == 'POST':
             form = MaintenanceForm(request.POST)
-            if form.is_valid():
+            if form.is_valid() and report.rep_status == 'O':
                 if inc_id == None:
                     __maintenance_add(form, report)
                     return redirect("reports:maintenance_tab", report.rep_id)
@@ -278,7 +283,7 @@ def incident_tab(request, rep_id):
 
         if request.method == 'POST':
             form = IncidentForm(request.POST)
-            if form.is_valid():
+            if form.is_valid() and report.rep_status == 'O':
                 __incident_add(form, report)
                 return redirect("reports:incident_tab", report.rep_id)
             else:

@@ -65,6 +65,17 @@ DATABASES = {
         'PASSWORD': 'l1VSR9v8qOszEo7ZNzvp',
         'HOST': '10.132.23.115',
         'PORT': '5432',
+    },
+    'jira': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'JIRA',
+        'USER': 'jiranew',
+        'PASSWORD': 'jiraqq',
+        'HOST': '10.233.12.7',
+        'PORT': '1521',
+        'OPTIONS': {},
+        'CONN_MAX_AGE': 1200,
+        'AUTOCOMMIT': False
     }
 }
 
