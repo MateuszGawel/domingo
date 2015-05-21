@@ -23,4 +23,4 @@ def do_login(request):
 
 def do_logout(request):
     logout(request)
-    return render(request, 'main/login.html', {'error_message': "Thanks for logging out. Now you can login again.", "error_type": "success"})
+    return render(request, 'main/login.html')

@@ -4,43 +4,6 @@
          {% block breadcrumbs %}
 
         {% endblock %}
-    <div class="col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
-
-        {% if error_message %}
-
-            {% if error_type %}
-                <div class="alert alert-{{ error_type }}" role="alert">
-            {% else %}
-                <div class="alert alert-danger" role="alert">
-            {% endif %}
-
-                {{ error_message }}
-            </div>
-        {% endif %}
-
-      <!--  <div class="panel panel-primary">
-            <div class="panel-heading">Log into system</div>
-            <div class="panel-body">
-                <form action="{% url 'main:do_login' %}" method="post">
-                {% csrf_token %}
-
-                    <div class="form-group">
-                        <label for="login-input-login">Login</label>
-                        <input type="text" id="login-input-login" name="username" class="form-control" placeholder="Enter login">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="login-input-password">Password</label>
-                        <input type="password" id="login-input-password" name="password" class="form-control" placeholder="Enter Password">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg center-block">Login</button>
-                </form>
-            </div>
-        </div>  -->
-
-
-    </div>
         {% include "main/_layout/login_content.html" %}
 
 {% endblock %}

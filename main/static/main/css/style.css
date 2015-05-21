@@ -46,6 +46,13 @@ header nav, body{
 	float: right;
 	margin: 0 8px 10px 10px;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #f3f3f3;
+}
 .log_btn_1{
 	margin-bottom: 10px;
 }
@@ -69,7 +76,7 @@ header nav, body{
 	border-radius:0;
 	margin-right: 10px;
 }
- .button_style .glyphicon-cog{
+.button_style .glyphicon-cog{
 	color: #eee;
 }
 .button_style,.button_style_1{
@@ -118,7 +125,7 @@ header nav, body{
 .breadcrumb a:hover{
 	color:#555;
 }
-.list-group .list-group-item,.summary_tab{
+.list-group .list-group-item{
 	border-radius: 0px;
 	border: 2px solid #BBB;
 
@@ -238,6 +245,9 @@ header nav, body{
     border-radius: 0px;
     margin-right: 10px;
     color:#333;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 .filters{
 	padding-left: 30px;
@@ -341,7 +351,10 @@ td .form-group .input-group .form-control{
 	color:#f61;
 	text-align: center;
 }
-
+.error_color{
+	text-align: center;
+	color: #f61;
+}
 
 .alert_tab{
 	display: block;
