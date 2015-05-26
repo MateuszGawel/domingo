@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 
 from main.models import *
 
@@ -45,7 +46,7 @@ class DateWidget(MyWidget):
         self.widget.set_template_name('main/_widgets/date_widget.html')
         self.widget.set_label(label)
 
-        context = {'placeholder': 'YYYY-MM-DD hh:mm:ss'}
+        context = {'placeholder': 'YYYY-MM-DD hh:mm:ss', 'error': False}
 
         self.widget.set_context(context)
 
@@ -60,9 +61,6 @@ class SelectWidget(MyWidget):
         context = {'values': values}
 
         self.widget.set_context(context)
-
-    def dupa(self):
-        print "COKOLWIEK"
 
 class CharWidget(MyWidget):
 
@@ -118,12 +116,21 @@ def getChoices(Model, fieldName):
 
     return objects
 
+#---------------FORMS---------------#
 class SummaryForm(forms.Form):
     rep_redirection = forms.DateTimeField(label = '', required=False, widget = DateWidget("Redirection date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     rep_comment = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
-class AlertForm(forms.Form):
+    def save(self, report):
+        if self.cleaned_data.has_key('rep_redirection'):
+            report.rep_redirection = self.cleaned_data['rep_redirection']
+        if self.cleaned_data.has_key('rep_comment'):
+            report.rep_com_id.com_value = self.cleaned_data['rep_comment']
+            report.rep_com_id.save()
+        report.save()
 
+
+class AlertForm(forms.Form):
     alert_project = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
     alert_name = forms.CharField(label = '', widget = CharWidget("Alert name").get_widget() )
     alert_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
@@ -131,8 +138,42 @@ class AlertForm(forms.Form):
     alert_date = forms.DateTimeField(label = '', widget = DateWidget("Alert date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     alert_comment = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
-class ContactForm(forms.Form):
+    def save(self, report, inc_id=None):
+        alert = Alert()
+        comment = Comment()
+        if self.cleaned_data.has_key('alert_project'):
+            alert.alt_prj_id = get_object_or_404(Project, prj_id=self.cleaned_data['alert_project'])
+        if self.cleaned_data.has_key('alert_name'):
+            alert.alt_name = self.cleaned_data['alert_name']
+        if self.cleaned_data.has_key('alert_ticket'):
+            alert.alt_ticket = self.cleaned_data['alert_ticket']
+        if self.cleaned_data.has_key('alert_date'):
+            alert.alt_date = self.cleaned_data['alert_date']
+        if self.cleaned_data.has_key('alert_type'):
+            alert.alt_type = self.cleaned_data['alert_type']
+        if self.cleaned_data.has_key('alert_comment'):
+            comment.com_value = self.cleaned_data['alert_comment']
 
+        comment.save()
+
+        alert.alt_com_id = comment
+        alert.alt_rep_id = report
+
+        alert.save()
+
+        if inc_id != None:
+            incident = Incident.objects.get(inc_id=inc_id)
+            incidentStep = IncidentStep()
+            incidentStep.ins_type = 'A'
+            incidentStep.ins_ent_id = alert.alt_id
+            incidentStep.ins_inc_id = incident
+            incidentStepComment = Comment()
+            incidentStepComment.save()
+            incidentStep.ins_com_id = incidentStepComment
+            incidentStep.save()
+
+
+class ContactForm(forms.Form):
     con_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
     con_type = forms.CharField(label = '', widget = SelectWidget("Contact type", getChoices(Contact, "con_type")).get_widget())
     con_address = forms.CharField(label = '', widget = CharWidget("Contact address").get_widget() )
@@ -141,20 +182,108 @@ class ContactForm(forms.Form):
     con_internal = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Internal").get_widget() )
     con_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
-class MaintenanceForm(forms.Form):
+    def save(self, report, inc_id=None):
+        contact = Contact()
+        comment = Comment()
+        if self.cleaned_data.has_key('con_prj_id'):
+            contact.con_prj_id = get_object_or_404(Project, prj_id=self.cleaned_data['con_prj_id'])
+        if self.cleaned_data.has_key('con_type'):
+            contact.con_type = self.cleaned_data['con_type']
+        if self.cleaned_data.has_key('con_address'):
+            contact.con_address = self.cleaned_data['con_address']
+        if self.cleaned_data.has_key('con_date'):
+            contact.con_date = self.cleaned_data['con_date']
+        if self.cleaned_data.has_key('con_direction'):
+            contact.con_direction = self.cleaned_data['con_direction']
+        if self.cleaned_data.has_key('con_internal'):
+            contact.con_internal = self.cleaned_data['con_internal']
+        if self.cleaned_data.has_key('con_com_id'):
+            comment.com_value = self.cleaned_data['con_com_id']
 
+        comment.save()
+
+        contact.con_com_id = comment
+        contact.con_rep_id = report
+
+        contact.save()
+        if inc_id != None:
+            incident = Incident.objects.get(inc_id=inc_id)
+            incidentStep = IncidentStep()
+            incidentStep.ins_type = 'C'
+            incidentStep.ins_ent_id = contact.con_id
+            incidentStep.ins_inc_id = incident
+            incidentStepComment = Comment()
+            incidentStepComment.save()
+            incidentStep.ins_com_id = incidentStepComment
+            incidentStep.save()
+
+
+class MaintenanceForm(forms.Form):
     mnt_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
     mnt_name = forms.CharField(label = '', widget = CharWidget("Maintenance name").get_widget() )
     mnt_date = forms.DateTimeField(label = '', widget = DateWidget("Maintenance date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     mnt_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
-class IncidentForm(forms.Form):
+    def save(self, report, inc_id=None):
+        comment = Comment()
+        maintenance = Maintenance()
+        if self.cleaned_data.has_key('mnt_prj_id'):
+            maintenance.mnt_prj_id = get_object_or_404(Project, prj_id=self.cleaned_data['mnt_prj_id'])
+        if self.cleaned_data.has_key('mnt_name'):
+            maintenance.mnt_name = self.cleaned_data['mnt_name']
+        if self.cleaned_data.has_key('mnt_date'):
+            maintenance.mnt_date = self.cleaned_data['mnt_date']
+        if self.cleaned_data.has_key('con_com_id'):
+            comment.com_value = self.cleaned_data['mnt_com_id']
 
+        comment.save()
+
+        maintenance.mnt_com_id = comment
+        maintenance.mnt_rep_id = report
+
+        maintenance.save()
+        if inc_id != None:
+            incident = Incident.objects.get(inc_id=inc_id)
+            incidentStep = IncidentStep()
+            incidentStep.ins_type = 'M'
+            incidentStep.ins_ent_id = maintenance.mnt_id
+            incidentStep.ins_inc_id = incident
+            incidentStepComment = Comment()
+            incidentStepComment.save()
+            incidentStep.ins_com_id = incidentStepComment
+            incidentStep.save()
+
+
+class IncidentForm(forms.Form):
     inc_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
     inc_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
     inc_date_start = forms.DateTimeField(label = '', widget = DateWidget("Start date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     inc_date_end = forms.DateTimeField(label = '', required=False, widget = DateWidget("End date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     inc_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+
+    def save(self, report):
+        incident = Incident()
+        comment = Comment()
+        if self.cleaned_data.has_key('inc_prj_id'):
+            incident.inc_prj_id = get_object_or_404(Project, prj_id=self.cleaned_data['inc_prj_id'])
+        if self.cleaned_data.has_key('inc_ticket'):
+            incident.inc_ticket = self.cleaned_data['inc_ticket']
+        if self.cleaned_data.has_key('inc_date_start'):
+            incident.inc_date_start = self.cleaned_data['inc_date_start']
+        if self.cleaned_data.has_key('inc_com_id'):
+            comment.com_value = self.cleaned_data['inc_com_id']
+
+        comment.save()
+
+        incident.inc_com_id = comment
+        incident.inc_status = 'O'
+        incident.save()
+
+        reportIncident = ReportIncident()
+        reportIncident.rpi_inc_id = incident
+        reportIncident.rpi_rep_id = report
+
+        reportIncident.save()
 
 class ReportFilterForm(forms.Form):
 

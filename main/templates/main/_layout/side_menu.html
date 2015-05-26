@@ -1,25 +1,27 @@
 <aside class='list-group col-lg-3 col-md-3 col-sm-3'>
     <a href="{% url 'main:index' %}" class='list-group-item {% if active == "dashboard" %} active {% endif %}'>
-        Dashboard
-    </a>
-
-    <a href="{% url 'announcements:index' %}" class='list-group-item {% if active == "announcements" %} active {% endif %}'>
-        Announcements
+        Dashboard <div style="width: 5px; height: 30px; background-color: #333333; float:right; margin-top: -5px; margin-right: -5px;"></div>
     </a>
 
     <a href="{% url 'reports:index' %}" class='list-group-item {% if active == "reports" %} active {% endif %}'>
-        Reports
+        Reports <div style="width: 5px; height: 30px; background-color: #806ba5; float:right; margin-top: -5px; margin-right: -5px;"></div>
+    </a>
+
+    <a href="javascript:void(0)" class='list-group-item {% if active == "announcements" %} active {% endif %}'>
+        Announcements <div style="width: 5px; height: 30px; background-color: #db5762; float:right; margin-top: -5px; margin-right: -5px;"></div>
     </a>
 
     <a href="javascript:void(0)" class='list-group-item {% if active == "else" %} active {% endif %}'>
-        Monitoring Schedules
+        Mailing <div style="width: 5px; height: 30px; background-color: #dbc557; float:right; margin-top: -5px; margin-right: -5px;"></div>
     </a>
 
     <a href="javascript:void(0)" class='list-group-item {% if active == "else" %} active {% endif %}'>
-        Deploy Schedules
+        Monitoring Schedules <div style="width: 5px; height: 30px; background-color: #649667; float:right; margin-top: -5px; margin-right: -5px;"></div>
     </a>
 
     <a href="javascript:void(0)" class='list-group-item {% if active == "else" %} active {% endif %}'>
-        Mailing
+        Deploy Schedules <div style="width: 5px; height: 30px; background-color: #609ba5; float:right; margin-top: -5px; margin-right: -5px;"></div>
     </a>
+
+
 </aside>

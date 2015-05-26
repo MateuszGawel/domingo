@@ -1,8 +1,9 @@
+{% load staticfiles %}
 <nav class='navbar navbar-inverse row form-inline head_form'>
     {% if user.is_authenticated %}
         <div class="user_info">
             <a href="{% url 'reports:index' %}">
-                <img src="../../../static/main/img/superman.jpg" alt='User info' class='img-responsive img-rounded avatar'>
+                <img src="{%  static "main/img/superman.jpg" %}" alt='User info' class='img-responsive img-rounded avatar'>
             </a>
 
             <span>
@@ -19,13 +20,17 @@
             {% endif %}
 
 
-            <a href="{% url 'main:do_logout' %}">
+        </div>
+        <div class='log_btn'>
+            <form class="form-inline" action="{% url 'main:do_logout' %}" method="post">
+                {% csrf_token %}
                 <button class="btn button_style button_style_logout" type="submit">Logout</button>
-            </a>
+            </form>
         </div>
     {% else %}
         <div class='log_btn'>
-            <form class="form-inline" action="{% url 'main:do_login' %}" method="post">
+
+            <form class="form-inline" action="{% url 'main:index' %}" method="post">
                 {% csrf_token %}
                 <input type="text" id="login-input-login" name="username" class="form-control" placeholder="Enter Login">
                 <input type="password" id="login-input-password" name="password" class="form-control" placeholder="Enter Password">

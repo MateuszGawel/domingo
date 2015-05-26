@@ -10,7 +10,7 @@ html{
 }
 body{
 	font-family: 'OpenSans';
-	font-size: 16px;
+	font-size: 14px;
 }
 .navbar{
     -webkit-border-radius: 0 !important;
@@ -233,7 +233,55 @@ header nav, body{
 	color: #555;
 }
 
+
+/* =======================  forms ======================*/
+.error p{
+    color:   firebrick;
+    font-size: 13px;
+    margin-top: -12px;
+    float: right;
+    font-weight: 100 !important;
+}
+
+.error p strong{
+    font-weight: normal;
+}
+
+.error p strong:before{
+    content: '* ';
+}
+
+.error label{
+    color:   firebrick;
+}
+
+.error input, form .error .input-group-addon {
+    border-color: firebrick;
+}
+
+.error input, form .error .input-group-addon .glyphicon{
+    color: firebrick;
+}
+
+.error input::-webkit-input-placeholder { /* WebKit browsers */
+    color:   firebrick;
+    opacity:  0.5;
+}
+.error input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    firebrick;
+    opacity:  0.5;
+}
+.error input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    firebrick;
+    opacity:  0.5;
+}
+.error input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    firebrick;
+    opacity:  0.5;
+}
+
 /* =======================  tabs style ======================*/
+
 .form-control{
 	width: 100%!important;
 }
@@ -256,6 +304,7 @@ header nav, body{
 .filters .form-group{
 	display: block;
 }
+
 .filters .form-group,  .filters .form-group label{
 	display: block;
 }

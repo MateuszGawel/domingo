@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404, redirect, render
-
 from main.views.reports.utils import *
 
 
@@ -27,9 +25,6 @@ def edit(request, rep_id, mnt_id):
         if form.is_valid():
             __modify(form, mnt_id)
             return redirect("maintenances:details", rep_id, mnt_id)
-        else:
-            clear_custom_select_data(form.fields['mnt_prj_id'])
-            add_custom_select_data(form.fields['mnt_prj_id'], int(form.cleaned_data['mnt_prj_id'])-1, "selected")
 
     else:
 
@@ -38,8 +33,6 @@ def edit(request, rep_id, mnt_id):
                                 'mnt_date': str( maintenance.mnt_date ),
                                 'mnt_com_id': maintenance.mnt_com_id.com_value,
         })
-
-        clear_custom_select_data(form.fields['mnt_prj_id'])
 
     return render(request, 'main/reports/maintenances/edit.html', {'maintenanceForm': form, 'maintenance': maintenance, 'report': report})
 

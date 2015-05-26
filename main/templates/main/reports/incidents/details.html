@@ -25,7 +25,7 @@
                     {% endfor %}
                 </select>
             </form>
-            <a class='btn button_style_1 _2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_alert_tab' incident.inc_id %}">Create new alert</a>
+            <a class='btn button_style_1 _2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_alert_tab'  report.rep_id incident.inc_id %}">Create alert</a>
         </div>
         <hr>
         <div class="inc_add">
@@ -38,7 +38,7 @@
                     {% endfor %}
                 </select>
             </form>
-            <a class='btn button_style_1 log_btn_2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_contact_tab' incident.inc_id %}">Create new contact</a>
+            <a class='btn button_style_1 log_btn_2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_contact_tab' report.rep_id incident.inc_id %}">Create contact</a>
         </div>
         <hr>
         <div class="inc_add">
@@ -51,7 +51,7 @@
                     {% endfor %}
                 </select>
             </form>
-            <a class='btn button_style_1 log_btn_2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_maintenance_tab' incident.inc_id %}">Create new maintenance</a>
+            <a class='btn button_style_1 log_btn_2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_maintenance_tab' report.rep_id incident.inc_id %}">Create maintenance</a>
         </div>
         <hr>
         <div class="col-md-offset-3 col-md-6 col-md-offset-3">
@@ -75,7 +75,13 @@
                         <td>{{ entity.ent_number }}</td>
                         <td>{{ entity.ent_name }}</td>
                         <td>{{ entity.ent_date }}</td>
-                        <td>{{ entity.ent_type }}</td>
+                        {% if entity.ent_type == 'A' %}
+                            <td><span class="glyphicon glyphicon-bell"></span> Alert</td>
+                        {% elif entity.ent_type == 'C' %}
+                            <td><span class="glyphicon glyphicon-earphone"></span> Contact</td>
+                        {% elif entity.ent_type == 'M' %}
+                            <td><span class="glyphicon glyphicon-wrench"></span> Maintenace</td>
+                        {% endif %}
                         <td>
                             <a class='btn button_style_1 col-md-12' href="{% url  entity.ent_url  report.rep_id entity.ent_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>
                             <form class="" action="{% url 'incidents:remove_incident_step' report.rep_id entity.ent_ins_id %}" method="post">

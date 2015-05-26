@@ -1,14 +1,14 @@
 {% extends 'main/_layout/base.html' %}
 
 {% block content %}
-
+{% load crispy_forms_tags %}
 {% include 'main/_layout/report_menu.html' with active_tab="summary" %}
 
 
 
     <form class="filters form-inline well summary_tab col-md-3" action=" {% url 'reports:summary_tab' report.rep_id %} " method="post">
         {% csrf_token %}
-        {{ summaryForm }}
+        {{ summaryForm|crispy }}
         {{ error_message }}
 
         <button class='btn button_style_1 navbar-right col-md-offset-4 col-md-4 col-md-offset-4' type='submit'>Update</button>
@@ -16,9 +16,9 @@
     <article class="col-md-offset-2 col-md-5 col-md-offset-2">                      <!--col-md-offset-4 col-md-4 col-md-offset-4-->
         Status:
         {% if report.rep_status == 'O' %}
-            <span style="color: yell; font-weight: 600">{{ report.get_rep_status_display }}</span>
-        {% elif report.rep_status == 'S' %}
-            <span style="color: #d4ce48; font-weight: 600">{{ report.get_rep_status_display }}</span> {{ report.rep_date_sent }}
+            <span style="color: yellowgreen; font-weight: 600">{{ report.get_rep_status_display }}</span>
+        {% elif report.rep_status == 'C' %}
+            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span> {{ report.rep_date_sent }}
         {% else %}
             <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span> {{ report.rep_date_removed }}
         {% endif %}

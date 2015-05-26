@@ -6,9 +6,12 @@ def index(request):
     if request.user.is_authenticated():
         return render(request, 'main/index.html')
     else:
-        return render(request, 'main/login.html')
+        if request.method == 'POST':
+            return __do_login(request)
+        else:
+            return render(request, 'main/login.html')
 
-def do_login(request):
+def __do_login(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
@@ -23,4 +26,4 @@ def do_login(request):
 
 def do_logout(request):
     logout(request)
-    return render(request, 'main/login.html')
+    return redirect("main:index")

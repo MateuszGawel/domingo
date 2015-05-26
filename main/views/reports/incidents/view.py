@@ -1,6 +1,5 @@
 import datetime
 
-from django.shortcuts import get_object_or_404, redirect, render
 from django.forms import Form
 
 from main.views.reports.utils import *
@@ -104,21 +103,14 @@ def edit(request, rep_id, inc_id):
         if form.is_valid():
             __modify(form, inc_id)
             return redirect("incidents:details", rep_id, inc_id)
-        else:
-            clear_custom_select_data(form.fields['inc_prj_id'])
-            add_custom_select_data(form.fields['inc_prj_id'], int(form.cleaned_data['inc_prj_id'])-1, "selected")
 
     else:
-
-            form = IncidentForm({   'inc_prj_id': incident.inc_prj_id.prj_id,
-                                    'inc_ticket': incident.inc_ticket,
-                                    'inc_date_start': str( incident.inc_date_start ),
-                                    'inc_date_end': str( incident.inc_date_end ),
-                                    'inc_com_id': incident.inc_com_id.com_value,
-            })
-
-            clear_custom_select_data(form.fields['inc_prj_id'])
-            add_custom_select_data(form.fields['inc_prj_id'], int(incident.inc_prj_id.prj_id)-1, "selected")
+        form = IncidentForm({   'inc_prj_id': incident.inc_prj_id.prj_id,
+                                'inc_ticket': incident.inc_ticket,
+                                'inc_date_start': str( incident.inc_date_start ),
+                                'inc_date_end': str( incident.inc_date_end ),
+                                'inc_com_id': incident.inc_com_id.com_value,
+        })
 
     return render(request, 'main/reports/incidents/edit.html', {'incidentForm': form, 'incident': incident, 'report':report})
 

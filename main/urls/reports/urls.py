@@ -11,9 +11,9 @@ urlpatterns = patterns('',
     url(r'^(?P<rep_id>\d+)/incidents/$', view.incident_tab, name='incident_tab'),
 
 
-    url(r'^incidents/(?P<inc_id>\d+)/alerts/$', view.incident_alert_tab, name='incident_alert_tab'),
-    url(r'^incidents/(?P<inc_id>\d+)/contacts/$', view.incident_contact_tab, name='incident_contact_tab'),
-    url(r'^incidents/(?P<inc_id>\d+)/maintenances/$', view.incident_maintenance_tab, name='incident_maintenance_tab'),
+    url(r'^(?P<rep_id>\d+)/incidents/(?P<inc_id>\d+)/alerts/$', view.incident_alert_tab, name='incident_alert_tab'),
+    url(r'^(?P<rep_id>\d+)/incidents/(?P<inc_id>\d+)/contacts/$', view.incident_contact_tab, name='incident_contact_tab'),
+    url(r'^(?P<rep_id>\d+)/incidents/(?P<inc_id>\d+)/maintenances/$', view.incident_maintenance_tab, name='incident_maintenance_tab'),
 
 
 

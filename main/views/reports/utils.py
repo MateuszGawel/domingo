@@ -1,4 +1,3 @@
-from django import forms
 from django.db import connections
 
 from main.forms import *
@@ -7,21 +6,6 @@ from main.forms import *
 def get_current_report(request):
     report = Report.objects.filter(rep_usr_id=request.user.id, rep_date_sent=None).latest('rep_id')
     return report
-
-def clear_custom_select_data(formField):
-    '''Czyscimy tutaj custom data z fielda czyli caly kontekst 'value' jesli jest wyslany. czyli w tym wypadku selected dla taga <option>. Mozemy dodac tutaj wiecej.
-    Jak tego nie robilismy to mimo odpowiedniego value i tak renderowana byla pierwsza opcja z listy.'''
-    numberOfOptions = len( formField.widget.widget_context['values'] )
-
-    for i in range( numberOfOptions ):
-        currentOptionValues = formField.widget.widget_context['values'][i]
-        formField.widget.widget_context['values'][i] =( currentOptionValues[0], currentOptionValues[1], "" )
-
-def add_custom_select_data(formField, optionIndex, valueValue):
-    values = formField.widget.widget_context['values'][optionIndex]
-    formField.widget.widget_context['values'][optionIndex] =( values[0], values[1], valueValue )
-    print values
-    print valueValue
 
 def get_inner_tuple_index(baseTuple, element):
     '''Potrzebne zeby wziac index wewnetrznego tuple'a z choices modelu - nie bedzie potrzebne jesli zamiast tego choices typy alertow itp wrzucimy do tabel'''

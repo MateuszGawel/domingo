@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404, redirect, render
-
 from main.views.reports.utils import *
 
 
@@ -25,14 +23,6 @@ def edit(request, rep_id, con_id):
         if form.is_valid():
             __modify(form, con_id)
             return redirect("contacts:details", rep_id, con_id)
-        else:
-            clear_custom_select_data(form.fields['con_prj_id'])
-            add_custom_select_data(form.fields['con_prj_id'], int(form.cleaned_data['con_prj_id'])-1, "selected")
-            clear_custom_select_data(form.fields['con_type'])
-            add_custom_select_data(form.fields['con_type'], get_inner_tuple_index(Contact._meta.get_field('con_type').choices, form.cleaned_data['con_type'] ), "selected")
-            clear_custom_select_data(form.fields['con_direction'])
-            add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, form.cleaned_data['con_direction'] ), "selected")
-
     else:
 
         form = ContactForm({   'con_prj_id': contact.con_prj_id.prj_id,
@@ -43,13 +33,6 @@ def edit(request, rep_id, con_id):
                                'con_internal': contact.con_internal,
                                'con_com_id': contact.con_com_id.com_value,
         })
-
-        clear_custom_select_data(form.fields['con_prj_id'])
-        add_custom_select_data(form.fields['con_prj_id'], contact.con_prj_id.prj_id - 1, "selected")
-        clear_custom_select_data(form.fields['con_type'])
-        add_custom_select_data(form.fields['con_type'], get_inner_tuple_index(Contact._meta.get_field('con_type').choices, contact.con_type ), "selected")
-        clear_custom_select_data(form.fields['con_direction'])
-        add_custom_select_data(form.fields['con_direction'], get_inner_tuple_index(Contact._meta.get_field('con_direction').choices, contact.con_direction ), "selected")
 
     return render(request, 'main/reports/contacts/edit.html', {'contactForm': form, 'contact': contact, 'report':report})
 
