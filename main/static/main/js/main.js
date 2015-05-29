@@ -17,18 +17,21 @@ $(document).ready(function(){
 // =====================   END  tab.js ==================
 
 // =====================   switching between normal and form view - report tabs ============
-function switchToAlertFormView(id){
-    $('.alertForm-view'+id).css('display', '');
-    $('.alert-view'+id).css('display', 'none');
+var inEdit = 0;
+function switchToEditView(id){
+    switchToNormalView(inEdit);
+    inEdit = id;
+    $('.edit-view'+id).css('display', '');
+    $('.normal-view'+id).css('display', 'none');
 };
-function switchToAlertView(id){
-    $('.alertForm-view'+id).css('display', 'none');
-    $('.alert-view'+id).css('display', '');
+function switchToNormalView(id){
+    $('.edit-view'+id).css('display', 'none');
+    $('.normal-view'+id).css('display', '');
 };
 $(document).ready(function() {
 
 // =====================   hiding labels ============
-$('.alertForm-view label').css('display', 'none');
+$('.edit-view label').css('display', 'none');
 
 
 // =====================   BEGIN calendar ============

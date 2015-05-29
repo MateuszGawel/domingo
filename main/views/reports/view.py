@@ -1,6 +1,8 @@
 import datetime
 from datetime import timedelta
 
+from django.shortcuts import redirect, render
+
 from utils import *
 
 
@@ -18,7 +20,7 @@ def index(request):
 def search(request):
     if request.method == 'GET':
         form = ReportFilterForm(request.GET)
-        if form.is_valid():
+        if doValidate(form):
             filter_result = Report.objects.all()
 
             if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
@@ -56,28 +58,29 @@ def search(request):
         return search(request) #?
 
 def create(request):
-    if check_csrf(request):
+    if request.method == 'POST':
+        if doValidate(form=forms.Form(request.POST)):
 
-        if Report.objects.filter(rep_usr_id=request.user.id, rep_date_sent=None).exists():
-            return redirect("reports:index")
-        report = Report()
-        report.rep_status = 'O'
+            if Report.objects.filter(rep_usr_id=request.user.id, rep_date_sent=None).exists():
+                return redirect("reports:index")
+            report = Report()
+            report.rep_status = 'O'
 
-        report.rep_date_created = (datetime.datetime.now()- timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
-        report.rep_usr_id = request.user
-        comment = Comment()
-        comment.com_value = ''
-        comment.save()
-        report.rep_com_id = comment
-        report.save()
+            report.rep_date_created = (datetime.datetime.now()- timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+            report.rep_usr_id = request.user
+            comment = Comment()
+            comment.com_value = ''
+            comment.save()
+            report.rep_com_id = comment
+            report.save()
 
-        for incident in Incident.objects.filter(inc_status='O'):
-            ri = ReportIncident()
-            ri.rpi_inc_id = incident
-            ri.rpi_rep_id = report
-            ri.save()
+            for incident in Incident.objects.filter(inc_status='O'):
+                ri = ReportIncident()
+                ri.rpi_inc_id = incident
+                ri.rpi_rep_id = report
+                ri.save()
 
-        return redirect("reports:summary_tab", report.rep_id)
+            return redirect("reports:summary_tab", report.rep_id)
 
     return redirect("reports:index")
 
@@ -118,7 +121,7 @@ def summary_tab(request, rep_id):
 
         if request.method == 'POST':
             form = SummaryForm(request.POST)
-            if form.is_valid() and report.rep_status == 'O':
+            if doValidate(form, request, report):
                 form.save(report)
                 return redirect("reports:summary_tab", report.rep_id)
 
@@ -168,7 +171,7 @@ def alert_tab(request, rep_id=None, inc_id=None):
 
         if request.method == 'POST':
             form = AlertForm(request.POST)
-            if form.is_valid() and report.rep_status == 'O':
+            if doValidate(form, request, report):
                 if inc_id == None:
                     form.save(report)
                     return redirect("reports:alert_tab", report.rep_id)
@@ -192,10 +195,20 @@ def contact_tab(request, rep_id=None, inc_id=None):
             report = Report.objects.get(rep_id=rep_id)
 
         contacts  = Contact.objects.filter(con_rep_id=report.rep_id)
+        filledContactForms = []
+        for contact in contacts:
+            filledContactform = ContactForm({'con_prj_id': contact.con_prj_id.prj_id,
+                                   'con_type': contact.con_type,
+                                   'con_address': contact.con_address,
+                                   'con_date': str( contact.con_date ),
+                                   'con_direction': contact.con_direction,
+                                   'con_internal': contact.con_internal,
+                                   'con_com_id': contact.con_com_id.com_value})
+            filledContactForms.append( (contact, filledContactform) )
 
         if request.method == 'POST':
             form = ContactForm(request.POST)
-            if form.is_valid() and report.rep_status == 'O':
+            if doValidate(form, request, report):
                 if inc_id == None:
                     form.save(report)
                     return redirect("reports:contact_tab", report.rep_id)
@@ -206,7 +219,7 @@ def contact_tab(request, rep_id=None, inc_id=None):
         else:
             form = ContactForm()
 
-        return render(request, 'main/reports/contact_tab.html', {'contactForm': form, 'contacts': contacts, 'report': report, 'inc_id': inc_id})
+        return render(request, 'main/reports/contact_tab.html', {'contactForm': form, 'contacts': filledContactForms, 'report': report, 'inc_id': inc_id})
 
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
@@ -221,9 +234,18 @@ def maintenance_tab(request, rep_id=None, inc_id=None):
             report = Report.objects.get(rep_id=rep_id)
 
         maintenances  = Maintenance.objects.filter(mnt_rep_id=report.rep_id)
+        filledMaintenanceForms = []
+        for maintenance in maintenances:
+            filledMaintenanceForm = MaintenanceForm({'mnt_prj_id': maintenance.mnt_prj_id.prj_id,
+                                    'mnt_name': maintenance.mnt_name,
+                                    'mnt_date': str( maintenance.mnt_date ),
+                                    'mnt_com_id': maintenance.mnt_com_id.com_value,
+            })
+            filledMaintenanceForms.append( (maintenance, filledMaintenanceForm) )
+
         if request.method == 'POST':
             form = MaintenanceForm(request.POST)
-            if form.is_valid() and report.rep_status == 'O':
+            if doValidate(form, request, report):
                 if inc_id == None:
                     form.save( report)
                     return redirect("reports:maintenance_tab", report.rep_id)
@@ -233,7 +255,7 @@ def maintenance_tab(request, rep_id=None, inc_id=None):
         else:
             form = MaintenanceForm()
 
-        return render(request, 'main/reports/maintenance_tab.html', {'maintenances': maintenances, 'maintenanceForm' : form, 'report': report, 'inc_id': inc_id})
+        return render(request, 'main/reports/maintenance_tab.html', {'maintenances': filledMaintenanceForms, 'maintenanceForm' : form, 'report': report, 'inc_id': inc_id})
 
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
@@ -249,7 +271,7 @@ def incident_tab(request, rep_id):
 
         if request.method == 'POST':
             form = IncidentForm(request.POST)
-            if form.is_valid() and report.rep_status == 'O':
+            if doValidate(form, request, report):
                 form.save( report)
                 return redirect("reports:incident_tab", report.rep_id)
         else:
@@ -261,12 +283,14 @@ def incident_tab(request, rep_id):
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
 
 def close(request, rep_id):
-    if check_csrf(request):
+    report = Report.objects.get(rep_id=rep_id)
 
-        report = Report.objects.get(rep_id=rep_id)
-        report.rep_date_sent = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        report.rep_status = 'C'
-        report.save()
+    if request.method == 'POST':
+        if doValidate(form=forms.Form(request.POST), request=request, report=report):
+
+            report.rep_date_sent = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            report.rep_status = 'C'
+            report.save()
 
     return redirect("reports:index")
 

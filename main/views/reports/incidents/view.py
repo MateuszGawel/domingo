@@ -1,9 +1,9 @@
 import datetime
 
 from django.forms import Form
+from django.shortcuts import redirect, render
 
 from main.views.reports.utils import *
-
 
 class Entity:
 
@@ -93,86 +93,87 @@ def details(request, rep_id, inc_id):
         if iss.ins_type == 'M':
             maintenances = maintenances.exclude( mnt_id=iss.ins_ent_id )
 
-    return render(request, 'main/reports/incidents/details.html', {'incident': Incident.objects.get(inc_id=inc_id), 'entities': entities, "report": report, "alerts": alerts, "contacts": contacts, "maintenances": maintenances})
-
-def edit(request, rep_id, inc_id):
-    report = Report.objects.get(rep_id=rep_id)
     incident = Incident.objects.get(inc_id=inc_id)
     if request.method == 'POST':
-        form = IncidentForm(request.POST)
-        if form.is_valid():
-            __modify(form, inc_id)
+        incidentForm = IncidentForm(request.POST)
+        if doValidate(incidentForm, incident=incident):
+            incidentForm.modify( inc_id)
             return redirect("incidents:details", rep_id, inc_id)
 
     else:
-        form = IncidentForm({   'inc_prj_id': incident.inc_prj_id.prj_id,
+        incidentForm = IncidentForm({   'inc_prj_id': incident.inc_prj_id.prj_id,
                                 'inc_ticket': incident.inc_ticket,
                                 'inc_date_start': str( incident.inc_date_start ),
                                 'inc_date_end': str( incident.inc_date_end ),
                                 'inc_com_id': incident.inc_com_id.com_value,
         })
 
-    return render(request, 'main/reports/incidents/edit.html', {'incidentForm': form, 'incident': incident, 'report':report})
+    return render(request, 'main/reports/incidents/details.html', {'incidentForm': incidentForm, 'incident': Incident.objects.get(inc_id=inc_id), 'entities': entities, "report": report, "alerts": alerts, "contacts": contacts, "maintenances": maintenances})
 
-def __modify(form, inc_id):
-    if form.is_valid():
 
-        incident = Incident.objects.get(inc_id=inc_id)
-        comment = Comment.objects.get(com_id=incident.inc_com_id.com_id)
+def close(request, inc_id, rep_id, details=0):
+    incident = Incident.objects.get(inc_id=inc_id)
+    report = Report.objects.get(rep_id=rep_id)
 
-        if form.cleaned_data.has_key('inc_prj_id'):
-            incident.inc_prj_id = get_object_or_404(Project, prj_id=form.cleaned_data['inc_prj_id'])
-        if form.cleaned_data.has_key('inc_ticket'):
-            incident.inc_ticket = form.cleaned_data['inc_ticket']
-        if form.cleaned_data.has_key('inc_date_start'):
-            incident.inc_date_start = form.cleaned_data['inc_date_start']
-        if form.cleaned_data.has_key('inc_date_end'):
-            incident.inc_date_end = form.cleaned_data['inc_date_end']
-        if form.cleaned_data.has_key('inc_com_id'):
-            comment.com_value = form.cleaned_data['inc_com_id']
+    if request.method == 'POST':
+        if doValidate(form=forms.Form(request.POST), request=request, report=report, incident=incident):
 
-        comment.save()
-        incident.save()
+            incident.inc_date_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            incident.inc_status = 'R'
+            incident.save()
+    if int(details) == 0:
+        return redirect("reports:incident_tab", rep_id)
+    else:
+        return redirect("incidents:details", rep_id, inc_id)
 
-def close(request, inc_id, rep_id):
-    if check_csrf(request):
+def set_rca(request, inc_id, rep_id, details=0):
+    if request.method == 'POST':
+        if doValidate(form=forms.Form(request.POST)):
 
-        incident = Incident.objects.get(inc_id=inc_id)
-        incident.inc_date_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        incident.inc_status = 'R'
-        incident.save()
+            incident = Incident.objects.get(inc_id=inc_id)
+            incident.inc_rca = True
+            incident.save()
+    if int(details) == 0:
+        return redirect("reports:incident_tab", rep_id)
+    else:
+        return redirect("incidents:details", rep_id, inc_id)
 
-    return redirect("reports:incident_tab", rep_id)
+def invalidate(request, inc_id, rep_id, details=0):
+    incident = Incident.objects.get(inc_id=inc_id)
+    report = Report.objects.get(rep_id=rep_id)
+    if request.method == 'POST':
+        if doValidate(form=forms.Form(request.POST)):
 
-def invalidate(request, inc_id, rep_id):
-    if check_csrf(request):
+            incident = Incident.objects.get(inc_id=inc_id)
+            incident.inc_date_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            incident.inc_status = 'I'
+            incident.save()
+    if int(details) == 0:
+        return redirect("reports:incident_tab", rep_id)
+    else:
+        return redirect("incidents:details", rep_id, inc_id)
 
-        incident = Incident.objects.get(inc_id=inc_id)
-        incident.inc_date_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        incident.inc_status = 'I'
-        incident.save()
-
-    return redirect("reports:incident_tab", rep_id)
-
-def reopen(request, inc_id, rep_id):
-    if check_csrf(request):
-
-        incident = Incident.objects.get(inc_id=inc_id)
-        incident.inc_date_end = None
-        incident.inc_status = 'O'
-        incident.save()
-
-    return redirect("reports:incident_tab", rep_id)
+def reopen(request, inc_id, rep_id, details=0):
+    incident = Incident.objects.get(inc_id=inc_id)
+    report = Report.objects.get(rep_id=rep_id)
+    if request.method == 'POST':
+        if doValidate(form=forms.Form(request.POST)):
+            incident.inc_date_end = None
+            incident.inc_status = 'O'
+            incident.save()
+    if int(details) == 0:
+        return redirect("reports:incident_tab", rep_id)
+    else:
+        return redirect("incidents:details", rep_id, inc_id)
 
 def join_alert(request, rep_id, inc_id):
     if request.method == 'POST':
         form = Form(request.POST)
-        if form.is_valid():
+        incident = Incident.objects.get(inc_id=inc_id)
+        if doValidate(form, incident=incident):
             alert = None
             if form.data.has_key('alt_id'):
                 alert = get_object_or_404(Alert, alt_id=form.data['alt_id'])
-
-            incident = Incident.objects.get(inc_id=inc_id)
             incidentStep = IncidentStep()
             incidentStep.ins_type = 'A'
             incidentStep.ins_ent_id = alert.alt_id
@@ -186,11 +187,11 @@ def join_alert(request, rep_id, inc_id):
 def join_contact(request, rep_id, inc_id):
     if request.method == 'POST':
         form = Form(request.POST)
-        if form.is_valid():
+        incident = Incident.objects.get(inc_id=inc_id)
+        if doValidate(form, incident=incident):
             contact = None
             if form.data.has_key('con_id'):
                 contact = get_object_or_404(Contact, con_id=form.data['con_id'])
-            incident = Incident.objects.get(inc_id=inc_id)
             incidentStep = IncidentStep()
             incidentStep.ins_type = 'C'
             incidentStep.ins_ent_id = contact.con_id
@@ -204,11 +205,11 @@ def join_contact(request, rep_id, inc_id):
 def join_maintenance(request, rep_id, inc_id):
     if request.method == 'POST':
         form = Form(request.POST)
-        if form.is_valid():
+        incident = Incident.objects.get(inc_id=inc_id)
+        if doValidate(form, incident=incident):
             maintenance = None
             if form.data.has_key('mnt_id'):
                 maintenance = get_object_or_404(Maintenance, mnt_id=form.data['mnt_id'])
-            incident = Incident.objects.get(inc_id=inc_id)
             incidentStep = IncidentStep()
             incidentStep.ins_type = 'M'
             incidentStep.ins_ent_id = maintenance.mnt_id

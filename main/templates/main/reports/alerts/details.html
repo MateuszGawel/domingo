@@ -1,24 +1,62 @@
 {% extends 'main/_layout/base.html' %}
-
+{% load main_filters %}
 {% block content %}
+{% load crispy_forms_tags %}
+{% load main_filters %}
 
-    <article class="col-lg-offset-4 col-lg-4 col-lg-offset-4 col-md-offset-4 col-md-4 col-md-offset-4 detail">
-            <h1>NAME: {{ alert.alt_name }}</h1>
-            Author: {{ alert.alt_rep_id.rep_usr_id }}
-            <hr>
-            Project: {{ alert.alt_prj_id.prj_name }}
-            <hr>
-            Sensor: {{ alert.alt_name }}
-            <hr>
-            Ticket: {{ alert.alt_ticket }}
-            <hr>
-            Data: {{ alert.alt_date }}
-            <hr>
-            Type: {{ alert.alt_type }}
-            <hr>
-            Comment: {{ alert.alt_com_id.com_value }}
-            <hr>
-            <a href="{% url 'alerts:edit' report.rep_id alert.alt_id %}" type="submit" class='btn button_style_1 log_btn'><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>
+    <form class="filters form-inline well summary_tab col-md-3" action=" {% url 'alerts:details' report.rep_id alert.alt_id %} " method="post">
+        {% checkDisabled request report %}
+            {% csrf_token %}
+            {{ alertForm|crispy }}
+
+            <button class='btn button_style_1 navbar-right col-md-offset-4 col-md-4 col-md-offset-4' type='submit'>Save</button>
+        </fieldset>
+    </form>
+
+    <article class="col-md-6 col-md-offset-1">
+        <table class="table">
+            <tr>
+                <td>Author:</td>
+                <td>
+                    {{ alert.alt_rep_id.rep_usr_id }}
+                </td>
+            </tr>
+            <tr>
+                <td>Project:</td>
+                <td>
+                    {{ alert.alt_prj_id.prj_name }}
+                </td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>
+                    {{ alert.alt_name }}
+                </td>
+            </tr>
+            <tr>
+                <td>Ticket:</td>
+                <td>
+                    <a target="_blank" href="{{ alert.alt_ticket }}">{{ alert.alt_ticket|urlLastPart }}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Type:</td>
+                <td>
+                    {{ alert.get_alt_type_display }}
+                </td>
+            </tr>
+            <tr>
+                <td>Date:</td>
+                <td>
+                    {{ alert.alt_date }}
+                </td>
+            </tr>
+            <tr>
+                <td>Comment:</td>
+                <td>
+                    {{ alert.alt_com_id.com_value }}
+                </td>
+            </tr>
+        </table>
     </article>
-
 {% endblock %}

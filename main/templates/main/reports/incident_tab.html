@@ -1,5 +1,5 @@
 {% extends 'main/_layout/base.html' %}
-
+{% load main_filters %}
 {% block content %}
 {% load crispy_forms_tags %}
 {% include 'main/_layout/report_menu.html' with active_tab="incidents" %}
@@ -7,31 +7,33 @@
 
 
     <form class="filters form-inline well col-md-3" action="{% url 'reports:incident_tab' report.rep_id %}" method="post">
-        {% csrf_token %}
-        <span class=" {% if incidentForm.inc_prj_id.errors %} error {% endif %}">
-            {{ incidentForm.inc_prj_id }}
-            <p>{{ incidentForm.inc_prj_id.errors.as_text }}</p>
-        </span>
+        {% checkDisabled request report %}
+            {% csrf_token %}
+            <span class=" {% if incidentForm.inc_prj_id.errors %} error {% endif %}">
+                {{ incidentForm.inc_prj_id }}
+                <p>{{ incidentForm.inc_prj_id.errors.as_text }}</p>
+            </span>
 
-        <span class=" {% if incidentForm.inc_ticket.errors %} error {% endif %}">
-            {{ incidentForm.inc_ticket }}
-            <p>{{ incidentForm.inc_ticket.errors.as_text }}</p>
+            <span class=" {% if incidentForm.inc_ticket.errors %} error {% endif %}">
+                {{ incidentForm.inc_ticket }}
+                <p>{{ incidentForm.inc_ticket.errors.as_text }}</p>
 
-        </span>
+            </span>
 
-        <span class=" {% if incidentForm.inc_date_start.errors %} error {% endif %}">
-            {{ incidentForm.inc_date_start }}
-            <p>{{ incidentForm.inc_date_start.errors.as_text }}</p>
+            <span class=" {% if incidentForm.inc_date_start.errors %} error {% endif %}">
+                {{ incidentForm.inc_date_start }}
+                <p>{{ incidentForm.inc_date_start.errors.as_text }}</p>
 
-        </span>
+            </span>
 
-        <span class=" {% if incidentForm.inc_com_id.errors %} error {% endif %}">
-            {{ incidentForm.inc_com_id }}
-            <p>{{ incidentForm.inc_com_id.errors.as_text }}</p>
+            <span class=" {% if incidentForm.inc_com_id.errors %} error {% endif %}">
+                {{ incidentForm.inc_com_id }}
+                <p>{{ incidentForm.inc_com_id.errors.as_text }}</p>
 
-        </span>
+            </span>
 
-        <button class='btn button_style_1 col-md-offset-4 col-md-4 col-md-offset-4' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Open</button>
+            <button class='btn button_style_1 col-md-offset-4 col-md-4 col-md-offset-4' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Open</button>
+        </fieldset>
     </form>
         <div class="col-md-9">
             <table class='table table-bordered table-striped table-hover'>
@@ -42,6 +44,7 @@
                         <th>Status</th>
                         <th>Start date</th>
                         <th>Resolve date</th>
+                        <th>RCA</th>
                         <th>Comment</th>
                         <th></th>
                     </tr>
@@ -50,29 +53,51 @@
                     {% for incident in incidents %}
                         <tr>
                             <td>{{ incident.inc_prj_id.prj_name }}</td>
-                            <td>{{ incident.inc_ticket }}</td>
-                            <td>{{ incident.get_inc_status_display }}</td>
+                            <td><a target="_blank" href="{{ incident.inc_ticket }}">{{ incident.inc_ticket|urlLastPart }}</a></td>
+                            <td>
+                                {% if incident.inc_status == 'I' %}
+                                    <span style="color: gold" class="glyphicon glyphicon-asterisk"></span>
+                                {% elif incident.inc_status == 'R' %}
+                                    <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                                {% elif incident.inc_status == 'O' %}
+                                    <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                                {% endif %}
+                                {{ incident.get_inc_status_display }}
+                            </td>
                             <td>{{ incident.inc_date_start }}</td>
                             <td>{% if incident.inc_date_end != None %} {{ incident.inc_date_end }} {% endif %}</td>
+                            <td>
+                                {% if incident.inc_rca%}
+                                    <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                                {% else %}
+                                    <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                                {% endif %}
+                            </td>
                             <td>{{ incident.inc_com_id.com_value }}</td>
                             <td>
                                 <a class='btn button_style_1 col-md-12' href="{% url 'incidents:details' report.rep_id incident.inc_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>
                                 {%  if incident.inc_status == 'O' or incident.inc_status == 'R' %}
-                                    <form action="{% url 'incidents:invalidate' report.rep_id incident.inc_id %}" method="post">
+                                    <form action="{% url 'incidents:invalidate' report.rep_id incident.inc_id 0 %}" method="post">
                                         {% csrf_token %}
-                                        <button class='btn button_style_1 col-md-12 rem_but' type='submit' style=""><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Invalidate incident</button>
+                                        <button class='btn button_style_1 col-md-12 rem_but button_style_invalidate' type='submit' style=""><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Invalidate incident</button>
                                     </form>
                                 {% endif %}
                                 {% if incident.inc_status == 'O' %}
-                                    <form action="{% url 'incidents:close' report.rep_id incident.inc_id %}" method="post">
+                                    <form action="{% url 'incidents:close' report.rep_id incident.inc_id 0 %}" method="post">
                                         {% csrf_token %}
-                                        <button class='btn button_style_1 col-md-12 button_style_logout rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Resolve incident</button>
+                                        <button class='btn button_style_1 col-md-12 button_style_resolve rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Resolve incident</button>
                                     </form>
                                 {% endif %}
                                 {%  if incident.inc_status == 'R' or incident.inc_status == 'I' %}
-                                    <form action="{% url 'incidents:reopen' report.rep_id incident.inc_id %}" method="post">
+                                    <form action="{% url 'incidents:reopen' report.rep_id incident.inc_id 0 %}" method="post">
                                         {% csrf_token %}
-                                        <button class='btn button_style_1 col-md-12 rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Reopen incident</button>
+                                        <button class='btn button_style_1 col-md-12 button_style_logout rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Reopen incident</button>
+                                    </form>
+                                {% endif %}
+                                {%  if incident.inc_status != 'I' and not incident.inc_rca %}
+                                    <form action="{% url 'incidents:set_rca' report.rep_id incident.inc_id 0 %}" method="post">
+                                        {% csrf_token %}
+                                        <button class='btn button_style_1 col-md-12 rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Set RCA</button>
                                     </form>
                                 {% endif %}
                             </td>

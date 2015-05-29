@@ -3,6 +3,16 @@ from django import template
 register = template.Library()
 
 @register.filter(is_safe=True)
+def urlLastPart(value):
+    parts = value.split("/")
+
+    for i in range( len(parts)):
+        if len(parts[-i-1]) > 0:
+            return parts[-i-1]
+
+    return "Wrong URL"
+
+@register.filter(is_safe=True)
 def breadcrumb(value, hostname):
     crumbs = value.split("/")
     crumbs = crumbs[1:-1]
@@ -51,3 +61,41 @@ def clearSession(request):
         del request.session['inc_id']
     except:
         pass
+
+@register.simple_tag
+def checkDisabled(request, report, show=True):
+
+    if request != None and report != None:
+        if request.user.is_superuser:
+            return "<fieldset>"
+        elif report.rep_status == 'O':
+            if request.user == report.rep_usr_id:
+                return "<fieldset>"
+            else:
+                if show:
+                    return "<div style='color: firebrick; text-align: center; width: 100%'><span style='color: firebrick;' class='glyphicon glyphicon-exclamation-sign'></span> You are not the owner</div> <fieldset disabled>"
+                else:
+                    return "<fieldset disabled>"
+        else:
+            if show:
+                return "<div style='color: firebrick; text-align: center; width: 100%'><span style='color: firebrick;'class='glyphicon glyphicon-exclamation-sign'></span> The report is not opened</div>  <fieldset disabled>"
+            else:
+                return "<fieldset disabled>"
+
+    return "<fieldset>"
+
+@register.simple_tag
+def disabledButton(request, report):
+
+    if request != None and report != None:
+        if request.user.is_superuser:
+            return ""
+        elif report.rep_status == 'O':
+            if request.user == report.rep_usr_id:
+                return ""
+            else:
+                return "disabled"
+        else:
+            return "disabled"
+
+    return ""

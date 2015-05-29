@@ -1,63 +1,196 @@
 {% extends 'main/_layout/base.html' %}
-
+{% load main_filters %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 
-    <article class=" col-lg-3 col-md-3 filters well det_incident">
-        <h1>ID: {{ incident.inc_id }}</h1>
-        Project: {{ incident.inc_prj_id.prj_name }}
-        <hr>
-        Ticket: {{ incident.inc_ticket }}
-        <hr>
-        Start date: {{ incident.inc_date_start }}
-        <hr>
-        Resolve date: {{ incident.inc_date_end }}
-        <hr>
-        Comment: {{ incident.inc_com_id.com_value }}
-        <hr>
-        <div class="inc_add">
-            <form action="{% url 'incidents:join_alert' report.rep_id incident.inc_id %}" method="post" class="col-md-5">
+    <article class="filters form-inline well summary_tab col-md-3">
+        <form action="{% url 'incidents:details' report.rep_id incident.inc_id %}" method="post">
+            {% checkDisabled request report %}
                 {% csrf_token %}
-                <button type="submit" class="btn btn-xs button_style_1"> <span class="glyphicon glyphicon-plus"></span>Add</button>
-                <select name="alt_id">
-                    {% for alert in alerts %}
-                        <option value="{{ alert.alt_id }}"> {{ alert.alt_name }}</option>
-                    {% endfor %}
-                </select>
+                    <span class=" {% if incidentForm.inc_prj_id.errors %} error {% endif %}">
+                        {{ incidentForm.inc_prj_id }}
+                        <p>{{ incidentForm.inc_prj_id.errors.as_text }}</p>
+                    </span>
+
+                    <span class=" {% if incidentForm.inc_ticket.errors %} error {% endif %}">
+                        {{ incidentForm.inc_ticket }}
+                        <p>{{ incidentForm.inc_ticket.errors.as_text }}</p>
+
+                    </span>
+
+                    <span class=" {% if incidentForm.inc_date_start.errors %} error {% endif %}">
+                        {{ incidentForm.inc_date_start }}
+                        <p>{{ incidentForm.inc_date_start.errors.as_text }}</p>
+
+                    </span>
+
+                    {% if incident.inc_status != 'O' %}
+                        <span class=" {% if incidentForm.inc_date_start.errors %} error {% endif %}">
+                            {{ incidentForm.inc_date_start }}
+                            <p>{{ incidentForm.inc_date_start.errors.as_text }}</p>
+
+                        </span>
+                    {% endif %}
+
+                    <span class=" {% if incidentForm.inc_com_id.errors %} error {% endif %}">
+                        {{ incidentForm.inc_com_id }}
+                        <p>{{ incidentForm.inc_com_id.errors.as_text }}</p>
+
+                    </span>
+                <button type="submit" style="margin-bottom:20px" class='center-block btn button_style_1 col-md-7' {% disabledButton request report %}>Save</button>
+            </fieldset>
+        </form>
+        {%  if incident.inc_status == 'O' or incident.inc_status == 'R' %}
+            <form action="{% url 'incidents:invalidate' report.rep_id incident.inc_id 1 %}" method="post">
+                {% csrf_token %}
+                <button class='btn button_style_1 col-md-7 rem_but center-block button_style_invalidate' type='submit' style="margin-top:10px"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Invalidate incident</button>
             </form>
-            <a class='btn button_style_1 _2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_alert_tab'  report.rep_id incident.inc_id %}">Create alert</a>
+        {% endif %}
+        {% if incident.inc_status == 'O' %}
+            <form action="{% url 'incidents:close' report.rep_id incident.inc_id 1 %}" method="post">
+                {% csrf_token %}
+                <button class='btn button_style_1 col-md-7 button_style_logout rem_but center-block button_style_resolve' type='submit' style="margin-top:10px"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Resolve incident</button>
+            </form>
+        {% endif %}
+        {%  if incident.inc_status == 'R' or incident.inc_status == 'I' %}
+            <form action="{% url 'incidents:reopen' report.rep_id incident.inc_id 1 %}" method="post">
+                {% csrf_token %}
+                <button class='btn button_style_1 col-md-7 rem_but center-block button_style_logout' type='submit' style="margin-top:10px"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Reopen incident</button>
+            </form>
+        {% endif %}
+
+        {%  if incident.inc_status != 'I' and not incident.inc_rca %}
+            <form action="{% url 'incidents:set_rca' report.rep_id incident.inc_id 1 %}" method="post">
+                {% csrf_token %}
+                <button class='btn button_style_1 col-md-7 rem_but center-block' type='submit' style="margin-top:10px"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Set RCA</button>
+            </form>
+        {% endif %}
+        <hr>
+
+
+
+
+        <h3 style="text-align:center;">Add incident steps</h3>
+        <br>
+        <br>
+
+        <div class="inc_add">
+            <h4 style="text-align:center;">Add alert</h4>
+            <form action="{% url 'incidents:join_alert' report.rep_id incident.inc_id %}" method="post">
+                {% checkDisabled request report False %}
+                    {% csrf_token %}
+                    <div class="form-group col-md-9">
+                        <select class="form-control" name="alt_id">
+                            {% for alert in alerts %}
+                                <option value="{{ alert.alt_id }}"> {{ alert.alt_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn button_style_1 log_btn_2 col-md-3"> <span class="glyphicon glyphicon-plus"></span>Add</button>
+                </fieldset>
+            </form>
+            <a style="margin: 10px 0;" class='btn button_style_1 log_btn_2 center-block' href="{% url 'reports:incident_alert_tab'  report.rep_id incident.inc_id %}" {% disabledButton request report %}>Create new alert</a>
         </div>
         <hr>
         <div class="inc_add">
-            <form action="{% url 'incidents:join_contact' report.rep_id incident.inc_id %}" method="post" class="col-md-5">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-xs button_style_1"> <span class="glyphicon glyphicon-plus"></span>Add</button>
-                <select name="con_id">
-                    {% for contact in contacts %}
-                        <option value="{{ contact.con_id }}"> {{ contact.con_address }}</option>
-                    {% endfor %}
-                </select>
+            <h4 style="text-align:center;">Add contact</h4>
+            <form action="{% url 'incidents:join_contact' report.rep_id incident.inc_id %}" method="post">
+                {% checkDisabled request report False %}
+                    {% csrf_token %}
+                            <div class="form-group col-md-9">
+                                <select class="form-control" name="con_id">
+                                    {% for contact in contacts %}
+                                        <option value="{{ contact.con_id }}"> {{ contact.con_address }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                    <button type="submit" class="btn button_style_1 log_btn_2 col-md-3"> <span class="glyphicon glyphicon-plus"></span>Add</button>
+                </fieldset>
             </form>
-            <a class='btn button_style_1 log_btn_2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_contact_tab' report.rep_id incident.inc_id %}">Create contact</a>
+            <a style="margin: 10px 0;" class='btn button_style_1 log_btn_2 center-block' href="{% url 'reports:incident_contact_tab' report.rep_id incident.inc_id %}" {% disabledButton request report %}>Create new contact</a>
         </div>
         <hr>
         <div class="inc_add">
-            <form action="{% url 'incidents:join_maintenance' report.rep_id incident.inc_id %}" method="post" class="col-md-5">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-xs button_style_1"> <span class="glyphicon glyphicon-plus"></span>Add</button>
-                <select name="mnt_id">
-                    {% for maintenance in maintenances %}
-                        <option value="{{ maintenance.mnt_id }}"> {{ maintenance.mnt_name }}</option>
-                    {% endfor %}
-                </select>
+            <h4 style="text-align:center;">Add maintenance</h4>
+            <form action="{% url 'incidents:join_maintenance' report.rep_id incident.inc_id %}" method="post">
+                {% checkDisabled request report False %}
+                    {% csrf_token %}
+                    <div class="form-group col-md-9">
+                        <select class="form-control" name="mnt_id">
+                            {% for maintenance in maintenances %}
+                                <option value="{{ maintenance.mnt_id }}"> {{ maintenance.mnt_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn button_style_1 log_btn_2 col-md-3"> <span class="glyphicon glyphicon-plus"></span>Add</button>
+                </fieldset>
             </form>
-            <a class='btn button_style_1 log_btn_2 col-md-5 col-md-offset-2' href="{% url 'reports:incident_maintenance_tab' report.rep_id incident.inc_id %}">Create maintenance</a>
-        </div>
-        <hr>
-        <div class="col-md-offset-3 col-md-6 col-md-offset-3">
-            <a href="{% url 'incidents:edit' report.rep_id incident.inc_id %}" type="submit" class='btn button_style_1 log_btn'><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>
+            <a style="margin: 10px 0;" class='btn button_style_1 log_btn_2 center-block' href="{% url 'reports:incident_maintenance_tab' report.rep_id incident.inc_id %}" {% disabledButton request report %}>Create new maintenance</a>
         </div>
     </article>
+
+
+    <article class="col-md-6 col-md-offset-1">                      <!--col-md-offset-4 col-md-4 col-md-offset-4-->
+        <table class="table">
+            <tr>
+                <td>Author:</td>
+                <td>
+                    {{ report.rep_usr_id }} - do poprawki
+                </td>
+            </tr>
+            <tr>
+                <td>Project:</td>
+                <td>
+                    {{ incident.inc_prj_id }}
+                </td>
+            </tr>
+            <tr>
+                <td>Ticket:</td>
+                <td>
+                    <a target="_blank" href="{{ incident.inc_ticket }}">{{ incident.inc_ticket|urlLastPart }}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Started:</td>
+                <td>
+                    {{ incident.inc_date_start }}
+                </td>
+            </tr>
+            <tr>
+                <td>Status:</td>
+                <td>
+                    {% if incident.inc_status == 'I' %}
+                        <span style="color: gold" class="glyphicon glyphicon-asterisk"></span>
+                    {% elif incident.inc_status == 'R' %}
+                        <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                    {% elif incident.inc_status == 'O' %}
+                        <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                    {% endif %}
+                    {{ incident.get_inc_status_display }}
+                </td>
+            </tr>
+            <tr>
+                <td>RCA:</td>
+                <td>
+                    {% if incident.inc_rca%}
+                        <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                    {% else %}
+                        <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Comment:</td>
+                <td>
+                    {{ incident.inc_com_id.com_value }}
+                </td>
+            </tr>
+        </table>
+    </article>
+
+
     <div class="col-lg-9 col-md-9">
         <table class='table table-bordered table-striped table-hover'>
             <thead>

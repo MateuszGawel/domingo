@@ -11,7 +11,11 @@
     <label> {{ label }} </label>
     <select class="form-control" name="{{ name }}" value="{{ value }}">
         {% for v in values %}
-            <option value="{{ v.0 }}" {% if v.0 == value %} selected="selected" {% endif %}> {{ v.1 }} </option>
+            {% if v.0|add:0 == "" or value|add:0 == "" %}
+                <option value="{{ v.0 }}" {% if v.0 == value %} selected="selected" {% endif %}> {{ v.1 }} </option>
+            {% else %}
+                <option value="{{ v.0 }}" {% if v.0|add:0 == value|add:0 %} selected="selected" {% endif %}> {{ v.1 }} </option>
+            {% endif %}
         {% endfor %}
     </select>
 </div>

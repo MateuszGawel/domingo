@@ -46,7 +46,7 @@
                 <div class='form_button'>
                     <form action="{% url 'reports:create' %}" class="disabled-form col-md-4" method="post" style="opacity:.6;">  <!--style="opacity:.2;  -->
                         {% csrf_token %}
-                        <button class='btn button_style_1' type='submit' style="margin-bottom: 20px" data-toggle="popover" title="You have opened report!" data-content="It hasn't been sent yet. You cannot create a new one. Please close or edit the old report.">Start Report</button>
+                        <button class='btn button_style_1' type='submit' style="margin-bottom: 20px" data-toggle="popover" data-trigger="focus" title="You have opened report!" data-content="It hasn't been sent yet. You cannot create a new one. Please close or edit the old report.">Start Report</button>
                     </form>
                     <div class="col-md-4">
                         <a href="{% url 'reports:summary_tab' report.rep_id %}" class='btn button_style_1' type='submit' style="margin-bottom: 20px">Edit current Report</a>

@@ -52,7 +52,9 @@ class Incident(models.Model):
     inc_status = models.CharField(max_length=1, blank=True, choices=INCIDENT_STATUSES, verbose_name="Incident status")
     inc_ticket = models.CharField(max_length=100, blank=True, verbose_name="Incident ticket link")
     inc_prj_id = models.ForeignKey('Project', blank=True, null=True, verbose_name="Incident project FK")
+    inc_rca = models.BooleanField(blank=True, default="False", verbose_name="Incident RCA")
     inc_com_id = models.ForeignKey("Comment", blank=True, null=True, verbose_name="Incident comment FK")
+
 
     def __unicode__(self):
         return str( self.inc_id )

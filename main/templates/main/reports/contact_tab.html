@@ -1,5 +1,5 @@
 {% extends 'main/_layout/base.html' %}
-
+{% load main_filters %}
 {% block content %}
 {% load crispy_forms_tags %}
 {% include 'main/_layout/report_menu.html' with active_tab="contacts" %}
@@ -11,10 +11,19 @@
 {% else %}
     <form class="filters form-inline well col-md-3" action=" {% url 'reports:incident_contact_tab' report.rep_id inc_id %} " method="post">
 {% endif %}
-        {% csrf_token %}
-        {{ contactForm|crispy }}
-        <button class='btn button_style_1 col-md-offset-4 col-md-4 col-md-offset-4' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+        {% checkDisabled request report %}
+            {% csrf_token %}
+            {{ contactForm|crispy }}
+            <button class='btn button_style_1 col-md-offset-4 col-md-4 col-md-offset-4' type='submit'><i class="glyphicon glyphicon-circle-ok"></i>Add</button>
+        </fieldset>
     </form>
+    {% if editingContact != None %}
+        <script>
+            window.onload = function(){
+              switchToEditView({{ editingContact }})
+            };
+        </script>
+    {% endif %}
     {% if inc_id == None %}
         <div class="col-md-9">
             <table class='table table-bordered table-striped table-hover'>
@@ -23,8 +32,8 @@
                         <th>Project</th>
                         <th>Type</th>
                         <th>Address</th>
-                        <th>Date</th>
                         <th>Direction</th>
+                        <th>Date</th>
                         <th>Internal</th>
                         <th>Comment</th>
                         <th></th>
@@ -33,21 +42,61 @@
                 <tbody>
                     {% for contact in contacts %}
                         <tr>
-                            <td>{{ contact.con_prj_id.prj_name }}</td>
-                            <td>{{ contact.con_type }}</td>
-                            <td>{{ contact.con_address }}</td>
-                            <td>{{ contact.con_date }}</td>
-                            <td>{{ contact.con_direction }}</td>
-                            <td>{{ contact.con_internal }}</td>
-                            <td>{{ contact.con_com_id.com_value }}</td>
-                            <td>
-                                <a class='btn button_style_1 col-md-12' href="{% url 'contacts:details' report.rep_id contact.con_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>
-                                <form class="" action="{% url 'contacts:remove_contact' report.rep_id contact.con_id %}" method="post">
-                                    {% csrf_token %}
-                                    {{ error_message }}
-                                    <button class='btn button_style_1 button_style_logout rem_but col-md-12' type='submit'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</button>
-                                </form>
-                            </td>
+                            <form action="{% url 'contacts:quick_edit' report.rep_id contact.0.con_id%}" method="post">
+                                {% csrf_token %}
+                                {% for field in contact.1.visible_fields %}
+                                    <input type="hidden" name="con_id" value="{{ contact.0.con_id }}">
+                                    <td class='edit-view edit-view{{ contact.0.con_id }}' style="display: none">
+                                        <span class=" {% if field.errors %} error {% endif %}">
+                                            {{ field }}
+                                            <p>{{ field.errors.as_text }}</p>
+                                        </span>
+                                    </td>
+
+                                {% endfor %}
+
+                                <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_prj_id.prj_name }}</td>
+                                <td class="normal-view{{ contact.0.con_id }}">
+                                    {% if contact.0.con_type == 'P' %}
+                                        <span class="glyphicon glyphicon-earphone"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-list-alt"></span>
+                                    {% endif %}
+                                    {{ contact.0.get_con_type_display }}
+                                </td>
+                                <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_address }}</td>
+                                <td class="normal-view{{ contact.0.con_id }}">
+                                    {% if contact.0.con_direction == 'I' %}
+                                        <span class="glyphicon glyphicon-import"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-export"></span>
+                                    {% endif %}
+                                    {{ contact.0.get_con_direction_display }}
+                                </td>
+                                <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_date }}</td>
+                                <td class="normal-view{{ contact.0.con_id }}">
+                                    {% if contact.0.con_internal %}
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    {% endif %}
+                                </td>
+                                <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_com_id.com_value }}</td>
+                                <td>
+                                <button class='edit-view{{ contact.0.con_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+                            </form>
+
+                            <a class='normal-view{{ contact.0.con_id }} btn button_style_1 col-md-6  ' href="{% url 'contacts:details' report.rep_id contact.0.con_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> </a>
+                            <button class='normal-view{{ contact.0.con_id }}  btn button_style_1 col-md-6' onclick="switchToEditView({{ contact.0.con_id }})" {% disabledButton request report %}><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </button>
+
+                            <form class="normal-view{{ contact.0.con_id }}" action="{% url 'contacts:remove_contact' report.rep_id contact.0.con_id %}" method="post">
+                                {% csrf_token %}
+                                {{ error_message }}
+                                <button class='btn button_style_logout button_style_1 col-md-12 rem_but' type='submit'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</button>
+                            </form>
+
+
+                            <a href="{% url 'reports:contact_tab' report.rep_id %}" class='edit-view{{ contact.0.con_id }} btn button_style_logout button_style_1 col-md-12 rem_but' style="display: none"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</a>
                         </tr>
                     {% endfor %}
                 </tbody>

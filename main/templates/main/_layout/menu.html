@@ -1,17 +1,17 @@
 {% load staticfiles %}
 <nav class='navbar navbar-inverse row form-inline head_form'>
+
+    <a href="{% url "main:index" %}"> <img style="height: 70px;" src="{%  static "main/img/logo.png" %}" /></a>
     {% if user.is_authenticated %}
         <div class="user_info">
-            <a href="{% url 'reports:index' %}">
-                <img src="{%  static "main/img/superman.jpg" %}" alt='User info' class='img-responsive img-rounded avatar'>
-            </a>
 
-            <span>
-              <a href="javascript:void(0)"> {{ user.first_name }} </a>
-            </span>
+{#            <a href="{% url 'reports:index' %}">#}
+{#                <img src="{%  static "main/img/superman.jpg" %}" alt='User info' class='img-responsive img-rounded avatar'>#}
+{#            </a>#}
+
+              You're logged as  <a href="javascript:void(0)">  {{ user }} </a>
 
         </div>
-
         <div class='log_btn'>
             {% if user.is_staff %}
                 <a href="{% url 'admin:index' %}">

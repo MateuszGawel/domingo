@@ -24,15 +24,8 @@ header nav, body{
 }
 .user_info, .user_info a{
 	display: inline-block;
-}
-.user_info a{
-	margin-top: 5px;
-}
-.user_info span{
-	font-size: 24px;
-	color: #fafafa;
-	margin-left: 20px;
-
+    font-size: 12px;
+    color: #fafafa;
 }
 .user_info .avatar{
 	max-width: 64px;
@@ -42,7 +35,7 @@ header nav, body{
 	width: auto!important;
 }
 .log_btn{
-	display: block;
+    display: block;
 	float: right;
 	margin: 0 8px 10px 10px;
 }
@@ -97,8 +90,16 @@ input:-webkit-autofill:active{
 	color: #555;
 } 
 .button_style_logout:hover{
-	border-color: #a22;
-	background-color: #a44;
+	border-color: #d9534f;
+	background-color: #d9534f;
+}
+.button_style_resolve:hover{
+	border-color: #5cb85c;
+	background-color: #5cb85c;
+}
+.button_style_invalidate:hover{
+	border-color: #f0ad4e;
+	background-color: #f0ad4e;
 }
 
 
@@ -116,6 +117,7 @@ input:-webkit-autofill:active{
 
 /* =============  Dashboard ========= */
 .breadcrumb{
+    margin-top: 10px;
 	background-color: #bbb;
 }
 .breadcrumb a{
@@ -154,23 +156,6 @@ header nav, body{
 	padding-right: 15px;
 	padding-left: 15px;
 }
-.user_info, .user_info a{
-	display: inline-block;
-}
-.user_info a{
-	margin-top: 5px;
-}
-.user_info span{
-	font-size: 24px;
-	color: #fafafa;
-	margin-left: 20px;
-
-}
-.user_info .avatar{
-	max-width: 64px;
-	max-height: 80px;
-}
-
 .log_btn{
 	display: block;
 	float: right;
@@ -279,7 +264,9 @@ header nav, body{
     color:    firebrick;
     opacity:  0.5;
 }
-
+.error input.form-control:focus, .error select.form-control:focus{
+	border-color: firebrick;
+}
 /* =======================  tabs style ======================*/
 
 .form-control{
@@ -372,9 +359,6 @@ td a:hover .glyphicon, button:hover .glyphicon, .detail a:hover .glyphicon{
 .inc_add form button.button_style_1,.inc_add a.button_style_1{
 	margin-top: 0px;
 }
-.inc_add form select{
-	max-width: 92px;
-}
 .jira_get_button{
 	padding-left: 0px;
 	padding-right:0px;
@@ -386,7 +370,9 @@ td .form-group .input-group .form-control{
 	padding-right: 0;
 	margin-right: 0;
 }
-
+.form-group label{
+    margin-top: 10px;
+}
 
 
 
