@@ -1,7 +1,5 @@
-from django.shortcuts import redirect, render
-
 from main.views.reports.utils import *
-
+from django.shortcuts import redirect, render
 
 def details(request, rep_id, alt_id):
     report = Report.objects.get(rep_id=rep_id)

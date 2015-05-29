@@ -1,8 +1,6 @@
 import datetime
 from datetime import timedelta
-
 from django.shortcuts import redirect, render
-
 from utils import *
 
 

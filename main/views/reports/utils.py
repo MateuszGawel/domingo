@@ -1,5 +1,6 @@
 from django.db import connections
 
+from main.forms import *
 
 def get_data_from_jira(query):
     '''Zwraca kursor na ktorym trzeba wykonac odpowiednia metode by pobrac dane. Np fetchone()'''

@@ -1,9 +1,9 @@
 import datetime
 
 from django.forms import Form
-from django.shortcuts import redirect, render
 
 from main.views.reports.utils import *
+from django.shortcuts import redirect, render
 
 class Entity:
 
