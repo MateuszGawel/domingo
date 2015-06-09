@@ -44,8 +44,21 @@ $(document).ready(function() {
         container: 'body'
     });
 
+    $('[data-toggle="popover"]').focusout( function() { $(this).popover("hide") } );
+
     //SELECT2 util
     //$('select').select2();
+
+    //SLIDER util
+    $("#dateSliderCreated").dateRangeSlider({arrows:false, bounds:{ min: new Date(2013, 4, 1), max: new Date()},   defaultValues:{ min: new Date(2013, 4, 1), max: new Date()} });
+    $("#dateSliderSent").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 4, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 4, 1), max: new Date()} });
+    $("#dateSliderRemoved").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 4, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 4, 1), max: new Date()} });
+
+    $("#dateSliderCreated").bind("valuesChanged", function(e, data){
+        $("#id_rep_date_created_from").val(moment( $("#dateSliderCreated").dateRangeSlider("min")).format('YYYY-MM-DD 00:00:00'));
+        $("#id_rep_date_created_to").val(moment( $("#dateSliderCreated").dateRangeSlider("max")).format('YYYY-MM-DD 00:00:00'));
+      console.log("Values just changed. min: " + data.values.min + " max: " + data.values.max);
+    });
 });
 
 //DATETIMEPICKER util

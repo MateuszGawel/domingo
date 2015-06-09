@@ -18,7 +18,10 @@ def index(request):
 def search(request):
     if request.method == 'GET':
         form = ReportFilterForm(request.GET)
+        print 1
+        print request.GET
         if doValidate(form):
+
             filter_result = Report.objects.all()
 
             if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
@@ -28,7 +31,10 @@ def search(request):
                 filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
 
             if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
+                print form.cleaned_data['rep_date_created_from']
                 filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
+            else:
+                print "dupa"
 
             if form.cleaned_data.has_key('rep_date_created_to') and form.cleaned_data['rep_date_created_to'] is not None:
                 filter_result = filter_result.filter(rep_date_created__lte=form.cleaned_data['rep_date_created_to'])
@@ -53,7 +59,8 @@ def search(request):
         else:
             return render(request, 'main/reports/search.html', {'form': form})
     else:
-        return search(request) #?
+        form = ReportFilterForm()
+        return render(request, 'main/reports/search.html', {'form': form})
 
 def create(request):
     if request.method == 'POST':

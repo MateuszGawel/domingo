@@ -79,13 +79,13 @@
 
                 {% with user.id|slugify as usr %}
                 <div class="col-md-6">
-                    <!-- <a href="{{ request.path|add:'search/?rep_user_id='|add:usr }}" class='btn button_style_1' type='submit' style="margin-bottom: 20px" data-toggle="popover" title="Not working now!" data-content="This is only Beta version of product. Will be working on the near future.">Browse my reports</a> -->
-                    <a href="javascript:void(0)" class='btn button_style_1' type='submit' style="margin-bottom: 20px" data-toggle="popover" title="Not working now!" data-content="This is only Beta version of product. Will be working on the near future.">Browse my reports</a>
+                    <a href="{{ request.path|add:'search/?rep_user_id='|add:usr }}" class='btn button_style_1' type='submit' style="margin-bottom: 20px">Browse my reports</a>
+                    {# <a href="javascript:void(0)" class='btn button_style_1' type='submit' style="margin-bottom: 20px" data-toggle="popover" title="Not working now!" data-content="This is only Beta version of product. Will be working on the near future.">Browse my reports</a> #}
                 </div>
                 {% endwith %}
                 <div class="col-md-6">
-                    <a href="javascript:void(0)" class='btn button_style_1' style="margin-bottom: 20px" data-toggle="popover" title="Not working now!" data-content="This is only Beta version of product. Will be working on the near future.">Browse all reports</a>
-                    <!--<a href="{% url 'reports:search' %}" class='btn button_style_1' style="margin-bottom: 20px" data-toggle="popover" title="Not working now!" data-content="This is only Beta version of product. Will be working on the near future.">Browse all reports</a>-->
+                    {# <a href="javascript:void(0)" class='btn button_style_1' style="margin-bottom: 20px" data-toggle="popover" title="Not working now!" data-content="This is only Beta version of product. Will be working on the near future.">Browse all reports</a> #}
+                    <a href="{% url 'reports:search' %}" class='btn button_style_1' style="margin-bottom: 20px">Browse all reports</a>
                 </div>
             </div>
         </div>

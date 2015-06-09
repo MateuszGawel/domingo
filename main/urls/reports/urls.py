@@ -21,8 +21,6 @@ urlpatterns = patterns('',
     url(r'^(?P<rep_id>\d+)/close/$', view.close, name='close'),
     url(r'^(?P<rep_id>\d+)/get_alerts/$', view.get_alerts_from_jira, name='get_alerts_from_jira'),
 
-
-
     url(r'^search/$', view.search, name='search'),
 
     url(r'^$', view.index, name='index'),
