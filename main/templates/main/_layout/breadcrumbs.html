@@ -8,11 +8,11 @@
 
         {% if skiplast %}
 
-            {{ request.path|breadcrumb_without_last:request.get_host }}
+            {{ request.path|breadcrumb_without_last:'10.132.23.115' }}
 
         {% else %}
 
-            {{ request.path|breadcrumb:request.get_host }}
+            {{ request.path|breadcrumb:'10.132.23.115' }}
 
         {% endif %}
 

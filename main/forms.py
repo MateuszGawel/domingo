@@ -55,7 +55,7 @@ class MinDateWidget(MyWidget):
     def __init__(self, label):
         self.widget = CustomWidget()
         self.widget.set_template_name('main/_widgets/min_date_widget.html')
-        context = {'placeholder': 'YYYY-MM-DD hh:mm:ss'}
+        context = {'placeholder': 'YYYY-MM-DD'}
 
         self.widget.set_context(context)
 
@@ -377,13 +377,13 @@ class IncidentForm(forms.Form):
 class ReportFilterForm(forms.Form):
 
     rep_id = forms.CharField(label = '', required=False, widget = CharWidget("Id").get_widget() )
-    rep_status = forms.CharField(label = '', max_length=1, required=False, widget = CharWidget("Status").get_widget() )
-    rep_date_created_from = forms.DateTimeField(label = '', required=False, widget = MinDateWidget("Created from").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    rep_date_created_to = forms.DateTimeField(label = '', required=False, widget = MinDateWidget("Created To").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    rep_date_sent_from = forms.DateTimeField(label = '', required=False, widget = forms.HiddenInput, input_formats=['%Y-%m-%d %H:%M:%S'] )
-    rep_date_sent_to = forms.DateTimeField(label = '', required=False, widget = forms.HiddenInput, input_formats=['%Y-%m-%d %H:%M:%S'] )
-    rep_date_removed_from = forms.DateTimeField(label = '', required=False, widget = forms.HiddenInput, input_formats=['%Y-%m-%d %H:%M:%S'] )
-    rep_date_removed_to = forms.DateTimeField(label = '', required=False, widget = forms.HiddenInput, input_formats=['%Y-%m-%d %H:%M:%S'] )
+    rep_status = forms.CharField(label = '', required=False, widget = SelectWidget("Status", getChoices(Report, "rep_status")).get_widget() )
+    rep_date_created_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Created from").get_widget(), input_formats=['%Y-%m-%d'] )
+    rep_date_created_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Created to").get_widget(), input_formats=['%Y-%m-%d'] )
+    rep_date_sent_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent from").get_widget(), input_formats=['%Y-%m-%d'] )
+    rep_date_sent_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent to").get_widget(), input_formats=['%Y-%m-%d'] )
+    rep_date_removed_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Removed from").get_widget(), input_formats=['%Y-%m-%d'] )
+    rep_date_removed_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Removed to").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_redirection = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Redirection checked").get_widget() )
-    rep_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("User id").get_widget() )
+    rep_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
 

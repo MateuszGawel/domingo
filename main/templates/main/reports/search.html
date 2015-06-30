@@ -2,52 +2,12 @@
 
 {% block content %}
 
-    <script>
-        $(document).ready(function() {
-            $("#submitFilterForm").click(
-                    function (e) {
-                        e.preventDefault();
-
-                        //dateSliderCreated
-{#                        if( Date($("#dateSliderCreated").dateRangeSlider("min")) != Date($("#dateSliderCreated").dateRangeSlider("bounds").min) )#}
-{#                        {#}
-{#                            $("#filterForm input[name=rep_date_created_from]").val( moment( $("#dateSliderCreated").dateRangeSlider("min")).format('YYYY-MM-DD 00:00:00') );#}
-{#                        }#}
-{#                        if( Date($("#dateSliderCreated").dateRangeSlider("max")) != Date($("#dateSliderCreated").dateRangeSlider("bounds").max) )#}
-{#                        {#}
-{#                            $("#filterForm input[name=rep_date_created_to]").val( moment( $("#dateSliderCreated").dateRangeSlider("max")).format('YYYY-MM-DD 00:00:00') );#}
-{#                        }#}
-
-                        //dateSliderSent
-                        if( Date($("#dateSliderSent").dateRangeSlider("min")) != Date($("#dateSliderSent").dateRangeSlider("bounds").min) )
-                        {
-                            $("#filterForm input[name=rep_date_sent_from]").val( moment( $("#dateSliderSent").dateRangeSlider("min")).format('YYYY-MM-DD 00:00:00') );
-                        }
-                        if( Date($("#dateSliderSent").dateRangeSlider("max")) != Date($("#dateSliderSent").dateRangeSlider("bounds").max) )
-                        {
-                            $("#filterForm input[name=rep_date_sent_to]").val( moment( $("#dateSliderSent").dateRangeSlider("max")).format('YYYY-MM-DD 00:00:00') );
-                        }
-
-                        //dateSliderRemoved
-                        if( Date($("#dateSliderRemoved").dateRangeSlider("min")) != Date($("#dateSliderRemoved").dateRangeSlider("bounds").min) )
-                        {
-                            $("#filterForm input[name=rep_date_removed_from]").val( moment( $("#dateSliderRemoved").dateRangeSlider("min")).format('YYYY-MM-DD 00:00:00') );
-                        }
-                        if( Date($("#dateSliderRemoved").dateRangeSlider("max")) != Date($("#dateSliderRemoved").dateRangeSlider("bounds").max) )
-                        {
-                            $("#filterForm input[name=rep_date_removed_to]").val( moment( $("#dateSliderRemoved").dateRangeSlider("max")).format('YYYY-MM-DD 00:00:00') );
-                        }
-
-                        $("#filterForm").submit();
-                    }
-            );
-        });
-    </script>
-
     <ul class="nav nav-pills">
         <li class="active"><a data-toggle="tab" href="#browse_reports">Reports</a></li>
-        <li><a data-toggle="tab" href="#browse_alerts">Alerts</a></li>
-        <li><a data-toggle="tab" href="#browse_incidents">Incidents</a></li>
+        <li><a href="javascript:void(0)">Alerts</a></li>
+        <li><a href="javascript:void(0)">Contacts</a></li>
+        <li><a href="javascript:void(0)">Maintenances</a></li>
+        <li><a href="javascript:void(0)">Incidents</a></li>
     </ul>
     <div class="tab-content">
 
@@ -74,7 +34,7 @@
                     {{ form.rep_redirection.errors }}
                     {{ form.rep_redirection }}
                 </div>
--->
+-->             <hr>
                 <div class='filter_input'>
                     <strong>Created date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
@@ -82,47 +42,27 @@
                     {{ form.rep_date_created_from }}
                     {{ form.rep_date_created_to }}
                 </div>
-
+                <hr>
                 <div class='filter_input'>
                     <strong>Sent date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
                     <div id="dateSliderSent" style="margin-top:40px; margin-bottom:20px;"></div>
+                    {{ form.rep_date_sent_from }}
+                    {{ form.rep_date_sent_to }}
                 </div>
-
+<hr>
                 <div class='filter_input'>
                     <strong>Removed date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
                     <div id="dateSliderRemoved" style="margin-top:40px; margin-bottom:20px;"></div>
-                </div>
-
-{#                <div class='filter_input'>#}
-                    {# {{ form.rep_date_created_from.errors }} #}
-{#                    {{ form.rep_date_created_from }}#}
-{#                </div>#}
-{#                <div class='filter_input'>#}
-                    {# {{ form.rep_date_created_to.errors }} #}
-{#                    {{ form.rep_date_created_to }}#}
-{#                </div>#}
-                <div class='filter_input'>
-                    {# {{ form.rep_date_sent_from.errors }} #}
-                    {{ form.rep_date_sent_from }}
-                </div>
-                <div class='filter_input'>
-                    {# {{ form.rep_date_sent_to.errors }} #}
-                    {{ form.rep_date_sent_to }}
-                </div>
-                <div class='filter_project'>
-                    {# {{ form.rep_date_removed_from.errors }} #}
                     {{ form.rep_date_removed_from }}
-                </div>
-                <div class='filter_project'>
-                    {# {{ form.rep_date_removed_to.errors }} #}
                     {{ form.rep_date_removed_to }}
                 </div>
-
+                <hr>
                 {{ error_message }}
-                <button class='btn button_style_1 clear col-md-5 but_float button_style_logout'><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Clear</button>
-                <button id='submitFilterForm' class='btn button_style_1 col-md-5 col-md-offset-2 but_float'><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter</button>
+                <button id='submitFilterForm' class='btn button_style_1 col-md-5 col-md-offset-2'><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter</button>
+                <button class='btn button_style_1 clear col-md-5 but_float button_style_logout   but_float'><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Clear</button>
+
             </form>
 
                 <div class="col-md-9">
@@ -189,7 +129,7 @@
                                         {% endif %}
                                     </td>
 
-                                    <td>{{ report.rep_com_id }}</td>
+                                    <td>{{ report.rep_com_id.com_value }}</td>
 
                                     <td>
                                         <a class="btn button_style_1" style="width:100%;" href="{% url 'reports:summary_tab' report.rep_id %}"><span class="glyphicon glyphicon-search"></span> View</a>
