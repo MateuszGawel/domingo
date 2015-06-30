@@ -27,6 +27,14 @@ $(document).ready(function() {
 
     $('[data-toggle="popover"]').focusout( function() { $(this).popover("hide") } );
 
+    //DATETIMEPICKER UTIL
+    $('.datetimePicker').datetimepicker({
+         format: 'YYYY-MM-DD HH:mm:ss',
+         toolbarPlacement: 'top',
+         showTodayButton: true,
+         showClear: true
+     });
+
     //SELECT2 util
     //$('select').select2();
 
