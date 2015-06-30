@@ -2,6 +2,9 @@
 
 {% block content %}
 
+    {% load staticfiles %}
+    <script src="{% static "main/js/search.js" %}"></script>
+
     <ul class="nav nav-pills">
         <li class="active"><a data-toggle="tab" href="#browse_reports">Reports</a></li>
         <li><a href="javascript:void(0)">Alerts</a></li>
