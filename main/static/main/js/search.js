@@ -1,4 +1,18 @@
 $(document).ready(function() {
+
+    //CLEAR FOR GET util
+    $("form").find(".clear").click(function(e){
+        e.preventDefault();
+        resetSliderValues("#dateSliderCreated");
+        resetSliderValues("#dateSliderSent");
+        resetSliderValues("#dateSliderRemoved");
+        $(this).parent().find("input").each(function ()
+        {
+            $(this).val("");
+        });
+
+    });
+
     //SLIDER util
     $("#dateSliderCreated").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 0, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 0, 1), max: new Date()} });
     $("#dateSliderCreated").dateRangeSlider({range:{min: {days: 0}}});

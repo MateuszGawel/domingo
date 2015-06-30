@@ -28,19 +28,6 @@ $(document).ready(function() {
         });
     });
 
-    //CLEAR FOR GET util
-    $("form").find(".clear").click(function(e){
-        e.preventDefault();
-        resetSliderValues("#dateSliderCreated");
-        resetSliderValues("#dateSliderSent");
-        resetSliderValues("#dateSliderRemoved");
-        $(this).parent().find("input").each(function ()
-        {
-            $(this).val("");
-        });
-
-    });
-
     //POPOVER util
     $('[data-toggle="popover"]').popover({
         placement : 'bottom',
