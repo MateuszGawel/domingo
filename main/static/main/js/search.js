@@ -1,6 +1,15 @@
 $(document).ready(function() {
 
     //CLEAR FOR GET util
+    $(".get-clear").submit(function(e){
+        $(this).find("input").each(function () {
+            if ($(this).val() == '') {
+                this.setAttribute("name", "");
+            }
+        });
+    });
+
+    //CLEAR FOR GET util
     $("form").find(".clear").click(function(e){
         e.preventDefault();
         resetSliderValues("#dateSliderCreated");

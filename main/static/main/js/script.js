@@ -19,15 +19,6 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
-    //CLEAR FOR GET util
-    $(".get-clear").submit(function(e){
-        $(this).find("input").each(function () {
-            if ($(this).val() == '') {
-                this.setAttribute("name", "");
-            }
-        });
-    });
-
     //POPOVER util
     $('[data-toggle="popover"]').popover({
         placement : 'bottom',
