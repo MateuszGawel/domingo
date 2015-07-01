@@ -23,12 +23,6 @@ def doValidate(form=None, request=None, report=None, incident=None):
             print "not super!"
             return False
 
-    if incident != None and incident.inc_status == 'O':
-        print "incident not open"
-    elif incident != None:
-        print "incident open!"
-        return False
-
     if form == None:
         print "no form!"
         return False

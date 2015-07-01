@@ -8,14 +8,12 @@ class Report(models.Model):
     REPORT_STATUSES = (
         ('O', 'Open'),
         ('C', 'Closed'),
-        ('R', 'Removed'),
     )
 
     rep_id = models.AutoField(primary_key=True, verbose_name="Report ID")
     rep_status = models.CharField(max_length=1, blank=True, choices=REPORT_STATUSES, verbose_name="Report status")
     rep_date_created = models.DateTimeField(blank=True, null=True, verbose_name="Report creation date")
     rep_date_sent = models.DateTimeField(blank=True, null=True, verbose_name="Report sent date")
-    rep_date_removed = models.DateTimeField(blank=True, null=True, verbose_name="Report deletion date")
     rep_redirection = models.DateTimeField(blank=True, null=True, verbose_name="Report redirection check")
     rep_usr_id = models.ForeignKey(User, blank=True, null=True, verbose_name="Report user FK")
     rep_com_id = models.ForeignKey("Comment", blank=True, null=True, verbose_name="Report comment FK")
@@ -101,7 +99,7 @@ class Alert(models.Model):
 
     alt_id = models.AutoField(primary_key=True, verbose_name="Alert ID")
     alt_date = models.DateTimeField(null=True, blank=True, verbose_name="Alert date")
-    alt_name = models.CharField(max_length=256, null=True, blank=True, verbose_name="Alert name")
+    alt_name = models.CharField(max_length=255, null=True, blank=True, verbose_name="Alert name")
     alt_ticket = models.CharField(max_length=128, null=True, blank=True, verbose_name="Alert ticket link")
     alt_type = models.CharField(max_length=1, null=True, blank=True, choices=ALERT_TYPE, verbose_name="Alert type")
     alt_rep_id = models.ForeignKey('Report', null=True, blank=True, verbose_name="Alert report FK")
@@ -124,11 +122,16 @@ class Contact(models.Model):
         ('O', 'Other'),
     )
 
+    CONTACT_SCOPE = (
+        ('I', 'Internal'),
+        ('E', 'External'),
+    )
+
     con_id = models.AutoField(primary_key=True, verbose_name="Contact ID")
     con_date = models.DateTimeField(blank=True, null=True, verbose_name="Contact date")
     con_address = models.CharField(max_length=64, blank=True, verbose_name="Contact address/phone number")
     con_direction = models.CharField(max_length=1, blank=True, choices=CONTACT_DIRECTION, verbose_name="Contact direction")
-    con_internal = models.BooleanField(blank=True, default="false", verbose_name="Contact internal")
+    con_scope = models.CharField(max_length=1, blank=True, choices=CONTACT_SCOPE, verbose_name="Contact scope")
     con_type = models.CharField(max_length=1, blank=True, choices=CONTACT_TYPE, verbose_name="Contact type")
     con_rep_id = models.ForeignKey('Report', blank=True, null=True, verbose_name="Contact report FK")
     con_prj_id = models.ForeignKey('Project', blank=True, null=True, verbose_name="Contact project FK")

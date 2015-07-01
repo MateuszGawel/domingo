@@ -9,7 +9,20 @@
 {#                <img src="{%  static "main/img/superman.jpg" %}" alt='User info' class='img-responsive img-rounded avatar'>#}
 {#            </a>#}
 
-              You're logged as  <a href="javascript:void(0)">  {{ user }} </a>
+            <span style="font-size:20px;" > BETA</span>
+
+            <br>
+            <span class="dropdown" style="color: #555">
+                <ul style="padding: 10px;" class="dropdown-menu" aria-labelledby="reports">
+                    <li>
+                        If you found any bug or have any sugestion please report it to us:<br>
+                        <a href="mailto:mateusz.gawel@comarch.pl, michal.antkowicz@comarch.pl?subject=Domingo feedback">mateusz.gawel@comarch.pl, michal.antkowicz@comarch.pl</a>
+                    </li>
+                </ul>
+                <a href="#" id="reports" data-toggle="dropdown" aria-expanded="true">Report BUG</a> <span style="color: firebrick" class="glyphicon glyphicon-bullhorn"> </span>
+            </span>
+
+            <span style="margin-left:20px;"> You're logged as  <a href="javascript:void(0)">  {{ user }} </a> </span>
 
         </div>
         <div class='log_btn'>

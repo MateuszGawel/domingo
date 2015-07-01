@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 {% include 'main/_layout/report_menu.html' with active_tab="maintenances" %}
 
-{% if inc_id != None %} DODAJE DO INCYDENTU O ID: {{ inc_id }} {% endif %}
+
 
 {% if inc_id == None %}
     <form class="filters form-inline well col-md-3" action=" {% url 'reports:maintenance_tab' report.rep_id %} " method="post">
@@ -25,8 +25,10 @@
             };
         </script>
     {% endif %}
-    {% if inc_id == None %}
+
         <div class="col-md-9">
+        {% if inc_id != None %} <div style="widht: 100%; text-align: center;"><span class="glyphicon glyphicon-copy" aria-hidden="true" style="font-size: 450px; color: #ddd;"></span></div>
+        {% else %}
             <table class='table table-bordered table-striped table-hover'>
                 <thead>
                     <tr>
@@ -75,7 +77,8 @@
                     {% endfor %}
                 </tbody>
             </table>
+        {% endif %}
         </div>
-    {% endif %}
+
 
 {% endblock %}

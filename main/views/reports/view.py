@@ -30,27 +30,19 @@ def search(request):
                 filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
 
             if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
-                print form.cleaned_data['rep_date_created_from']
                 filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
 
             if form.cleaned_data.has_key('rep_date_created_to') and form.cleaned_data['rep_date_created_to'] is not None:
-                filter_result = filter_result.filter(rep_date_created__lte=form.cleaned_data['rep_date_created_to'])
+                filter_result = filter_result.filter(rep_date_created__lte=(form.cleaned_data['rep_date_created_to']+timedelta(days=1)))
 
             if form.cleaned_data.has_key('rep_date_sent_from') and form.cleaned_data['rep_date_sent_from'] is not None:
                 filter_result = filter_result.filter(rep_date_sent__gte=form.cleaned_data['rep_date_sent_from'])
 
             if form.cleaned_data.has_key('rep_date_sent_to') and form.cleaned_data['rep_date_sent_to'] is not None:
-                filter_result = filter_result.filter(rep_date_sent__lte=form.cleaned_data['rep_date_sent_to'])
-
-            if form.cleaned_data.has_key('rep_date_removed_from') and form.cleaned_data['rep_date_removed_from'] is not None:
-                filter_result = filter_result.filter(rep_date_removed__gte=form.cleaned_data['rep_date_removed_from'])
-
-            if form.cleaned_data.has_key('rep_date_removed_to') and form.cleaned_data['rep_date_removed_to'] is not None:
-                filter_result = filter_result.filter(rep_date_removed__lte=form.cleaned_data['rep_date_removed_to'])
+                filter_result = filter_result.filter(rep_date_sent__lte=(form.cleaned_data['rep_date_sent_to']+timedelta(days=1)))
 
             if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
                 filter_result = filter_result.filter(rep_usr_id=User.objects.get(username=form.cleaned_data['rep_usr_id']))
-
 
             return render(request, 'main/reports/search.html', {'form': form, 'filter_result': filter_result})
         else:
@@ -68,7 +60,7 @@ def create(request):
             report = Report()
             report.rep_status = 'O'
 
-            report.rep_date_created = (datetime.datetime.now()- timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+            report.rep_date_created = (datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
             report.rep_usr_id = request.user
             comment = Comment()
             comment.com_value = ''
@@ -197,6 +189,7 @@ def contact_tab(request, rep_id=None, inc_id=None):
             report = Report.objects.get(rep_id=rep_id)
 
         contacts  = Contact.objects.filter(con_rep_id=report.rep_id)
+
         filledContactForms = []
         for contact in contacts:
             filledContactform = ContactForm({'con_prj_id': contact.con_prj_id.prj_id,
@@ -204,7 +197,7 @@ def contact_tab(request, rep_id=None, inc_id=None):
                                    'con_address': contact.con_address,
                                    'con_date': str( contact.con_date ),
                                    'con_direction': contact.con_direction,
-                                   'con_internal': contact.con_internal,
+                                   'con_scope': contact.con_scope,
                                    'con_com_id': contact.con_com_id.com_value})
             filledContactForms.append( (contact, filledContactform) )
 

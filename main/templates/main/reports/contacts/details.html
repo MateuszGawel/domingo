@@ -24,6 +24,13 @@
             <tr>
                 <td>Type:</td>
                 <td>
+                    {% if contact.con_type == 'P' %}
+                        <span class="glyphicon glyphicon-earphone"></span>
+                    {% elif contact.con_type == 'E' %}
+                        <span class="glyphicon glyphicon-list-alt"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-transfer"></span>
+                    {% endif %}
                     {{ contact.get_con_type_display }}
                 </td>
             </tr>
@@ -51,13 +58,14 @@
                 </td>
             </tr>
             <tr>
-                <td>Internal:</td>
+                <td>Scope:</td>
                 <td>
-                    {% if contact.con_internal %}
-                        <span class="glyphicon glyphicon-ok"></span>
+                    {% if contact.con_scope == 'I' %}
+                        <span class="glyphicon glyphicon-home"></span>
                     {% else %}
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="glyphicon glyphicon-globe"></span>
                     {% endif %}
+                    {{ contact.get_con_scope_display }}
                 </td>
             </tr>
             <tr>

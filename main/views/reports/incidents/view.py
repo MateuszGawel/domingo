@@ -7,11 +7,12 @@ from django.shortcuts import redirect, render
 
 class Entity:
 
-    def __init__(self, name, date, type, url, ins_id, id):
+    def __init__(self, name, date, type, comment, url, ins_id, id):
         self.ent_number = 0
         self.ent_name = name
         self.ent_date = date
         self.ent_type = type
+        self.ent_comment = comment
 
         self.ent_url = url
         self.ent_ins_id = ins_id
@@ -38,7 +39,7 @@ def details(request, rep_id, inc_id):
             try:
                 alert = Alert.objects.get(alt_id=incidentStep.ins_ent_id)
 
-                entity = Entity(alert.alt_name, alert.alt_date, incidentStep.ins_type, "alerts:details", incidentStep.ins_id, alert.alt_id)
+                entity = Entity(alert.alt_name, alert.alt_date, incidentStep.ins_type, alert.alt_com_id.com_value, "alerts:details", incidentStep.ins_id, alert.alt_id)
 
             except Maintenance.DoesNotExist:
                 pass
@@ -54,7 +55,7 @@ def details(request, rep_id, inc_id):
                 else:
                     contact_name = contact.con_address.__str__() + " > " + request.user.__str__()
 
-                entity = Entity(contact_name, contact.con_date, incidentStep.ins_type, "contacts:details", incidentStep.ins_id, contact.con_id)
+                entity = Entity(contact_name, contact.con_date, incidentStep.ins_type, contact.con_com_id.com_value, "contacts:details", incidentStep.ins_id, contact.con_id)
 
             except Contact.DoesNotExist:
                 pass
@@ -64,7 +65,7 @@ def details(request, rep_id, inc_id):
             try:
                 maintenance = Maintenance.objects.get(mnt_id=incidentStep.ins_ent_id)
 
-                entity = Entity(maintenance.mnt_name, maintenance.mnt_date, incidentStep.ins_type, "maintenances:details", incidentStep.ins_id, maintenance.mnt_id)
+                entity = Entity(maintenance.mnt_name, maintenance.mnt_date, incidentStep.ins_type, maintenance.mnt_com_id.com_value, "maintenances:details", incidentStep.ins_id, maintenance.mnt_id)
 
             except Maintenance.DoesNotExist:
                 pass
@@ -174,14 +175,16 @@ def join_alert(request, rep_id, inc_id):
             alert = None
             if form.data.has_key('alt_id'):
                 alert = get_object_or_404(Alert, alt_id=form.data['alt_id'])
-            incidentStep = IncidentStep()
-            incidentStep.ins_type = 'A'
-            incidentStep.ins_ent_id = alert.alt_id
-            incidentStep.ins_inc_id = incident
-            incidentStepComment = Comment()
-            incidentStepComment.save()
-            incidentStep.ins_com_id = incidentStepComment
-            incidentStep.save()
+            if alert != None:
+                print alert
+                incidentStep = IncidentStep()
+                incidentStep.ins_type = 'A'
+                incidentStep.ins_ent_id = alert.alt_id
+                incidentStep.ins_inc_id = incident
+                incidentStepComment = Comment()
+                incidentStepComment.save()
+                incidentStep.ins_com_id = incidentStepComment
+                incidentStep.save()
     return redirect("incidents:details", rep_id, inc_id)
 
 def join_contact(request, rep_id, inc_id):
@@ -192,14 +195,15 @@ def join_contact(request, rep_id, inc_id):
             contact = None
             if form.data.has_key('con_id'):
                 contact = get_object_or_404(Contact, con_id=form.data['con_id'])
-            incidentStep = IncidentStep()
-            incidentStep.ins_type = 'C'
-            incidentStep.ins_ent_id = contact.con_id
-            incidentStep.ins_inc_id = incident
-            incidentStepComment = Comment()
-            incidentStepComment.save()
-            incidentStep.ins_com_id = incidentStepComment
-            incidentStep.save()
+            if contact != None:
+                incidentStep = IncidentStep()
+                incidentStep.ins_type = 'C'
+                incidentStep.ins_ent_id = contact.con_id
+                incidentStep.ins_inc_id = incident
+                incidentStepComment = Comment()
+                incidentStepComment.save()
+                incidentStep.ins_com_id = incidentStepComment
+                incidentStep.save()
     return redirect("incidents:details", rep_id, inc_id)
 
 def join_maintenance(request, rep_id, inc_id):
@@ -210,14 +214,15 @@ def join_maintenance(request, rep_id, inc_id):
             maintenance = None
             if form.data.has_key('mnt_id'):
                 maintenance = get_object_or_404(Maintenance, mnt_id=form.data['mnt_id'])
-            incidentStep = IncidentStep()
-            incidentStep.ins_type = 'M'
-            incidentStep.ins_ent_id = maintenance.mnt_id
-            incidentStep.ins_inc_id = incident
-            incidentStepComment = Comment()
-            incidentStepComment.save()
-            incidentStep.ins_com_id = incidentStepComment
-            incidentStep.save()
+            if maintenance != None:
+                incidentStep = IncidentStep()
+                incidentStep.ins_type = 'M'
+                incidentStep.ins_ent_id = maintenance.mnt_id
+                incidentStep.ins_inc_id = incident
+                incidentStepComment = Comment()
+                incidentStepComment.save()
+                incidentStep.ins_com_id = incidentStepComment
+                incidentStep.save()
     return redirect("incidents:details", rep_id, inc_id)
 
 def remove_incident_step(request, rep_id, ins_id):

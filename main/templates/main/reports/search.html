@@ -53,14 +53,7 @@
                     {{ form.rep_date_sent_from }}
                     {{ form.rep_date_sent_to }}
                 </div>
-<hr>
-                <div class='filter_input'>
-                    <strong>Removed date</strong>
-                    <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderRemoved" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.rep_date_removed_from }}
-                    {{ form.rep_date_removed_to }}
-                </div>
+
                 <hr>
                 {{ error_message }}
                 <button id='submitFilterForm' class='btn button_style_1 col-md-5 col-md-offset-2'><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter</button>
@@ -77,7 +70,6 @@
                                 <th>Status</th>
                                 <th>Created date</th>
                                 <th>Sent date</th>
-                                <th>Removed date</th>
                                 <th>Redirection checked</th>
                                 <th>Comment</th>
                                 <th></th>
@@ -111,14 +103,6 @@
                                     <td>
                                         {% if report.rep_date_sent != None %}
                                             {{ report.rep_date_sent|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        {% if report.rep_date_removed != None %}
-                                            {{ report.rep_date_removed|date:"Y-m-d H:i:s" }}
                                         {% else %}
                                             <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
                                         {% endif %}

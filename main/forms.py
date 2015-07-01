@@ -128,7 +128,7 @@ def getChoices(Model, fieldName):
 #---------------FORMS---------------#
 class SummaryForm(forms.Form):
     rep_redirection = forms.DateTimeField(label = '', required=False, widget = DateWidget("Redirection date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    rep_comment = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+    rep_comment = forms.CharField(label = '', max_length=400, required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
     def save(self, report):
         if self.cleaned_data.has_key('rep_redirection'):
@@ -140,11 +140,11 @@ class SummaryForm(forms.Form):
 
 class AlertForm(forms.Form):
     alert_project = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
-    alert_name = forms.CharField(label = '', widget = CharWidget("Alert name").get_widget() )
-    alert_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
+    alert_name = forms.CharField(label = '', max_length=255, widget = CharWidget("Alert name").get_widget() )
+    alert_ticket = forms.URLField(label = '', max_length=255, widget = CharWidget("Jira ticket URL").get_widget() )
     alert_type = forms.CharField(label = '', widget = SelectWidget("Alert type", getChoices(Alert, "alt_type")).get_widget() )
     alert_date = forms.DateTimeField(label = '', widget = DateWidget("Alert date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    alert_comment = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+    alert_comment = forms.CharField(label = '', max_length=400, required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
     def save(self, report, inc_id=None):
         alert = Alert()
@@ -204,17 +204,16 @@ class AlertForm(forms.Form):
 class ContactForm(forms.Form):
     con_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
     con_type = forms.CharField(label = '', widget = SelectWidget("Contact type", getChoices(Contact, "con_type")).get_widget())
-    con_address = forms.CharField(label = '', widget = CharWidget("Contact address").get_widget() )
+    con_address = forms.CharField(label = '', max_length=255, widget = CharWidget("Contact address").get_widget() )
     con_direction = forms.CharField(label = '', widget = SelectWidget("Contact direction", getChoices(Contact, "con_direction")).get_widget())
     con_date = forms.DateTimeField(label = '', widget = DateWidget("Contact date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    con_internal = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Internal").get_widget() )
-    con_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+    con_scope = forms.CharField(label = '', widget = SelectWidget("Contact scope", getChoices(Contact, "con_scope")).get_widget())
+    con_com_id = forms.CharField(label = '', max_length=400, required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
     def save(self, report, inc_id=None):
         contact = Contact()
         comment = Comment()
-        print "printuje"
-        print self.cleaned_data['con_internal']
+        print self.cleaned_data['con_scope']
         if self.cleaned_data.has_key('con_prj_id'):
             contact.con_prj_id = get_object_or_404(Project, prj_id=self.cleaned_data['con_prj_id'])
         if self.cleaned_data.has_key('con_type'):
@@ -225,8 +224,8 @@ class ContactForm(forms.Form):
             contact.con_date = self.cleaned_data['con_date']
         if self.cleaned_data.has_key('con_direction'):
             contact.con_direction = self.cleaned_data['con_direction']
-        if self.cleaned_data.has_key('con_internal'):
-            contact.con_internal = self.cleaned_data['con_internal']
+        if self.cleaned_data.has_key('con_scope'):
+            contact.con_scope = self.cleaned_data['con_scope']
         if self.cleaned_data.has_key('con_com_id'):
             comment.com_value = self.cleaned_data['con_com_id']
 
@@ -261,8 +260,8 @@ class ContactForm(forms.Form):
             contact.con_date = self.cleaned_data['con_date']
         if self.cleaned_data.has_key('con_direction'):
             contact.con_direction = self.cleaned_data['con_direction']
-        if self.cleaned_data.has_key('con_internal'):
-            contact.con_internal = self.cleaned_data['con_internal']
+        if self.cleaned_data.has_key('con_scope'):
+            contact.con_scope = self.cleaned_data['con_scope']
         if self.cleaned_data.has_key('con_com_id'):
             comment.com_value = self.cleaned_data['con_com_id']
 
@@ -271,9 +270,9 @@ class ContactForm(forms.Form):
 
 class MaintenanceForm(forms.Form):
     mnt_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
-    mnt_name = forms.CharField(label = '', widget = CharWidget("Maintenance name").get_widget() )
+    mnt_name = forms.CharField(label = '', max_length=255, widget = CharWidget("Maintenance name").get_widget() )
     mnt_date = forms.DateTimeField(label = '', widget = DateWidget("Maintenance date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    mnt_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+    mnt_com_id = forms.CharField(label = '', max_length=400, required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
     def save(self, report, inc_id=None):
         comment = Comment()
@@ -323,11 +322,11 @@ class MaintenanceForm(forms.Form):
 
 class IncidentForm(forms.Form):
     inc_prj_id = forms.CharField(label = '', widget = SelectWidget("Project", getProjects(Project) ).get_widget() )
-    inc_ticket = forms.URLField(label = '', widget = CharWidget("Jira ticket URL").get_widget() )
+    inc_ticket = forms.URLField(label = '', max_length=255, widget = CharWidget("Jira ticket URL").get_widget() )
     inc_date_start = forms.DateTimeField(label = '', widget = DateWidget("Start date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     inc_date_end = forms.DateTimeField(label = '', required=False, widget = DateWidget("End date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     inc_rca = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("RCA").get_widget() )
-    inc_com_id = forms.CharField(label = '', required=False, widget = TextWidget("Comment", '', 3).get_widget() )
+    inc_com_id = forms.CharField(label = '', max_length=400, required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
     def save(self, report):
         incident = Incident()
@@ -382,8 +381,6 @@ class ReportFilterForm(forms.Form):
     rep_date_created_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Created to").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_sent_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent from").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_sent_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent to").get_widget(), input_formats=['%Y-%m-%d'] )
-    rep_date_removed_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Removed from").get_widget(), input_formats=['%Y-%m-%d'] )
-    rep_date_removed_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Removed to").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_redirection = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Redirection checked").get_widget() )
     rep_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
 

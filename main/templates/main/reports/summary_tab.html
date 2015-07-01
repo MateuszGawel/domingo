@@ -34,11 +34,9 @@
                 <td>
                     {% if report.rep_status == 'O' %}
 						<span style="color: yellowgreen; font-weight: 600">{{ report.get_rep_status_display }}</span>
-					{% elif report.rep_status == 'C' %}
-						<span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span> {{ report.rep_date_sent }}
 					{% else %}
-						<span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span> {{ report.rep_date_removed }}
-					{% endif %}
+						<span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span> {{ report.rep_date_sent }}
+                    {% endif %}
                 </td>
             </tr>
             <tr>

@@ -4,8 +4,6 @@
 {% load crispy_forms_tags %}
 {% include 'main/_layout/report_menu.html' with active_tab="contacts" %}
 
-{% if inc_id != None %} DODAJE DO INCYDENTU O ID: {{ inc_id }} {% endif %}
-
 {% if inc_id == None %}
     <form class="filters form-inline well col-md-3" action=" {% url 'reports:contact_tab' report.rep_id %} " method="post">
 {% else %}
@@ -24,8 +22,10 @@
             };
         </script>
     {% endif %}
-    {% if inc_id == None %}
+
         <div class="col-md-9">
+        {% if inc_id != None %} <div style="widht: 100%; text-align: center;"><span class="glyphicon glyphicon-copy" aria-hidden="true" style="font-size: 450px; color: #ddd;"></span></div>
+        {% else %}
             <table class='table table-bordered table-striped table-hover'>
                 <thead>
                     <tr>
@@ -34,7 +34,7 @@
                         <th>Address</th>
                         <th>Direction</th>
                         <th>Date</th>
-                        <th>Internal</th>
+                        <th>Scope</th>
                         <th>Comment</th>
                         <th></th>
                     </tr>
@@ -59,8 +59,10 @@
                                 <td class="normal-view{{ contact.0.con_id }}">
                                     {% if contact.0.con_type == 'P' %}
                                         <span class="glyphicon glyphicon-earphone"></span>
-                                    {% else %}
+                                    {% elif contact.0.con_type == 'E' %}
                                         <span class="glyphicon glyphicon-list-alt"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-transfer"></span>
                                     {% endif %}
                                     {{ contact.0.get_con_type_display }}
                                 </td>
@@ -75,11 +77,12 @@
                                 </td>
                                 <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_date }}</td>
                                 <td class="normal-view{{ contact.0.con_id }}">
-                                    {% if contact.0.con_internal %}
-                                        <span class="glyphicon glyphicon-ok"></span>
+                                    {% if contact.0.con_scope == 'I' %}
+                                        <span class="glyphicon glyphicon-home"></span>
                                     {% else %}
-                                        <span class="glyphicon glyphicon-remove"></span>
+                                        <span class="glyphicon glyphicon-globe"></span>
                                     {% endif %}
+                                    {{ contact.0.get_con_scope_display }}
                                 </td>
                                 <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_com_id.com_value }}</td>
                                 <td>
@@ -101,7 +104,8 @@
                     {% endfor %}
                 </tbody>
             </table>
+        {% endif %}
         </div>
-    {% endif %}
+
 
 {% endblock %}

@@ -26,9 +26,9 @@
                     </span>
 
                     {% if incident.inc_status != 'O' %}
-                        <span class=" {% if incidentForm.inc_date_start.errors %} error {% endif %}">
-                            {{ incidentForm.inc_date_start }}
-                            <p>{{ incidentForm.inc_date_start.errors.as_text }}</p>
+                        <span class=" {% if incidentForm.inc_date_end.errors %} error {% endif %}">
+                            {{ incidentForm.inc_date_end }}
+                            <p>{{ incidentForm.inc_date_end.errors.as_text }}</p>
 
                         </span>
                     {% endif %}
@@ -162,13 +162,13 @@
                 <td>Status:</td>
                 <td>
                     {% if incident.inc_status == 'I' %}
-                        <span style="color: gold" class="glyphicon glyphicon-asterisk"></span>
+                        <span style="color: gold" class="glyphicon glyphicon-asterisk"></span> {{ incident.get_inc_status_display }} <span style="color: #999;"> {{ incident.inc_date_end }} </span>
                     {% elif incident.inc_status == 'R' %}
-                        <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                        <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span> {{ incident.get_inc_status_display }} <span style="color: #999;"> {{ incident.inc_date_end }} </span>
                     {% elif incident.inc_status == 'O' %}
-                        <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                        <span style="color: firebrick" class="glyphicon glyphicon-remove"></span> {{ incident.get_inc_status_display }}
                     {% endif %}
-                    {{ incident.get_inc_status_display }}
+
                 </td>
             </tr>
             <tr>
@@ -199,6 +199,7 @@
                     <th>Step name</th>
                     <th>Step date</th>
                     <th>Step type</th>
+                    <th>Step comment</th>
                     <th></th>
                 </tr>
             </thead>
@@ -215,6 +216,7 @@
                         {% elif entity.ent_type == 'M' %}
                             <td><span class="glyphicon glyphicon-wrench"></span> Maintenace</td>
                         {% endif %}
+                        <td>{{ entity.ent_comment }}</td>
                         <td>
                             <a class='btn button_style_1 col-md-12' href="{% url  entity.ent_url  report.rep_id entity.ent_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>
                             <form class="" action="{% url 'incidents:remove_incident_step' report.rep_id entity.ent_ins_id %}" method="post">

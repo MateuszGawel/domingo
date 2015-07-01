@@ -6,6 +6,7 @@ def details(request, rep_id, con_id):
     contact = Contact.objects.get(con_id=con_id)
     if request.method == 'POST':
         form = ContactForm(request.POST)
+        print form
         if doValidate(form, request, contact.con_rep_id):
             form.modify(con_id)
             return redirect("contacts:details", rep_id, con_id)
@@ -15,7 +16,7 @@ def details(request, rep_id, con_id):
                                'con_address': contact.con_address,
                                'con_date': str( contact.con_date ),
                                'con_direction': contact.con_direction,
-                               'con_internal': contact.con_internal,
+                               'con_scope': contact.con_scope,
                                'con_com_id': contact.con_com_id.com_value,
         })
     return render(request, 'main/reports/contacts/details.html', {'contactForm': form, 'contact': contact, 'report':report})
@@ -47,7 +48,7 @@ def quick_edit(request, rep_id, con_id):
                                'con_address': contact.con_address,
                                'con_date': str( contact.con_date ),
                                'con_direction': contact.con_direction,
-                               'con_internal': contact.con_internal,
+                               'con_scope': contact.con_scope,
                                'con_com_id': contact.con_com_id.com_value})
         filledContactForms.append( (contact, filledContactform) )
 

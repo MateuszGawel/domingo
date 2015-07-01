@@ -14,7 +14,6 @@ $(document).ready(function() {
         e.preventDefault();
         resetSliderValues("#dateSliderCreated");
         resetSliderValues("#dateSliderSent");
-        resetSliderValues("#dateSliderRemoved");
         $(this).parent().find("input").each(function ()
         {
             $(this).val("");
@@ -23,17 +22,13 @@ $(document).ready(function() {
     });
 
     //SLIDER util
-    $("#dateSliderCreated").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 0, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 0, 1), max: new Date()} });
+    $("#dateSliderCreated").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 5, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 5, 1), max: new Date()} });
     $("#dateSliderCreated").dateRangeSlider({range:{min: {days: 0}}});
     registerEvents("#rep_date_created_from", "#rep_date_created_to","#dateSliderCreated");
 
-    $("#dateSliderSent").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 0, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 0, 1), max: new Date()} });
+    $("#dateSliderSent").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 5, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 5, 1), max: new Date()} });
     $("#dateSliderSent").dateRangeSlider({range:{min: {days: 0}}});
     registerEvents("#rep_date_sent_from", "#rep_date_sent_to","#dateSliderSent");
-
-    $("#dateSliderRemoved").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 0, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 0, 1), max: new Date()} });
-    $("#dateSliderRemoved").dateRangeSlider({range:{min: {days: 0}}});
-    registerEvents("#rep_date_removed_from", "#rep_date_removed_to","#dateSliderRemoved");
 
 
     function registerEvents(from, to, slider){

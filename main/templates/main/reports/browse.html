@@ -66,7 +66,7 @@
                         <th>Address</th>
                         <th>Date</th>
                         <th>Direction</th>
-                        <th>Internal</th>
+                        <th>Scope</th>
                         <th>Comment</th>
                         <th></th>
                     </tr>
@@ -79,7 +79,7 @@
                             <td>{{ contact.con_address }}</td>
                             <td>{{ contact.con_date }}</td>
                             <td>{{ contact.con_direction }}</td>
-                            <td>{{ contact.con_internal }}</td>
+                            <td>{{ contact.con_scope }}</td>
                             <td>{{ contact.con_com_id.com_value }}</td>
                             <td><a class='btn btn-primary' href="{% url 'contacts:index' contact.con_id %}">Edit</a></td>
                         </tr>

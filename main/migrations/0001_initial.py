@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('con_date', models.DateTimeField(null=True, verbose_name='Contact date', blank=True)),
                 ('con_address', models.CharField(max_length=64, verbose_name='Contact address/phone number', blank=True)),
                 ('con_direction', models.CharField(blank=True, max_length=1, verbose_name='Contact direction', choices=[('I', 'Incoming'), ('O', 'Outcoming')])),
-                ('con_internal', models.BooleanField(default='false', verbose_name='Contact internal')),
+                ('con_scope', models.BooleanField(default='false', verbose_name='Contact internal')),
                 ('con_type', models.CharField(blank=True, max_length=1, verbose_name='Contact type', choices=[('P', 'Phone'), ('E', 'Email'), ('O', 'Other')])),
                 ('con_com_id', models.ForeignKey(verbose_name='Contact comment FK', blank=True, to='main.Comment', null=True)),
             ],

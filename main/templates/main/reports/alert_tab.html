@@ -26,13 +26,13 @@
         </fieldset>
     </form>
 
-        {% if inc_id == None %}
-    <form class="col-md-offset-3 col-md-6 col-md-offset-3 jira_get_button" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
-        {% csrf_token %}
-        {{ error_message }}
-        <button class='btn button_style_1 col-md-12' type='submit' {% disabledButton request report %}>Get from Jira</button>
-
-    </form>
+    {% if inc_id == None %}
+        <form class="col-md-offset-3 col-md-6 col-md-offset-3 jira_get_button" action="{% url 'reports:get_alerts_from_jira' report.rep_id %}" method="post">
+            {% csrf_token %}
+            {{ error_message }}
+            <button class='btn button_style_1 col-md-12' type='submit' {% disabledButton request report %}>Get from Jira</button>
+        </form>
+    {% endif %}
         {% if editingAlert != None %}
             <script>
                 window.onload = function(){
@@ -42,59 +42,62 @@
         {% endif %}
         </div>
         <div class="col-md-9">
-            <table id="alertTable" class='table table-bordered table-striped table-hover'>
-                <thead>
-                    <tr>
-                        <th>Project</th>
-                        <th>Sensor</th>
-                        <th>Ticket</th>
-                        <th>Type</th>
-                        <th>Data</th>
-                        <th>Comment</th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for alert in alerts %}
+            {% if inc_id != None %} <div style="widht: 100%; text-align: center;"><span class="glyphicon glyphicon-copy" aria-hidden="true" style="font-size: 450px; color: #ddd;"></span></div>
+            {% else %}
+                <table id="alertTable" class='table table-bordered table-striped table-hover'>
+                    <thead>
                         <tr>
-                            <form action="{% url 'alerts:quick_edit' report.rep_id alert.0.alt_id%}" method="post">
-                                {% csrf_token %}
-                                {% for field in alert.1.visible_fields %}
-                                    <input type="hidden" name="alt_id" value="{{ alert.0.alt_id }}">
-                                    <td class='edit-view edit-view{{ alert.0.alt_id }}' style="display: none">
-                                        <span class=" {% if field.errors %} error {% endif %}">
-                                            {{ field }}
-                                            <p>{{ field.errors.as_text }}</p>
-                                        </span>
-                                    </td>
-
-                                {% endfor %}
-
-                                <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_prj_id.prj_name }}</td>
-                                <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_name }}</td>
-                                <td class="normal-view{{ alert.0.alt_id }}"><a target="_blank" href="{{ alert.0.alt_ticket }}">{{ alert.0.alt_ticket|urlLastPart }}</a></td>
-                                <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.get_alt_type_display }}</td>
-                                <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_date }}</td>
-                                <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_com_id.com_value }}</td>
-                                <td>
-                                <button class='edit-view{{ alert.0.alt_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
-                            </form>
-
-                            <a class='normal-view{{ alert.0.alt_id }} btn button_style_1 col-md-6  ' href="{% url 'alerts:details' report.rep_id alert.0.alt_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> </a>
-                            <button class='normal-view{{ alert.0.alt_id }}  btn button_style_1 col-md-6' onclick="switchToEditView({{ alert.0.alt_id }})" {% disabledButton request report %}><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </button>
-
-                            <form class="normal-view{{ alert.0.alt_id }}" action="{% url 'alerts:remove_alert' report.rep_id alert.0.alt_id %}" method="post">
-                                {% csrf_token %}
-                                {{ error_message }}
-                                <button class='btn button_style_logout button_style_1 col-md-12 rem_but' type='submit'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</button>
-                            </form>
-
-                            <a href="{% url 'reports:alert_tab' report.rep_id %}" class='edit-view{{ alert.0.alt_id }} btn button_style_logout button_style_1 col-md-12 rem_but' style="display: none"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</a>
+                            <th>Project</th>
+                            <th>Sensor</th>
+                            <th>Ticket</th>
+                            <th>Type</th>
+                            <th>Data</th>
+                            <th>Comment</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {%  endif %}
+                    </thead>
+
+                    <tbody>
+                        {% for alert in alerts %}
+                            <tr>
+                                <form action="{% url 'alerts:quick_edit' report.rep_id alert.0.alt_id%}" method="post">
+                                    {% csrf_token %}
+                                    {% for field in alert.1.visible_fields %}
+                                        <input type="hidden" name="alt_id" value="{{ alert.0.alt_id }}">
+                                        <td class='edit-view edit-view{{ alert.0.alt_id }}' style="display: none">
+                                            <span class=" {% if field.errors %} error {% endif %}">
+                                                {{ field }}
+                                                <p>{{ field.errors.as_text }}</p>
+                                            </span>
+                                        </td>
+
+                                    {% endfor %}
+
+                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_prj_id.prj_name }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_name }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}"><a target="_blank" href="{{ alert.0.alt_ticket }}">{{ alert.0.alt_ticket|urlLastPart }}</a></td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.get_alt_type_display }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_date }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_com_id.com_value }}</td>
+                                    <td>
+                                    <button class='edit-view{{ alert.0.alt_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+                                </form>
+
+                                <a class='normal-view{{ alert.0.alt_id }} btn button_style_1 col-md-6  ' href="{% url 'alerts:details' report.rep_id alert.0.alt_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> </a>
+                                <button class='normal-view{{ alert.0.alt_id }}  btn button_style_1 col-md-6' onclick="switchToEditView({{ alert.0.alt_id }})" {% disabledButton request report %}><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </button>
+
+                                <form class="normal-view{{ alert.0.alt_id }}" action="{% url 'alerts:remove_alert' report.rep_id alert.0.alt_id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ error_message }}
+                                    <button class='btn button_style_logout button_style_1 col-md-12 rem_but' type='submit'><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</button>
+                                </form>
+
+                                <a href="{% url 'reports:alert_tab' report.rep_id %}" class='edit-view{{ alert.0.alt_id }} btn button_style_logout button_style_1 col-md-12 rem_but' style="display: none"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</a>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {%  endif %}
+            </div>
+
 {% endblock %}
