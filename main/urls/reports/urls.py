@@ -1,5 +1,10 @@
 from django.conf.urls import patterns, url
 
+import main.views.reports.alerts.view
+import main.views.reports.contacts.view
+import main.views.reports.maintenances.view
+import main.views.reports.incidents.view
+
 from main.views.reports import view
 
 
@@ -22,6 +27,10 @@ urlpatterns = patterns('',
     url(r'^(?P<rep_id>\d+)/get_alerts/$', view.get_alerts_from_jira, name='get_alerts_from_jira'),
 
     url(r'^search/$', view.search, name='search'),
+    url(r'^search/alerts$', main.views.reports.alerts.view.search, name='alert_search'),
+    url(r'^search/contacts$', main.views.reports.contacts.view.search, name='contact_search'),
+    url(r'^search/maintenances$', main.views.reports.maintenances.view.search, name='maintenance_search'),
+    url(r'^search/incidents$', main.views.reports.incidents.view.search, name='incident_search'),
 
     url(r'^$', view.index, name='index'),
 )

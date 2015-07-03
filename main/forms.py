@@ -61,13 +61,13 @@ class MinDateWidget(MyWidget):
 
 class SelectWidget(MyWidget):
 
-    def __init__(self, label, values):
+    def __init__(self, label, values, empty_on_initial=False):
         self.widget = CustomWidget()
 
         self.widget.set_template_name('main/_widgets/select_widget.html')
         self.widget.set_label(label)
 
-        context = {'values': values}
+        context = {'values': values, "empty_on_initial": empty_on_initial}
 
         self.widget.set_context(context)
 
@@ -375,12 +375,48 @@ class IncidentForm(forms.Form):
 
 class ReportFilterForm(forms.Form):
 
-    rep_id = forms.CharField(label = '', required=False, widget = CharWidget("Id").get_widget() )
-    rep_status = forms.CharField(label = '', required=False, widget = SelectWidget("Status", getChoices(Report, "rep_status")).get_widget() )
+    rep_status = forms.CharField(label = '', required=False, widget = SelectWidget("Status", getChoices(Report, "rep_status"), True).get_widget() )
     rep_date_created_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Created from").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_created_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Created to").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_sent_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent from").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_sent_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent to").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_redirection = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Redirection checked").get_widget() )
     rep_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
+
+class AlertFilterForm(forms.Form):
+
+    alt_prj_id = forms.CharField(label = '', required=False, widget = SelectWidget("Project", getProjects(Project), True ).get_widget() )
+    alt_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
+    alt_name = forms.CharField(label = '', required=False, max_length=255, widget = CharWidget("Alert name").get_widget() )
+    alt_type = forms.CharField(label = '', required=False, widget = SelectWidget("Alert type", getChoices(Alert, "alt_type"), True).get_widget() )
+    alt_date_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Alert date from").get_widget(), input_formats=['%Y-%m-%d'] )
+    alt_date_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Alert date to").get_widget(), input_formats=['%Y-%m-%d'] )
+
+class ContactFilterForm(forms.Form):
+
+    con_prj_id = forms.CharField(label = '', required=False, widget = SelectWidget("Project", getProjects(Project), True ).get_widget() )
+    con_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
+    con_address = forms.CharField(label = '', required=False, max_length=255, widget = CharWidget("Contact address").get_widget() )
+    con_scope = forms.CharField(label = '', required=False, widget = SelectWidget("Contact scope", getChoices(Contact, "con_scope"), True).get_widget())
+    con_type = forms.CharField(label = '', required=False, widget = SelectWidget("Contact type", getChoices(Contact, "con_type"), True).get_widget())
+    con_direction = forms.CharField(label = '', required=False, widget = SelectWidget("Contact direction", getChoices(Contact, "con_direction"), True).get_widget())
+    con_date_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Contact date from").get_widget(), input_formats=['%Y-%m-%d'] )
+    con_date_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Contact date to").get_widget(), input_formats=['%Y-%m-%d'] )
+
+class MaintenanceFilterForm(forms.Form):
+
+    mnt_prj_id = forms.CharField(label = '', required=False, widget = SelectWidget("Project", getProjects(Project), True ).get_widget() )
+    mnt_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
+    mnt_name = forms.CharField(label = '', required=False, max_length=255, widget = CharWidget("Maintenance name").get_widget() )
+    mnt_date_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Maintenance date from").get_widget(), input_formats=['%Y-%m-%d'] )
+    mnt_date_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Maintenance date to").get_widget(), input_formats=['%Y-%m-%d'] )
+
+class IncidentFilterForm(forms.Form):
+
+    inc_prj_id = forms.CharField(label = '', required=False, widget = SelectWidget("Project", getProjects(Project), True ).get_widget() )
+    inc_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
+    inc_status = forms.CharField(label = '', required=False, widget = SelectWidget("Incident Status", getChoices(Incident, "inc_status"), True).get_widget() )
+    inc_rca = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("RCA sent").get_widget() )
+    inc_date_start = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident start date").get_widget(), input_formats=['%Y-%m-%d'] )
+    inc_date_end = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident end date").get_widget(), input_formats=['%Y-%m-%d'] )
 

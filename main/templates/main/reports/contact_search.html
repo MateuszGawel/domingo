@@ -6,9 +6,9 @@
     <script src="{% static "main/js/search.js" %}"></script>
 
     <ul class="nav nav-pills">
-        <li class="active"><a href="{% url 'reports:search' %}">Reports</a></li>
+        <li><a href="{% url 'reports:search' %}">Reports</a></li>
         <li><a href="{% url 'reports:alert_search' %}">Alerts</a></li>
-        <li><a href="{% url 'reports:contact_search' %}">Contacts</a></li>
+        <li class="active"><a href="{% url 'reports:contact_search' %}">Contacts</a></li>
         <li><a href="{% url 'reports:maintenance_search' %}">Maintenances</a></li>
         <li><a href="{% url 'reports:incident_search' %}">Incidents</a></li>
     </ul>
@@ -18,35 +18,43 @@
           <!--  <h1>BROWSE REPORTS</h1>   -->
             <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:search' %}" method="get">
                 <div class='filter_input'>
-                    {{ form.rep_usr_id.errors }}
-                    {{ form.rep_usr_id }}
+                    {{ form.con_prj_id.errors }}
+                    {{ form.con_prj_id }}
+                </div>
+
+                <div class='filter_project'>
+                    {{ form.con_usr_id.errors }}
+                    {{ form.con_usr_id }}
                 </div>
 
                 <div class='filter_input'>
-                    {{ form.rep_status.errors }}
-                    {{ form.rep_status }}
+                    {{ form.con_address.errors }}
+                    {{ form.con_address }}
                 </div>
-<!--
+
                 <div class='filter_input'>
-                    {# to jeszcze nie działa bo trzeba jakos zaimplementować trzecią opcje. TAK/NIE/OBOJETNE #}
-                    {{ form.rep_redirection.errors }}
-                    {{ form.rep_redirection }}
+                    {{ form.con_scope.errors }}
+                    {{ form.con_scope }}
                 </div>
--->             <hr>
+
                 <div class='filter_input'>
-                    <strong>Created date</strong>
+                    {{ form.con_type.errors }}
+                    {{ form.con_type }}
+                </div>
+
+                <div class='filter_input'>
+                    {{ form.con_direction.errors }}
+                    {{ form.con_direction }}
+                </div>
+
+                <hr>
+
+                <div class='filter_input'>
+                    <strong>Contact date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
                     <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.rep_date_created_from }}
-                    {{ form.rep_date_created_to }}
-                </div>
-                <hr>
-                <div class='filter_input'>
-                    <strong>Sent date</strong>
-                    <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderSent" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.rep_date_sent_from }}
-                    {{ form.rep_date_sent_to }}
+                    {{ form.con_date_from }}
+                    {{ form.con_date_to }}
                 </div>
 
                 <hr>

@@ -6,8 +6,8 @@
     <script src="{% static "main/js/search.js" %}"></script>
 
     <ul class="nav nav-pills">
-        <li class="active"><a href="{% url 'reports:search' %}">Reports</a></li>
-        <li><a href="{% url 'reports:alert_search' %}">Alerts</a></li>
+        <li><a href="{% url 'reports:search' %}">Reports</a></li>
+        <li class="active"><a href="{% url 'reports:alert_search' %}">Alerts</a></li>
         <li><a href="{% url 'reports:contact_search' %}">Contacts</a></li>
         <li><a href="{% url 'reports:maintenance_search' %}">Maintenances</a></li>
         <li><a href="{% url 'reports:incident_search' %}">Incidents</a></li>
@@ -16,37 +16,35 @@
 
         <section class="tab-pane fade in active" id="browse_reports">
           <!--  <h1>BROWSE REPORTS</h1>   -->
-            <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:search' %}" method="get">
+            <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:alert_search' %}" method="get">
                 <div class='filter_input'>
-                    {{ form.rep_usr_id.errors }}
-                    {{ form.rep_usr_id }}
+                    {{ form.alt_prj_id.errors }}
+                    {{ form.alt_prj_id }}
+                </div>
+
+                <div class='filter_project'>
+                    {{ form.alt_usr_id.errors }}
+                    {{ form.alt_usr_id }}
                 </div>
 
                 <div class='filter_input'>
-                    {{ form.rep_status.errors }}
-                    {{ form.rep_status }}
+                    {{ form.alt_name.errors }}
+                    {{ form.alt_name }}
                 </div>
-<!--
+
                 <div class='filter_input'>
-                    {# to jeszcze nie działa bo trzeba jakos zaimplementować trzecią opcje. TAK/NIE/OBOJETNE #}
-                    {{ form.rep_redirection.errors }}
-                    {{ form.rep_redirection }}
+                    {{ form.alt_type.errors }}
+                    {{ form.alt_type }}
                 </div>
--->             <hr>
+
+                <hr>
+
                 <div class='filter_input'>
-                    <strong>Created date</strong>
+                    <strong>Alert date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
                     <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.rep_date_created_from }}
-                    {{ form.rep_date_created_to }}
-                </div>
-                <hr>
-                <div class='filter_input'>
-                    <strong>Sent date</strong>
-                    <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderSent" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.rep_date_sent_from }}
-                    {{ form.rep_date_sent_to }}
+                    {{ form.alt_date_from }}
+                    {{ form.alt_date_to }}
                 </div>
 
                 <hr>

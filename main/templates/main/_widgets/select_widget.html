@@ -10,6 +10,13 @@
 <div class="form-group">
     <label> {{ label }} </label>
     <select class="form-control" name="{{ name }}" value="{{ value }}">
+
+        {% if empty_on_initial %}
+
+            <option></option>
+
+        {% endif %}
+
         {% for v in values %}
             {% if v.0|add:0 == "" or value|add:0 == "" %}
                 <option value="{{ v.0 }}" {% if v.0 == value %} selected="selected" {% endif %}> {{ v.1 }} </option>
@@ -17,5 +24,6 @@
                 <option value="{{ v.0 }}" {% if v.0|add:0 == value|add:0 %} selected="selected" {% endif %}> {{ v.1 }} </option>
             {% endif %}
         {% endfor %}
+
     </select>
 </div>

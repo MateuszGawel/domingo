@@ -1,6 +1,42 @@
 from main.views.reports.utils import *
 from django.shortcuts import redirect, render
 
+def search(request):
+    if request.method == 'GET':
+        form = MaintenanceFilterForm(request.GET)
+        print request.GET
+        if doValidate(form):
+
+            filter_result = Report.objects.all()
+            '''
+            if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
+                filter_result = filter_result.filter(rep_id=form.cleaned_data['rep_id'])
+
+            if form.cleaned_data.has_key('rep_status') and form.cleaned_data['rep_status'] != "":
+                filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
+
+            if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
+                filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
+
+            if form.cleaned_data.has_key('rep_date_created_to') and form.cleaned_data['rep_date_created_to'] is not None:
+                filter_result = filter_result.filter(rep_date_created__lte=(form.cleaned_data['rep_date_created_to']+timedelta(days=1)))
+
+            if form.cleaned_data.has_key('rep_date_sent_from') and form.cleaned_data['rep_date_sent_from'] is not None:
+                filter_result = filter_result.filter(rep_date_sent__gte=form.cleaned_data['rep_date_sent_from'])
+
+            if form.cleaned_data.has_key('rep_date_sent_to') and form.cleaned_data['rep_date_sent_to'] is not None:
+                filter_result = filter_result.filter(rep_date_sent__lte=(form.cleaned_data['rep_date_sent_to']+timedelta(days=1)))
+
+            if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
+                filter_result = filter_result.filter(rep_usr_id=User.objects.get(username=form.cleaned_data['rep_usr_id']))
+            '''
+            return render(request, 'main/reports/maintenance_search.html', {'form': form, 'filter_result': filter_result})
+        else:
+            return render(request, 'main/reports/maintenance_search.html', {'form': form})
+    else:
+        form = MaintenanceFilterForm()
+        return render(request, 'main/reports/maintenance_search.html', {'form': form})
+
 def details(request, rep_id, mnt_id):
     report = Report.objects.get(rep_id=rep_id)
 

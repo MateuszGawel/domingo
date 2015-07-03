@@ -81,8 +81,12 @@ def create(request):
 def get_alerts_from_jira(request, rep_id):
     if request.user.is_authenticated():
         report = Report.objects.get(rep_id=rep_id)
-        query = " select project.pname, jiraissue.summary, jiraissue.pkey, jiraissue.created from jiraissue, project where jiraissue.reporter = '" + request.user.username + "' and jiraissue.created >= to_date('" + report.rep_date_created.strftime('%Y-%m-%d %H:%M:%S') +"', 'yyyy-mm-dd hh24:mi:ss') and jiraissue.created <= sysdate and project.id = jiraissue.project"
+        query = "select project.pname, jiraissue.summary, jiraissue.pkey, jiraissue.created from jiraissue, project where jiraissue.reporter = '" + request.user.username + "' and jiraissue.created >= to_date('" + report.rep_date_created.strftime('%Y-%m-%d %H:%M:%S') +"', 'yyyy-mm-dd hh24:mi:ss') and jiraissue.created <= sysdate and project.id = jiraissue.project"
 
+        print "LECIMY Z TEMATEM"
+        print query
+        print len( get_data_from_jira(query).fetchall() )
+        '''
         for record in get_data_from_jira(query).fetchall():
             project = Project.objects.get(prj_name = record[0])
             ticket = "https://loyaltysupport.comarch.pl/browse/" + record[2]
@@ -104,7 +108,7 @@ def get_alerts_from_jira(request, rep_id):
             alert.alt_com_id = comment
 
             alert.save()
-
+        '''
         return redirect("reports:alert_tab", report.rep_id)
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
