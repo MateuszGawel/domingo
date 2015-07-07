@@ -73,7 +73,7 @@
                                     <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
                                 {% endif %}
                             </td>
-                            <td>{{ incident.inc_com_id.com_value }}</td>
+                            <td>{% autoescape off %} {{ incident.inc_com_id.com_value|shorten }} {% endautoescape %}</td>
                             <td>
                                 <a class='btn button_style_1 col-md-12' href="{% url 'incidents:details' report.rep_id incident.inc_id %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Details</a>
                                 {%  if incident.inc_status == 'O' or incident.inc_status == 'R' %}

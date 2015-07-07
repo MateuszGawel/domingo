@@ -40,7 +40,7 @@ $(document).ready(function() {
     //SELECT2 util
     $('select').select2();
 
-
+    $(".tablesorter").tablesorter();
 
     //DATETIMEPICKER util
     //https://github.com/Eonasdan/bootstrap-datetimepicker
