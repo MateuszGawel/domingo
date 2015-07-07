@@ -84,7 +84,7 @@
                                     {% endif %}
                                     {{ contact.0.get_con_scope_display }}
                                 </td>
-                                <td class="normal-view{{ contact.0.con_id }}">{{ contact.0.con_com_id.com_value }}</td>
+                                <td class="normal-view{{ contact.0.con_id }}">{% autoescape off %} {{ contact.0.con_com_id.com_value|shorten }} {% endautoescape %}</td>
                                 <td>
                                 <button class='edit-view{{ contact.0.con_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
                             </form>

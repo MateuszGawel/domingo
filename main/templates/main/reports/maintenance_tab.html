@@ -58,7 +58,7 @@
                                 <td class="normal-view{{ maintenance.0.mnt_id }}">{{ maintenance.0.mnt_prj_id.prj_name }}</td>
                                 <td class="normal-view{{ maintenance.0.mnt_id }}">{{ maintenance.0.mnt_name }}</td>
                                 <td class="normal-view{{ maintenance.0.mnt_id }}">{{ maintenance.0.mnt_date }}</td>
-                                <td class="normal-view{{ maintenance.0.mnt_id }}">{{ maintenance.0.mnt_com_id.com_value }}</td>
+                                <td class="normal-view{{ maintenance.0.mnt_id }}">{% autoescape off %} {{ maintenance.0.mnt_com_id.com_value|shorten }} {% endautoescape %}</td>
                                 <td>
                                 <button class='edit-view{{ maintenance.0.mnt_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
                             </form>

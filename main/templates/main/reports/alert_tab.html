@@ -44,7 +44,7 @@
         <div class="col-md-9">
             {% if inc_id != None %} <div style="widht: 100%; text-align: center;"><span class="glyphicon glyphicon-copy" aria-hidden="true" style="font-size: 450px; color: #ddd;"></span></div>
             {% else %}
-                <table id="alertTable" class='table table-bordered table-striped table-hover'>
+                <table id="alertTable" class='table table-bordered table-striped table-hover tablesorter'>
                     <thead>
                         <tr>
                             <th>Project</th>
@@ -74,11 +74,11 @@
                                     {% endfor %}
 
                                     <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_prj_id.prj_name }}</td>
-                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_name }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{% autoescape off %} {{ alert.0.alt_name|shorten:"Name" }} {% endautoescape %}</td>
                                     <td class="normal-view{{ alert.0.alt_id }}"><a target="_blank" href="{{ alert.0.alt_ticket }}">{{ alert.0.alt_ticket|urlLastPart }}</a></td>
                                     <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.get_alt_type_display }}</td>
-                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_date }}</td>
-                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_com_id.com_value }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{{ alert.0.alt_date|date:"Y-m-d H:i:s" }}</td>
+                                    <td class="normal-view{{ alert.0.alt_id }}">{% autoescape off %} {{ alert.0.alt_com_id.com_value|shorten }} {% endautoescape %}</td>
                                     <td>
                                     <button class='edit-view{{ alert.0.alt_id }} btn button_style_1 col-md-12' style="display: none"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
                                 </form>
