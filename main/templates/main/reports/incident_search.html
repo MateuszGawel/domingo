@@ -1,5 +1,5 @@
 {% extends 'main/_layout/base.html' %}
-
+{% load main_filters %}
 {% block content %}
 
     {% load staticfiles %}
@@ -16,7 +16,7 @@
 
         <section class="tab-pane fade in active" id="browse_reports">
           <!--  <h1>BROWSE REPORTS</h1>   -->
-            <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:search' %}" method="get">
+            <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:incident_search' %}" method="get">
                 <div class='filter_input'>
                     {{ form.inc_prj_id.errors }}
                     {{ form.inc_prj_id }}
@@ -40,7 +40,15 @@
                 <hr>
 
                 <div class='filter_input'>
-                    <strong>Incident date</strong>
+                    <strong>Incident date start</strong>
+                    <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
+                    <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
+                    {{ form.inc_date_start }}
+                    {{ form.inc_date_end }}
+                </div>
+
+                <div class='filter_input'>
+                    <strong>Incident date end</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
                     <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
                     {{ form.inc_date_start }}
@@ -59,73 +67,69 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Project</th>
                                 <th>Author</th>
-                                <th>Status</th>
-                                <th>Created date</th>
-                                <th>Sent date</th>
-                                <th>Redirection checked</th>
+                                <th>Incident status</th>
+                                <th>RCA sent</th>
+                                <th>Incident date start</th>
+                                <th>Incident date end</th>
                                 <th>Comment</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for report in filter_result %}
+                            {% for incident in filter_result %}
                                 <tr>
-                                    <td>{{ report.rep_id }}</td>
+                                    <td>{{ incident.inc_id }}</td>
 
                                     <td>
-                                        {% if report.rep_usr_id == request.user %}
-                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ report.rep_usr_id }}
+                                        {{ incident.inc_prj_id.prj_name }}
+                                    </td>
+
+                                    <td>
+                                        {% if incident.inc_rep_id.rep_usr_id == request.user %}
+                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ incident.inc_rep_id.rep_usr_id }}
                                         {% else %}
-                                            {{ report.rep_usr_id }}
+                                            {{ incident.inc_rep_id.rep_usr_id }}
                                         {% endif %}
                                     </td>
 
                                     <td>
-                                        {% if report.rep_status == 'O' %}
-                                            <span style="color: yellowgreen; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% elif report.rep_status == 'C' %}
-                                            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% else %}
-                                            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>{{ report.rep_date_created|date:"Y-m-d H:i:s" }}</td>
-
-                                    <td>
-                                        {% if report.rep_date_sent != None %}
-                                            {{ report.rep_date_sent|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
+                                        {{ incident.inc_status }}
                                     </td>
 
                                     <td>
-                                        {% if report.rep_redirection != None %}
-                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span> {{ report.rep_redirection|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
+                                        {{ incident.inc_rca }}
                                     </td>
 
-                                    <td>{{ report.rep_com_id.com_value }}</td>
+                                    <td>{{ incident.inc_date_start|date:"Y-m-d H:i:s" }}</td>
 
-                                    <td>
-                                        <a class="btn button_style_1" style="width:100%;" href="{% url 'reports:summary_tab' report.rep_id %}"><span class="glyphicon glyphicon-search"></span> View</a>
+                                    <td>{{ incident.inc_date_end|date:"Y-m-d H:i:s" }}</td>
+
+                                    <td>{% autoescape off %} {{ incident.inc_com_id.com_value|shorten }} {% endautoescape %}</td>
+
+                                    <td style="min-width:240px;">
+                                        {% for report_incident in report_incidents %}
+
+                                            {% if report_incident.rpi_inc_id.inc_id == incident.inc_id %}
+                                                <a class="btn button_style_1" style="width:100%; margin:5px 0" href="{% url 'incidents:details' report_incident.rpi_rep_id incident.inc_id %}">
+                                                    <span class="col-md-7">
+                                                        <span class="glyphicon glyphicon-search"></span> View
+                                                    </span>
+
+                                                    <span style="color:#999; text-align:left;"><div style="float:right; text-align:left; width: 80px;">| report #{{ report_incident.rpi_rep_id.rep_id }}</div>
+                                                    </span>
+                                                </a>
+                                            {% endif %}
+
+                                        {% endfor %}
                                     </td>
+
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-        </section>
-
-        <section class="tab-pane fade" id="browse_alerts">
-            <h1>BROWSE ALERTS</h1>
-        </section>
-        <section class="tab-pane fade" id="browse_incidents">
-            <h1>BROWSE INCIDENTS</h1>
         </section>
     </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from datetime import timedelta
 from main.views.reports.utils import *
 from django.shortcuts import redirect, render
 
@@ -7,29 +8,34 @@ def search(request):
         print request.GET
         if doValidate(form):
 
-            filter_result = Report.objects.all()
-            '''
-            if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
-                filter_result = filter_result.filter(rep_id=form.cleaned_data['rep_id'])
+            filter_result = Contact.objects.all()
 
-            if form.cleaned_data.has_key('rep_status') and form.cleaned_data['rep_status'] != "":
-                filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
+            if form.cleaned_data.has_key('con_prj_id') and form.cleaned_data['con_prj_id'] != "":
+                filter_result = filter_result.filter(con_prj_id=form.cleaned_data['con_prj_id'])
 
-            if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
-                filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
+            if form.cleaned_data.has_key('con_usr_id') and form.cleaned_data['con_usr_id'] != "":
+                user=User.objects.filter(username__contains=form.cleaned_data['con_usr_id'])
+                reports = Report.objects.filter(rep_usr_id=user)
+                filter_result = filter_result.filter(con_rep_id=reports)
 
-            if form.cleaned_data.has_key('rep_date_created_to') and form.cleaned_data['rep_date_created_to'] is not None:
-                filter_result = filter_result.filter(rep_date_created__lte=(form.cleaned_data['rep_date_created_to']+timedelta(days=1)))
+            if form.cleaned_data.has_key('con_address') and form.cleaned_data['con_address'] != "":
+                filter_result = filter_result.filter(con_address__contains=form.cleaned_data['con_address'])
 
-            if form.cleaned_data.has_key('rep_date_sent_from') and form.cleaned_data['rep_date_sent_from'] is not None:
-                filter_result = filter_result.filter(rep_date_sent__gte=form.cleaned_data['rep_date_sent_from'])
+            if form.cleaned_data.has_key('con_scope') and form.cleaned_data['con_scope'] != "":
+                filter_result = filter_result.filter(con_scope=form.cleaned_data['con_scope'])
 
-            if form.cleaned_data.has_key('rep_date_sent_to') and form.cleaned_data['rep_date_sent_to'] is not None:
-                filter_result = filter_result.filter(rep_date_sent__lte=(form.cleaned_data['rep_date_sent_to']+timedelta(days=1)))
+            if form.cleaned_data.has_key('con_type') and form.cleaned_data['con_type'] != "":
+                filter_result = filter_result.filter(con_type=form.cleaned_data['con_type'])
 
-            if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
-                filter_result = filter_result.filter(rep_usr_id=User.objects.get(username=form.cleaned_data['rep_usr_id']))
-            '''
+            if form.cleaned_data.has_key('con_direction') and form.cleaned_data['con_direction'] != "":
+                filter_result = filter_result.filter(con_direction=form.cleaned_data['con_direction'])
+
+            if form.cleaned_data.has_key('con_date_from') and form.cleaned_data['con_date_from'] is not None:
+                filter_result = filter_result.filter(con_date__gte=form.cleaned_data['con_date_from'])
+
+            if form.cleaned_data.has_key('con_date_to') and form.cleaned_data['con_date_to'] is not None:
+                filter_result = filter_result.filter(con_date__lte=(form.cleaned_data['con_date_to']+timedelta(days=1)))
+
             return render(request, 'main/reports/contact_search.html', {'form': form, 'filter_result': filter_result})
         else:
             return render(request, 'main/reports/contact_search.html', {'form': form})

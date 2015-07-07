@@ -1,5 +1,7 @@
 {% extends 'main/_layout/base.html' %}
 
+{% load main_filters %}
+
 {% block content %}
 
     {% load staticfiles %}
@@ -42,7 +44,7 @@
                 <div class='filter_input'>
                     <strong>Alert date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
+                    <div id="dateSliderAlert" style="margin-top:40px; margin-bottom:20px;"></div>
                     {{ form.alt_date_from }}
                     {{ form.alt_date_to }}
                 </div>
@@ -59,73 +61,57 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Project</th>
                                 <th>Author</th>
-                                <th>Status</th>
-                                <th>Created date</th>
-                                <th>Sent date</th>
-                                <th>Redirection checked</th>
+                                <th>Alert name</th>
+                                <th>Alert ticket</th>
+                                <th>Alert type</th>
+                                <th>Alert date</th>
                                 <th>Comment</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for report in filter_result %}
+                            {% for alert in filter_result %}
                                 <tr>
-                                    <td>{{ report.rep_id }}</td>
+                                    <td>{{ alert.alt_id }}</td>
 
                                     <td>
-                                        {% if report.rep_usr_id == request.user %}
-                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ report.rep_usr_id }}
+                                        {{ alert.alt_prj_id.prj_name }}
+                                    </td>
+
+                                    <td>
+                                        {% if alert.alt_rep_id.rep_usr_id == request.user %}
+                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ alert.alt_rep_id.rep_usr_id }}
                                         {% else %}
-                                            {{ report.rep_usr_id }}
+                                            {{ alert.alt_rep_id.rep_usr_id }}
                                         {% endif %}
                                     </td>
 
                                     <td>
-                                        {% if report.rep_status == 'O' %}
-                                            <span style="color: yellowgreen; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% elif report.rep_status == 'C' %}
-                                            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% else %}
-                                            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>{{ report.rep_date_created|date:"Y-m-d H:i:s" }}</td>
-
-                                    <td>
-                                        {% if report.rep_date_sent != None %}
-                                            {{ report.rep_date_sent|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
+                                        {% autoescape off %} {{ alert.alt_name|shorten:"Name" }} {% endautoescape %}
                                     </td>
 
                                     <td>
-                                        {% if report.rep_redirection != None %}
-                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span> {{ report.rep_redirection|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
+                                        <a target="_blank" href="{{ alert.alt_ticket }}">{{ alert.alt_ticket|urlLastPart }}</a>
                                     </td>
 
-                                    <td>{{ report.rep_com_id.com_value }}</td>
+                                    <td>
+                                        {{ alert.get_alt_type_display }}
+                                    </td>
+
+                                    <td>{{ alert.alt_date|date:"Y-m-d H:i:s" }}</td>
+
+                                    <td>{% autoescape off %} {{ alert.alt_com_id.com_value|shorten }} {% endautoescape %}</td>
 
                                     <td>
-                                        <a class="btn button_style_1" style="width:100%;" href="{% url 'reports:summary_tab' report.rep_id %}"><span class="glyphicon glyphicon-search"></span> View</a>
+                                        <a class="btn button_style_1" style="width:100%;" href="{% url 'alerts:details' alert.alt_rep_id alert.alt_id %}"><span class="glyphicon glyphicon-search"></span> View</a>
                                     </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-        </section>
-
-        <section class="tab-pane fade" id="browse_alerts">
-            <h1>BROWSE ALERTS</h1>
-        </section>
-        <section class="tab-pane fade" id="browse_incidents">
-            <h1>BROWSE INCIDENTS</h1>
         </section>
     </div>
 {% endblock %}

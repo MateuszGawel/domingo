@@ -1,8 +1,7 @@
-import datetime
 from datetime import timedelta
 from django.shortcuts import redirect, render
 from utils import *
-
+import datetime
 
 def index(request):
     if request.user.is_authenticated():
@@ -29,6 +28,18 @@ def search(request):
             if form.cleaned_data.has_key('rep_status') and form.cleaned_data['rep_status'] != "":
                 filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
 
+            if form.cleaned_data.has_key('rep_redirection') and form.cleaned_data['rep_redirection'] != "":
+                if form.cleaned_data['rep_redirection'] == "True":
+                    filter_result = filter_result.exclude(rep_redirection=None)
+                else:
+                    filter_result = filter_result.filter(rep_redirection=None)
+
+            if form.cleaned_data.has_key('rep_sent') and form.cleaned_data['rep_sent'] != "":
+                if form.cleaned_data['rep_sent'] == "True":
+                    filter_result = filter_result.exclude(rep_date_sent=None)
+                else:
+                    filter_result = filter_result.filter(rep_date_sent=None)
+
             if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
                 filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
 
@@ -42,7 +53,7 @@ def search(request):
                 filter_result = filter_result.filter(rep_date_sent__lte=(form.cleaned_data['rep_date_sent_to']+timedelta(days=1)))
 
             if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
-                filter_result = filter_result.filter(rep_usr_id=User.objects.get(username=form.cleaned_data['rep_usr_id']))
+                filter_result = filter_result.filter(rep_usr_id=User.objects.filter(username__contains=form.cleaned_data['rep_usr_id']))
 
             return render(request, 'main/reports/search.html', {'form': form, 'filter_result': filter_result})
         else:

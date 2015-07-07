@@ -43,7 +43,7 @@
                         <th>Ticket</th>
                         <th>Status</th>
                         <th>Start date</th>
-                        <th>Resolve date</th>
+                        <th>End date</th>
                         <th>RCA</th>
                         <th>Comment</th>
                         <th></th>
@@ -67,7 +67,7 @@
                             <td>{{ incident.inc_date_start }}</td>
                             <td>{% if incident.inc_date_end != None %} {{ incident.inc_date_end }} {% endif %}</td>
                             <td>
-                                {% if incident.inc_rca%}
+                                {% if incident.inc_rca == 'S'%}
                                     <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
                                 {% else %}
                                     <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
@@ -94,7 +94,7 @@
                                         <button class='btn button_style_1 col-md-12 button_style_logout rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Reopen incident</button>
                                     </form>
                                 {% endif %}
-                                {%  if incident.inc_status != 'I' and not incident.inc_rca %}
+                                {%  if incident.inc_status != 'I' and  incident.inc_rca == 'N' %}
                                     <form action="{% url 'incidents:set_rca' report.rep_id incident.inc_id 0 %}" method="post">
                                         {% csrf_token %}
                                         <button class='btn button_style_1 col-md-12 rem_but' type='submit' style="margin-bottom: 20px"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Set RCA</button>

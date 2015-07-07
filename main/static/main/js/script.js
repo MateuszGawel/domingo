@@ -25,6 +25,8 @@ $(document).ready(function() {
         container: 'body'
     });
 
+    $('.popoverHoverData').popover();
+
     $('[data-toggle="popover"]').focusout( function() { $(this).popover("hide") } );
 
     //DATETIMEPICKER UTIL
@@ -36,7 +38,7 @@ $(document).ready(function() {
      });
 
     //SELECT2 util
-    //$('select').select2();
+    $('select').select2();
 
 
 

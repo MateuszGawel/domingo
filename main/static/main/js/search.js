@@ -14,6 +14,10 @@ $(document).ready(function() {
         e.preventDefault();
         resetSliderValues("#dateSliderCreated");
         resetSliderValues("#dateSliderSent");
+        resetSliderValues("#dateSliderAlert");
+        resetSliderValues("#dateSliderContact");
+        resetSliderValues("#dateSliderMaintenance");
+
         $(this).parent().find("input").each(function ()
         {
             $(this).val("");
@@ -22,14 +26,61 @@ $(document).ready(function() {
     });
 
     //SLIDER util
-    $("#dateSliderCreated").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 5, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 5, 1), max: new Date()} });
-    $("#dateSliderCreated").dateRangeSlider({range:{min: {days: 0}}});
-    registerEvents("#rep_date_created_from", "#rep_date_created_to","#dateSliderCreated");
 
-    $("#dateSliderSent").dateRangeSlider({arrows:false, bounds:{ min: new Date(2015, 5, 1), max: new Date()},   defaultValues:{ min: new Date(2015, 5, 1), max: new Date()} });
-    $("#dateSliderSent").dateRangeSlider({range:{min: {days: 0}}});
-    registerEvents("#rep_date_sent_from", "#rep_date_sent_to","#dateSliderSent");
+    if( document.getElementById("dateSliderCreated") != null )
+    {
+        $("#dateSliderCreated").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderCreated").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#rep_date_created_from", "#rep_date_created_to", "#dateSliderCreated");
+    }
 
+    if( document.getElementById("dateSliderSent") != null )
+    {
+        $("#dateSliderSent").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderSent").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#rep_date_sent_from", "#rep_date_sent_to", "#dateSliderSent");
+    }
+
+    if( document.getElementById("dateSliderAlert") != null )
+    {
+        $("#dateSliderAlert").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderAlert").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#alt_date_from", "#alt_date_to", "#dateSliderAlert");
+    }
+
+    if( document.getElementById("dateSliderContact") != null )
+    {
+        $("#dateSliderContact").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderContact").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#con_date_from", "#con_date_to", "#dateSliderContact");
+    }
+
+    if( document.getElementById("dateSliderMaintenance") != null )
+    {
+        $("#dateSliderMaintenance").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderMaintenance").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#mnt_date_from", "#mnt_date_to", "#dateSliderMaintenance");
+    }
 
     function registerEvents(from, to, slider){
         $(slider).bind("valuesChanged", function(e, data){
@@ -79,21 +130,21 @@ $(document).ready(function() {
         res = date.split("-", 3);
         var toDate = new Date(parseInt(res[0]),parseInt(res[1])-1,parseInt(res[2]));
 
-        if(fromDate.getTime() <= $("#dateSliderCreated").dateRangeSlider("max").getTime() && toDate.getTime() >= $("#dateSliderCreated").dateRangeSlider("min").getTime()) {
+        if(fromDate.getTime() <= $(slider).dateRangeSlider("max").getTime() && toDate.getTime() >= $(slider).dateRangeSlider("min").getTime()) {
             $(slider).dateRangeSlider("values", fromDate, toDate);
         }
         else if($(from).val() == "")
-            $(slider).dateRangeSlider("values", $("#dateSliderCreated").dateRangeSlider("min"), toDate);
+            $(slider).dateRangeSlider("values", $(slider).dateRangeSlider("min"), toDate);
         else if($(to).val() == "")
-            $(slider).dateRangeSlider("values", fromDate, $("#dateSliderCreated").dateRangeSlider("max"));
+            $(slider).dateRangeSlider("values", fromDate, $(slider).dateRangeSlider("max"));
         else {
-            $(slider).dateRangeSlider("values", $("#dateSliderCreated").dateRangeSlider("max"), $("#dateSliderCreated").dateRangeSlider("min"));
+            $(slider).dateRangeSlider("values", $(slider).dateRangeSlider("max"), $(slider).dateRangeSlider("min"));
         }
     }
 
     function resetSliderValues(slider) {
-        var from = $("#dateSliderCreated").dateRangeSlider("bounds").min;
-        var to = $("#dateSliderCreated").dateRangeSlider("bounds").max;
+        var from = $(slider).dateRangeSlider("bounds").min;
+        var to = $(slider).dateRangeSlider("bounds").max;
         $(slider).dateRangeSlider("values", from, to);
     }
 });

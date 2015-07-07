@@ -283,7 +283,7 @@ class MaintenanceForm(forms.Form):
             maintenance.mnt_name = self.cleaned_data['mnt_name']
         if self.cleaned_data.has_key('mnt_date'):
             maintenance.mnt_date = self.cleaned_data['mnt_date']
-        if self.cleaned_data.has_key('con_com_id'):
+        if self.cleaned_data.has_key('mnt_com_id'):
             comment.com_value = self.cleaned_data['mnt_com_id']
 
         comment.save()
@@ -325,7 +325,7 @@ class IncidentForm(forms.Form):
     inc_ticket = forms.URLField(label = '', max_length=255, widget = CharWidget("Jira ticket URL").get_widget() )
     inc_date_start = forms.DateTimeField(label = '', widget = DateWidget("Start date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
     inc_date_end = forms.DateTimeField(label = '', required=False, widget = DateWidget("End date").get_widget(), input_formats=['%Y-%m-%d %H:%M:%S'] )
-    inc_rca = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("RCA").get_widget() )
+    inc_rca = forms.CharField(label = '', required=False, widget = SelectWidget("RCA", getChoices(Incident, "inc_rca")).get_widget())
     inc_com_id = forms.CharField(label = '', max_length=400, required=False, widget = TextWidget("Comment", '', 3).get_widget() )
 
     def save(self, report):
@@ -337,10 +337,9 @@ class IncidentForm(forms.Form):
             incident.inc_ticket = self.cleaned_data['inc_ticket']
         if self.cleaned_data.has_key('inc_date_start'):
             incident.inc_date_start = self.cleaned_data['inc_date_start']
-        if self.cleaned_data.has_key('inc_rca'):
-            incident.inc_rca = self.cleaned_data['inc_rca']
         if self.cleaned_data.has_key('inc_com_id'):
             comment.com_value = self.cleaned_data['inc_com_id']
+        incident.inc_rca = 'N'
 
 
         comment.save()
@@ -380,7 +379,8 @@ class ReportFilterForm(forms.Form):
     rep_date_created_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Created to").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_sent_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent from").get_widget(), input_formats=['%Y-%m-%d'] )
     rep_date_sent_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Sent to").get_widget(), input_formats=['%Y-%m-%d'] )
-    rep_redirection = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("Redirection checked").get_widget() )
+    rep_redirection = forms.CharField(label = '', required=False, widget = SelectWidget("Redirection", ( ("True", "Checked", ""), ("False", "Not checked", "") ), True).get_widget() )
+    rep_sent = forms.CharField(label = '', required=False, widget = SelectWidget("Sent", ( ("True", "Sent", ""), ("False", "Not sent", "") ), True).get_widget() )
     rep_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
 
 class AlertFilterForm(forms.Form):
@@ -416,7 +416,7 @@ class IncidentFilterForm(forms.Form):
     inc_prj_id = forms.CharField(label = '', required=False, widget = SelectWidget("Project", getProjects(Project), True ).get_widget() )
     inc_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
     inc_status = forms.CharField(label = '', required=False, widget = SelectWidget("Incident Status", getChoices(Incident, "inc_status"), True).get_widget() )
-    inc_rca = forms.BooleanField(label = '', required=False, widget = CheckboxWidget("RCA sent").get_widget() )
+    inc_rca = forms.CharField(label = '', required=False, widget = SelectWidget("RCA sent", getChoices(Incident, "inc_rca"), True).get_widget() )
     inc_date_start = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident start date").get_widget(), input_formats=['%Y-%m-%d'] )
     inc_date_end = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident end date").get_widget(), input_formats=['%Y-%m-%d'] )
 

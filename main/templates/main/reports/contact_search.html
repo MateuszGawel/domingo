@@ -1,5 +1,7 @@
 {% extends 'main/_layout/base.html' %}
 
+{% load main_filters %}
+
 {% block content %}
 
     {% load staticfiles %}
@@ -16,7 +18,7 @@
 
         <section class="tab-pane fade in active" id="browse_reports">
           <!--  <h1>BROWSE REPORTS</h1>   -->
-            <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:search' %}" method="get">
+            <form id="filterForm" class="filters form-inline well get-clear col-md-3" action="{% url 'reports:contact_search' %}" method="get">
                 <div class='filter_input'>
                     {{ form.con_prj_id.errors }}
                     {{ form.con_prj_id }}
@@ -52,7 +54,7 @@
                 <div class='filter_input'>
                     <strong>Contact date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
+                    <div id="dateSliderContact" style="margin-top:40px; margin-bottom:20px;"></div>
                     {{ form.con_date_from }}
                     {{ form.con_date_to }}
                 </div>
@@ -69,60 +71,71 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Project</th>
                                 <th>Author</th>
-                                <th>Status</th>
-                                <th>Created date</th>
-                                <th>Sent date</th>
-                                <th>Redirection checked</th>
+                                <th>Contact address</th>
+                                <th>Contact scope</th>
+                                <th>Contact type</th>
+                                <th>Contact direction</th>
+                                <th>Contact date</th>
                                 <th>Comment</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for report in filter_result %}
+                            {% for contact in filter_result %}
                                 <tr>
-                                    <td>{{ report.rep_id }}</td>
+                                    <td>{{ contact.con_id }} </td>
+
+                                    <td> {{ contact.con_prj_id }} </td>
 
                                     <td>
-                                        {% if report.rep_usr_id == request.user %}
-                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ report.rep_usr_id }}
+                                        {% if contact.con_rep_id.rep_usr_id == request.user %}
+                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ contact.con_rep_id.rep_usr_id }}
                                         {% else %}
-                                            {{ report.rep_usr_id }}
+                                            {{ contact.con_rep_id.rep_usr_id }}
                                         {% endif %}
                                     </td>
 
                                     <td>
-                                        {% if report.rep_status == 'O' %}
-                                            <span style="color: yellowgreen; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% elif report.rep_status == 'C' %}
-                                            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% else %}
-                                            <span style="color: firebrick; font-weight: 600">{{ report.get_rep_status_display }}</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>{{ report.rep_date_created|date:"Y-m-d H:i:s" }}</td>
-
-                                    <td>
-                                        {% if report.rep_date_sent != None %}
-                                            {{ report.rep_date_sent|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
+                                        {{ contact.con_address }}
                                     </td>
 
                                     <td>
-                                        {% if report.rep_redirection != None %}
-                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span> {{ report.rep_redirection|date:"Y-m-d H:i:s" }}
+                                        {% if contact.con_scope == 'I' %}
+                                            <span class="glyphicon glyphicon-home"></span>
                                         {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                                            <span class="glyphicon glyphicon-globe"></span>
                                         {% endif %}
+                                        {{ contact.get_con_scope_display }}
                                     </td>
 
-                                    <td>{{ report.rep_com_id.com_value }}</td>
+                                    <td>
+                                        {% if contact.con_type == 'P' %}
+                                            <span class="glyphicon glyphicon-earphone"></span>
+                                        {% elif contact.con_type == 'E' %}
+                                            <span class="glyphicon glyphicon-list-alt"></span>
+                                        {% else %}
+                                            <span class="glyphicon glyphicon-transfer"></span>
+                                        {% endif %}
+                                        {{ contact.get_con_type_display }}
+                                    </td>
 
                                     <td>
-                                        <a class="btn button_style_1" style="width:100%;" href="{% url 'reports:summary_tab' report.rep_id %}"><span class="glyphicon glyphicon-search"></span> View</a>
+                                        {% if contact.con_direction == 'I' %}
+                                            <span class="glyphicon glyphicon-import"></span>
+                                        {% else %}
+                                            <span class="glyphicon glyphicon-export"></span>
+                                        {% endif %}
+                                        {{ contact.get_con_direction_display }}
+                                    </td>
+
+                                    <td>{{ contact.con_date|date:"Y-m-d H:i:s" }}</td>
+
+                                    <td>{% autoescape off %} {{ contact.con_com_id.com_value|shorten }} {% endautoescape %}</td>
+
+                                    <td>
+                                        <a class="btn button_style_1" style="width:100%;" href="{% url 'contacts:details' contact.con_rep_id contact.con_id %}"><span class="glyphicon glyphicon-search"></span> View</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -131,11 +144,5 @@
                 </div>
         </section>
 
-        <section class="tab-pane fade" id="browse_alerts">
-            <h1>BROWSE ALERTS</h1>
-        </section>
-        <section class="tab-pane fade" id="browse_incidents">
-            <h1>BROWSE INCIDENTS</h1>
-        </section>
     </div>
 {% endblock %}

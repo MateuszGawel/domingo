@@ -3,6 +3,19 @@ from django import template
 register = template.Library()
 
 @register.filter(is_safe=True)
+def shorten(comment_value, title="Comment"):
+
+    if len(comment_value) == 0:
+        short_comment = "-"
+        comment_value = "No comment"
+    else:
+        short_comment = comment_value[0:30]
+        if len(comment_value) > 31:
+            short_comment += "..."
+
+    return '<a class="btn popoverHoverData" href="#" data-content="'+comment_value+'" rel="popover" data-placement="bottom" data-original-title="'+title+'" data-trigger="hover">'+short_comment+'</a>'
+
+@register.filter(is_safe=True)
 def urlLastPart(value):
     parts = value.split("/")
 

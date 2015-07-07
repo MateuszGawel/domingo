@@ -24,7 +24,7 @@ def search(request):
         print request.GET
         if doValidate(form):
 
-            filter_result = Report.objects.all()
+            filter_result = Incident.objects.all()
             '''
             if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
                 filter_result = filter_result.filter(rep_id=form.cleaned_data['rep_id'])
@@ -47,7 +47,7 @@ def search(request):
             if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
                 filter_result = filter_result.filter(rep_usr_id=User.objects.get(username=form.cleaned_data['rep_usr_id']))
             '''
-            return render(request, 'main/reports/incident_search.html', {'form': form, 'filter_result': filter_result})
+            return render(request, 'main/reports/incident_search.html', {'form': form, 'filter_result': filter_result, 'report_incidents': ReportIncident.objects.all()})
         else:
             return render(request, 'main/reports/incident_search.html', {'form': form})
     else:
@@ -167,7 +167,7 @@ def set_rca(request, inc_id, rep_id, details=0):
         if doValidate(form=forms.Form(request.POST)):
 
             incident = Incident.objects.get(inc_id=inc_id)
-            incident.inc_rca = True
+            incident.inc_rca = 'S'
             incident.save()
     if int(details) == 0:
         return redirect("reports:incident_tab", rep_id)

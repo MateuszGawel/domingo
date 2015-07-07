@@ -1,5 +1,7 @@
 {% extends 'main/_layout/base.html' %}
 
+{% load main_filters %}
+
 {% block content %}
 
     {% load staticfiles %}
@@ -26,13 +28,19 @@
                     {{ form.rep_status.errors }}
                     {{ form.rep_status }}
                 </div>
-<!--
+
                 <div class='filter_input'>
-                    {# to jeszcze nie działa bo trzeba jakos zaimplementować trzecią opcje. TAK/NIE/OBOJETNE #}
                     {{ form.rep_redirection.errors }}
                     {{ form.rep_redirection }}
                 </div>
--->             <hr>
+
+                <div class='filter_input'>
+                    {{ form.rep_sent.errors }}
+                    {{ form.rep_sent }}
+                </div>
+
+                <hr>
+
                 <div class='filter_input'>
                     <strong>Created date</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
@@ -63,16 +71,20 @@
                                 <th>Id</th>
                                 <th>Author</th>
                                 <th>Status</th>
+                                <th>Redirection checked</th>
                                 <th>Created date</th>
                                 <th>Sent date</th>
-                                <th>Redirection checked</th>
                                 <th>Comment</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for report in filter_result %}
-                                <tr>
+                                {% if report.rep_date_sent != None %}
+                                    <tr>
+                                {% else %}
+                                    <tr class="danger">
+                                {% endif %}
                                     <td>{{ report.rep_id }}</td>
 
                                     <td>
@@ -93,6 +105,14 @@
                                         {% endif %}
                                     </td>
 
+                                    <td>
+                                        {% if report.rep_redirection != None %}
+                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span> {{ report.rep_redirection|date:"Y-m-d H:i:s" }}
+                                        {% else %}
+                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                                        {% endif %}
+                                    </td>
+
                                     <td>{{ report.rep_date_created|date:"Y-m-d H:i:s" }}</td>
 
                                     <td>
@@ -103,15 +123,7 @@
                                         {% endif %}
                                     </td>
 
-                                    <td>
-                                        {% if report.rep_redirection != None %}
-                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span> {{ report.rep_redirection|date:"Y-m-d H:i:s" }}
-                                        {% else %}
-                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>{{ report.rep_com_id.com_value }}</td>
+                                    <td>{% autoescape off %} {{ report.rep_com_id.com_value|shorten }} {% endautoescape %}</td>
 
                                     <td>
                                         <a class="btn button_style_1" style="width:100%;" href="{% url 'reports:summary_tab' report.rep_id %}"><span class="glyphicon glyphicon-search"></span> View</a>

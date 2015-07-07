@@ -44,13 +44,19 @@ class Incident(models.Model):
         ('R', 'Resolved'),
         ('I', 'Invalid'),
     )
+
+    RCA_STATUSES = (
+        ('S', 'Sent'),
+        ('N', 'Not sent'),
+    )
+
     inc_id = models.AutoField(primary_key=True, verbose_name="Incident ID")
     inc_date_start = models.DateTimeField(blank=True, null=True, verbose_name="Incident start date")
     inc_date_end = models.DateTimeField(blank=True, null=True, verbose_name="Incident end date")
     inc_status = models.CharField(max_length=1, blank=True, choices=INCIDENT_STATUSES, verbose_name="Incident status")
     inc_ticket = models.CharField(max_length=100, blank=True, verbose_name="Incident ticket link")
     inc_prj_id = models.ForeignKey('Project', blank=True, null=True, verbose_name="Incident project FK")
-    inc_rca = models.BooleanField(blank=True, default="False", verbose_name="Incident RCA")
+    inc_rca = models.CharField(max_length=1, null=True, blank=True, choices=RCA_STATUSES, verbose_name="RCA sent")
     inc_com_id = models.ForeignKey("Comment", blank=True, null=True, verbose_name="Incident comment FK")
 
 
@@ -89,11 +95,11 @@ class Maintenance(models.Model):
 
 class Alert(models.Model):
     ALERT_TYPE = (
+        ('E', 'Monitoring error'),
         ('B', 'Batch processing'),
         ('C', 'Cron error'),
         ('V', 'Connection problem'),
         ('S', 'Space problem'),
-        ('E', 'Monitoring error'),
         ('O', 'Other'),
     )
 
