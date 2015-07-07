@@ -1,5 +1,5 @@
 import datetime
-
+from datetime import timedelta
 from django.forms import Form
 
 from main.views.reports.utils import *
@@ -25,28 +25,39 @@ def search(request):
         if doValidate(form):
 
             filter_result = Incident.objects.all()
-            '''
-            if form.cleaned_data.has_key('rep_id') and form.cleaned_data['rep_id'] != "":
-                filter_result = filter_result.filter(rep_id=form.cleaned_data['rep_id'])
 
-            if form.cleaned_data.has_key('rep_status') and form.cleaned_data['rep_status'] != "":
-                filter_result = filter_result.filter(rep_status=form.cleaned_data['rep_status'])
+            if form.cleaned_data.has_key('inc_prj_id') and form.cleaned_data['inc_prj_id'] != "":
+                filter_result = filter_result.filter(inc_prj_id=form.cleaned_data['inc_prj_id'])
 
-            if form.cleaned_data.has_key('rep_date_created_from') and form.cleaned_data['rep_date_created_from'] is not None:
-                filter_result = filter_result.filter(rep_date_created__gte=form.cleaned_data['rep_date_created_from'])
+            if form.cleaned_data.has_key('inc_usr_id') and form.cleaned_data['inc_usr_id'] != "":
+                user=User.objects.filter(username__contains=form.cleaned_data['inc_usr_id'])
+                print user
+                reports=Report.objects.filter(rep_usr_id=user)
+                reportIncidents=ReportIncident.objects.filter(rpi_rep_id=reports)
+                print reportIncidents
+                rpi_incidents = []
+                for reportIncident in reportIncidents:
+                    rpi_incidents.append(reportIncident.rpi_inc_id.inc_id)
+                incidents=Incident.objects.filter(inc_id__in=rpi_incidents)
+                print "incydenty:"
+                print incidents
+                filter_result = filter_result.filter(inc_id=incidents)
 
-            if form.cleaned_data.has_key('rep_date_created_to') and form.cleaned_data['rep_date_created_to'] is not None:
-                filter_result = filter_result.filter(rep_date_created__lte=(form.cleaned_data['rep_date_created_to']+timedelta(days=1)))
+            if form.cleaned_data.has_key('inc_status') and form.cleaned_data['inc_status'] != "":
+                filter_result = filter_result.filter(inc_status=form.cleaned_data['inc_status'])
 
-            if form.cleaned_data.has_key('rep_date_sent_from') and form.cleaned_data['rep_date_sent_from'] is not None:
-                filter_result = filter_result.filter(rep_date_sent__gte=form.cleaned_data['rep_date_sent_from'])
+            if form.cleaned_data.has_key('inc_date_start_from') and form.cleaned_data['inc_date_start_from'] is not None:
+                filter_result = filter_result.filter(inc_date_start__gte=form.cleaned_data['inc_date_start_from'])
 
-            if form.cleaned_data.has_key('rep_date_sent_to') and form.cleaned_data['rep_date_sent_to'] is not None:
-                filter_result = filter_result.filter(rep_date_sent__lte=(form.cleaned_data['rep_date_sent_to']+timedelta(days=1)))
+            if form.cleaned_data.has_key('inc_date_start_to') and form.cleaned_data['inc_date_start_to'] is not None:
+                filter_result = filter_result.filter(inc_date_start__lte=(form.cleaned_data['inc_date_start_to']+timedelta(days=1)))
 
-            if form.cleaned_data.has_key('rep_usr_id') and form.cleaned_data['rep_usr_id'] != "":
-                filter_result = filter_result.filter(rep_usr_id=User.objects.get(username=form.cleaned_data['rep_usr_id']))
-            '''
+            if form.cleaned_data.has_key('inc_date_end_from') and form.cleaned_data['inc_date_end_from'] is not None:
+                filter_result = filter_result.filter(inc_date_end__gte=form.cleaned_data['inc_date_end_from'])
+
+            if form.cleaned_data.has_key('inc_date_end_to') and form.cleaned_data['inc_date_end_to'] is not None:
+                filter_result = filter_result.filter(inc_date_end__lte=(form.cleaned_data['inc_date_end_to']+timedelta(days=1)))
+
             return render(request, 'main/reports/incident_search.html', {'form': form, 'filter_result': filter_result, 'report_incidents': ReportIncident.objects.all()})
         else:
             return render(request, 'main/reports/incident_search.html', {'form': form})

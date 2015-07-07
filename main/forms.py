@@ -414,9 +414,11 @@ class MaintenanceFilterForm(forms.Form):
 class IncidentFilterForm(forms.Form):
 
     inc_prj_id = forms.CharField(label = '', required=False, widget = SelectWidget("Project", getProjects(Project), True ).get_widget() )
-    inc_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Author").get_widget() )
+    inc_usr_id = forms.CharField(label = '', required=False, widget = CharWidget("Participant").get_widget() )
     inc_status = forms.CharField(label = '', required=False, widget = SelectWidget("Incident Status", getChoices(Incident, "inc_status"), True).get_widget() )
     inc_rca = forms.CharField(label = '', required=False, widget = SelectWidget("RCA sent", getChoices(Incident, "inc_rca"), True).get_widget() )
-    inc_date_start = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident start date").get_widget(), input_formats=['%Y-%m-%d'] )
-    inc_date_end = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident end date").get_widget(), input_formats=['%Y-%m-%d'] )
+    inc_date_start_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident start date").get_widget(), input_formats=['%Y-%m-%d'] )
+    inc_date_start_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident start date").get_widget(), input_formats=['%Y-%m-%d'] )
+    inc_date_end_from = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident end date").get_widget(), input_formats=['%Y-%m-%d'] )
+    inc_date_end_to = forms.DateField(label = '', required=False, widget = MinDateWidget("Incident end date").get_widget(), input_formats=['%Y-%m-%d'] )
 

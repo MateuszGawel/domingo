@@ -42,17 +42,17 @@
                 <div class='filter_input'>
                     <strong>Incident date start</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.inc_date_start }}
-                    {{ form.inc_date_end }}
+                    <div id="dateSliderIncidentStart" style="margin-top:40px; margin-bottom:20px;"></div>
+                    {{ form.inc_date_start_from }}
+                    {{ form.inc_date_start_to }}
                 </div>
 
                 <div class='filter_input'>
                     <strong>Incident date end</strong>
                     <div style="background-color:black; height:2px; width:100%; margin-top:4px;"></div>
-                    <div id="dateSliderCreated" style="margin-top:40px; margin-bottom:20px;"></div>
-                    {{ form.inc_date_start }}
-                    {{ form.inc_date_end }}
+                    <div id="dateSliderIncidentEnd" style="margin-top:40px; margin-bottom:20px;"></div>
+                    {{ form.inc_date_end_from }}
+                    {{ form.inc_date_end_to }}
                 </div>
 
                 <hr>
@@ -68,11 +68,11 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Project</th>
-                                <th>Author</th>
-                                <th>Incident status</th>
+                                <th>Participants</th>
+                                <th>Status</th>
                                 <th>RCA sent</th>
-                                <th>Incident date start</th>
-                                <th>Incident date end</th>
+                                <th>Date start</th>
+                                <th>Date end</th>
                                 <th>Comment</th>
                                 <th></th>
                             </tr>
@@ -87,19 +87,38 @@
                                     </td>
 
                                     <td>
-                                        {% if incident.inc_rep_id.rep_usr_id == request.user %}
-                                            <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ incident.inc_rep_id.rep_usr_id }}
-                                        {% else %}
-                                            {{ incident.inc_rep_id.rep_usr_id }}
+                                    {% for report_incident in report_incidents %}
+                                        {% if report_incident.rpi_inc_id.inc_id == incident.inc_id %}
+                                            {% if report_incident.rpi_rep_id.rep_usr_id == request.user %}
+                                                <span style="color: yellowgreen;" class="glyphicon glyphicon-user"></span> {{ report_incident.rpi_rep_id.rep_usr_id }}
+                                            {% else %}
+                                                {{ report_incident.rpi_rep_id.rep_usr_id }}
+                                            {% endif %}
+                                            <br>
                                         {% endif %}
+
+                                    {% endfor %}
+
+
                                     </td>
 
                                     <td>
-                                        {{ incident.inc_status }}
+                                        {% if incident.inc_status == 'I' %}
+                                            <span style="color: gold" class="glyphicon glyphicon-asterisk"></span>
+                                        {% elif incident.inc_status == 'R' %}
+                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                                        {% elif incident.inc_status == 'O' %}
+                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                                        {% endif %}
+                                        {{ incident.get_inc_status_display }}
                                     </td>
 
                                     <td>
-                                        {{ incident.inc_rca }}
+                                        {% if incident.inc_rca == 'S'%}
+                                            <span style="color: yellowgreen" class="glyphicon glyphicon-ok"></span>
+                                        {% else %}
+                                            <span style="color: firebrick" class="glyphicon glyphicon-remove"></span>
+                                        {% endif %}
                                     </td>
 
                                     <td>{{ incident.inc_date_start|date:"Y-m-d H:i:s" }}</td>

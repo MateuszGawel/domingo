@@ -17,7 +17,8 @@ $(document).ready(function() {
         resetSliderValues("#dateSliderAlert");
         resetSliderValues("#dateSliderContact");
         resetSliderValues("#dateSliderMaintenance");
-
+        resetSliderValues("#dateSliderIncidentStart");
+        resetSliderValues("#dateSliderIncidentEnd");
         $(this).parent().find("input").each(function ()
         {
             $(this).val("");
@@ -81,6 +82,29 @@ $(document).ready(function() {
         $("#dateSliderMaintenance").dateRangeSlider({range: {min: {days: 0}}});
         registerEvents("#mnt_date_from", "#mnt_date_to", "#dateSliderMaintenance");
     }
+
+    if( document.getElementById("dateSliderIncidentStart") != null )
+    {
+        $("#dateSliderIncidentStart").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderIncidentStart").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#inc_date_start_from", "#inc_date_start_to", "#dateSliderIncidentStart");
+    }
+
+    if( document.getElementById("dateSliderIncidentEnd") != null )
+    {
+        $("#dateSliderIncidentEnd").dateRangeSlider({
+            arrows: false,
+            bounds: {min: new Date(2015, 5, 1), max: new Date()},
+            defaultValues: {min: new Date(2015, 5, 1), max: new Date()}
+        });
+        $("#dateSliderIncidentEnd").dateRangeSlider({range: {min: {days: 0}}});
+        registerEvents("#inc_date_end_from", "#inc_date_end_to", "#dateSliderIncidentEnd");
+    }
+
 
     function registerEvents(from, to, slider){
         $(slider).bind("valuesChanged", function(e, data){
