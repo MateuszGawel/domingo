@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-
+import main.receivers
 from main.views import view
 
 

@@ -28,21 +28,15 @@ def search(request):
 
             if form.cleaned_data.has_key('inc_prj_id') and form.cleaned_data['inc_prj_id'] != "":
                 filter_result = filter_result.filter(inc_prj_id=form.cleaned_data['inc_prj_id'])
-
             if form.cleaned_data.has_key('inc_usr_id') and form.cleaned_data['inc_usr_id'] != "":
                 user=User.objects.filter(username__contains=form.cleaned_data['inc_usr_id'])
-                print user
                 reports=Report.objects.filter(rep_usr_id=user)
                 reportIncidents=ReportIncident.objects.filter(rpi_rep_id=reports)
-                print reportIncidents
                 rpi_incidents = []
                 for reportIncident in reportIncidents:
                     rpi_incidents.append(reportIncident.rpi_inc_id.inc_id)
                 incidents=Incident.objects.filter(inc_id__in=rpi_incidents)
-                print "incydenty:"
-                print incidents
-                filter_result = filter_result.filter(inc_id=incidents)
-
+                filter_result = filter_result.filter(inc_id__in=incidents)
             if form.cleaned_data.has_key('inc_status') and form.cleaned_data['inc_status'] != "":
                 filter_result = filter_result.filter(inc_status=form.cleaned_data['inc_status'])
 

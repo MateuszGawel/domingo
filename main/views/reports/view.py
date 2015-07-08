@@ -2,6 +2,10 @@ from datetime import timedelta
 from django.shortcuts import redirect, render
 from utils import *
 import datetime
+from main.signals import new_report_signal
+from django.dispatch import receiver
+
+from main.models import Report
 
 def index(request):
     if request.user.is_authenticated():
@@ -62,6 +66,8 @@ def search(request):
         form = ReportFilterForm()
         return render(request, 'main/reports/search.html', {'form': form})
 
+
+
 def create(request):
     if request.method == 'POST':
         if doValidate(form=forms.Form(request.POST)):
@@ -85,6 +91,9 @@ def create(request):
                 ri.rpi_rep_id = report
                 ri.save()
 
+
+            new_report_signal.send(sender=request.user, message="ciuralla")
+
             return redirect("reports:summary_tab", report.rep_id)
 
     return redirect("reports:index")
@@ -92,12 +101,12 @@ def create(request):
 def get_alerts_from_jira(request, rep_id):
     if request.user.is_authenticated():
         report = Report.objects.get(rep_id=rep_id)
-        query = "select project.pname, jiraissue.summary, jiraissue.pkey, jiraissue.created from jiraissue, project where jiraissue.reporter = '" + request.user.username + "' and jiraissue.created >= to_date('" + report.rep_date_created.strftime('%Y-%m-%d %H:%M:%S') +"', 'yyyy-mm-dd hh24:mi:ss') and jiraissue.created <= sysdate and project.id = jiraissue.project"
+        query = "select project.pname, jiraissue.summary, jiraissue.pkey, jiraissue.created from jiraissue, project where jiraissue.reporter = '" + request.user.username + "' and jiraissue.created >= to_date('" + (report.rep_date_created - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S') +"', 'yyyy-mm-dd hh24:mi:ss') and jiraissue.created <= sysdate and project.id = jiraissue.project"
 
         print "LECIMY Z TEMATEM"
         print query
         print len( get_data_from_jira(query).fetchall() )
-        '''
+
         for record in get_data_from_jira(query).fetchall():
             project = Project.objects.get(prj_name = record[0])
             ticket = "https://loyaltysupport.comarch.pl/browse/" + record[2]
@@ -119,7 +128,7 @@ def get_alerts_from_jira(request, rep_id):
             alert.alt_com_id = comment
 
             alert.save()
-        '''
+
         return redirect("reports:alert_tab", report.rep_id)
     else:
         return render(request, 'main/login.html', {'error_message': "You have to log in first."})
