@@ -6,6 +6,7 @@
 
 
 
+
     <form class="filters form-inline well col-md-3" action="{% url 'reports:incident_tab' report.rep_id %}" method="post">
         {% checkDisabled request report %}
             {% csrf_token %}

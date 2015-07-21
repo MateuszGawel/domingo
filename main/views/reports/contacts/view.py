@@ -5,7 +5,6 @@ from django.shortcuts import redirect, render
 def search(request):
     if request.method == 'GET':
         form = ContactFilterForm(request.GET)
-        print request.GET
         if doValidate(form):
 
             filter_result = Contact.objects.all()
@@ -48,7 +47,6 @@ def details(request, rep_id, con_id):
     contact = Contact.objects.get(con_id=con_id)
     if request.method == 'POST':
         form = ContactForm(request.POST)
-        print form
         if doValidate(form, request, contact.con_rep_id):
             form.modify(con_id)
             return redirect("contacts:details", rep_id, con_id)
