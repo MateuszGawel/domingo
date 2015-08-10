@@ -34,5 +34,5 @@ def reset_password(request):
 
     newPassword = 'qwerty'
 
-    send_mail('Domingo password reset', 'Hi, your new password is: ' + newPassword, 'noreply@domingo.comarch', ['michal.antkowicz@comarch.pl'], fail_silently=False)
+    send_mail('Domingo password reset', 'Hi, your new password is: ' + newPassword, 'noreply@domingo.com', ['michal.antkowicz@comarch.pl'], fail_silently=False)
     return render(request, 'main/login.html', {'error_message': "The new password has been sent to you!"})
