@@ -31,5 +31,8 @@ def do_logout(request):
     return redirect("main:index")
 
 def reset_password(request):
-    send_mail('Subject here', 'Here is the message.', 'from@example.com', ['michal.antkowicz@comarch.pl'], fail_silently=False)
+
+    newPassword = 'qwerty'
+
+    send_mail('Domingo password reset', 'Hi, your new password is: ' + newPassword, 'noreply@domingo.comarch', ['michal.antkowicz@comarch.pl'], fail_silently=False)
     return render(request, 'main/login.html', {'error_message': "The new password has been sent to you!"})
