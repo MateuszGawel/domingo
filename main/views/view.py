@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
+import string
+import random
 
 
 def index(request):
@@ -32,7 +34,8 @@ def do_logout(request):
 
 def reset_password(request):
 
-    newPassword = 'qwerty'
+    newPassword = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+    receiver = ['michal.antkowicz@comarch.pl']
 
-    send_mail('Domingo password reset', 'Hi, your new password is: ' + newPassword, 'noreply@domingo.com', ['michal.antkowicz@comarch.pl'], fail_silently=False)
+    send_mail('Domingo password reset', 'Hi, your new password is: ' + newPassword, 'noreply@domingo.com', receiver, fail_silently=False)
     return render(request, 'main/login.html', {'error_message': "The new password has been sent to you!"})
